@@ -1,38 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>wanzhu&#39;s test blog</title>
-    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-</description>
-    <link>http://yourdomain.com/</link>
-    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 28 Nov 2015 16:17:56 +0800</pubDate>
-    <lastBuildDate>Sat, 28 Nov 2015 16:17:56 +0800</lastBuildDate>
+    <title>uno-dbyll</title>
+    <description></description>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 28 Nov 2015 17:29:59 +0800</pubDate>
+    <lastBuildDate>Sat, 28 Nov 2015 17:29:59 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+        <title>Lamp Installation on Arch</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/assets/media/Lamp.jpg&quot; width=&quot;85%&quot; /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+Linux, &lt;a href=&quot;http://httpd.apache.org/&quot;&gt;Apache&lt;/a&gt;, MySQL/MariaDB, PHP: In short LAMP, a complete Open Source solution for web-developer. Apache Web Server,Often referred to as simply &lt;a href=&quot;http://httpd.apache.org/&quot;&gt;Apache&lt;/a&gt;, a public-domain open source Web server developed by a loosely-knit group of programmers which runs roughly 50% of the servers in the world.
+Here i show you the simple steps to install LAMP on your Arch System:&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;Install php,php-apache,apache and mariadb:
+(note: use your favorite text editor, am using “gedit”)&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Pacman&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;php&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;apache&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apache&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mariadb&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;hello world!&quot;&lt;/span&gt;
-&lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#=&amp;gt; prints &#39;Hi, Tom&#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;Now configure apache:&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gedit&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/etc/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt; 
 
+&lt;span class=&quot;c1&quot;&gt;#&amp;gt; comment the line .i.e. put a # before it.&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;LoadModule&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unique_id_module&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mod_unique_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;so&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#&amp;gt; restart apache&lt;/span&gt;
+
+&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;systemctl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restart&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;then configure mariadb:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;systemctl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mysqld&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mysql_secure_installation&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#&amp;gt; press enter and then &amp;quot;yes&amp;quot; to all.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Lastly configure php and php-apache:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gedit&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/etc/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#&amp;gt; add the following lines at the end of the files&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;LoadModule&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;php5_module&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;libphp5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;so&lt;/span&gt; 
+&lt;span class=&quot;no&quot;&gt;AddHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;php5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;php&lt;/span&gt; 
+&lt;span class=&quot;no&quot;&gt;Include&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php5_module&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#&amp;gt; save and exit .&lt;/span&gt;
+
+&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gedit&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/srv/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#&amp;gt; add this in your php file:&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phpinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;finally, restart apache and all is done.enjoy!&lt;/p&gt;
 </description>
-        <pubDate>Sat, 28 Nov 2015 12:39:25 +0800</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2015/11/28/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/11/28/welcome-to-jekyll.html</guid>
+        <pubDate>Sun, 03 Nov 2013 00:00:00 +0800</pubDate>
+        <link>/lamp-installation-on-Arch</link>
+        <guid isPermaLink="true">/lamp-installation-on-Arch</guid>
+        
+        <category>Arch</category>
+        
+        <category>lamp</category>
+        
+        <category>setup</category>
+        
+        <category>php</category>
+        
+        <category>mariadb</category>
+        
+        <category>appache</category>
+        
+        <category>mysql</category>
         
         
-        <category>jekyll</category>
+        <category>linux</category>
         
-        <category>update</category>
+      </item>
+    
+      <item>
+        <title>Easiest Way To Install Lamp On Ubuntu</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/assets/media/lamp.jpg&quot; width=&quot;85%&quot; /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+LAMP(Linux, Apache, MySQL, PHP or Perl) is one of the most essential servers needed by the web developers or web entrepreneurs around the globe. This tutorial explains one of the easiest ways to install LAMP on Ubuntu. Because Ubuntu uses Linux as it’s kernel we are done with the Linux part ;) .&lt;/p&gt;
+
+&lt;p&gt;Install tasksel on your system:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;update&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tasksel&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Tasksel is a Debian/Ubuntu tool that installs multiple related packages as a co-ordinated “task” onto your system.
+Start tasksel:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tasksel&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;select the lamp-server and press ‘Ok’. Follow the steps as directed and create your Mysql password.&amp;lt;/br&amp;gt;
+Lastly,start apache2 server:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;service&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apache2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restart&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Congratulations you have successfully installed LAMP server on your system. To test just visit your web browser and type in the following url:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost/&quot;&gt;http://localhost/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;To test the php installation:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nano&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/var/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;www&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phptest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;type in and save:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phpinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;and open the following url in your browser:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost/phptest.php&quot;&gt;http://localhost/phptest.php&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 02 Nov 2013 00:00:00 +0800</pubDate>
+        <link>/easiest-way-to-install-lamp-on-ubuntu</link>
+        <guid isPermaLink="true">/easiest-way-to-install-lamp-on-ubuntu</guid>
+        
+        <category>ubuntu</category>
+        
+        <category>lamp</category>
+        
+        <category>setup</category>
+        
+        <category>tasksel</category>
+        
+        
+        <category>linux</category>
         
       </item>
     
