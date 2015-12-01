@@ -15,7 +15,8 @@ paginate_path: "page/:num"
 categories_path : categories.html
 tags_path : tags.html
 
-BASE_PATH : http://localhost:4000
+# BASE_PATH : http://localhost:4000
+BASE_PATH : http://fanyinan.me
 
 
 title : 顽主的一亩三分地 !#_#
