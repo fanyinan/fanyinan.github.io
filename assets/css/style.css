@@ -2,6 +2,8 @@
 
 body{
   overflow-X:hidden; 
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+
 }
 
 #nav-menu{
@@ -81,18 +83,20 @@ footer {
 
 #sidebar {
 	position: fixed;
-	padding-top: 8%;
+	padding-top: 5%;
 	height: 100%;
-	background-color:#6049df;
-	background-image: url("/assets/media/cover.png"),url("/assets/media/background-cover.jpg");	
-	background-size: 100% 100%;
-	color: #fff;
+	background-color: #1f1815;
+	background: url("/assets/media/bg.jpg") no-repeat center;	
+	background-size: 150% 100%;
+	/*color: #fff;*/
+	color: rgba(255, 255, 255, 0.8);
 	z-index: 5;
-	color: #fff;
+	/*max-width: 500px;*/
 }
 
 .sidebar-header {
-	text-align: center;
+	text-align: right;
+	margin-right: 5%;
 }
 .sidebar-header .title{
 	letter-spacing: 3px;
@@ -112,9 +116,9 @@ footer {
 }
 
 .title{
-	font-family: 'Raleway', sans-serif;
-	font-size: 45px;
-	text-shadow:0 0 5px #000;
+	font-size: 35px;
+	/*text-shadow:0 0 5px #000;*/
+	font-weight: 200;
 }
 .hr-line {
 	height: 1px;

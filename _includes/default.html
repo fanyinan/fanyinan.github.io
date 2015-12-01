@@ -8,6 +8,8 @@
 	<meta name="description" content="{{ page.description }}">
 	{% endif %}
 
+	<meta charset="utf-8">
+
 	<meta name="author" content="{{ site.author.name }}">
 
 		<!-- Enable responsive viewport -->
@@ -99,7 +101,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
    </ul>
  </div>
 
-<div class="col-sm-4 sidebar hidden-xs" id="sidebar">
+<div class="sidebar hidden-xs" id="sidebar" style="width: 30%">
 		{% include sidebar.html %}
 	</div>
 

@@ -2,7 +2,7 @@
 <html>
 	<head>
 
-		<title>Lamp Installation on Arch</title>
+		<title>记此博客的诞生</title>
 
 	
 
@@ -130,7 +130,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 <div class="col-sm-8 col-sm-offset-4" id="container">
   
 <div class="page-header">
-  <h1>Lamp Installation on Arch </h1>
+  <h1>记此博客的诞生 </h1>
 </div>
   
 <article>
@@ -139,61 +139,57 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
    <span class="post-date">
      
      November 
-     3rd,
-       
-     2013
+     29th,
+     
+     2015
       
    </span>
     <div class="article_body" id="article_body">
-    <p><img src="/assets/media/Lamp.jpg" width="85%" />
-<br />
-<br />
-Linux, <a href="http://httpd.apache.org/">Apache</a>, MySQL/MariaDB, PHP: In short LAMP, a complete Open Source solution for web-developer. Apache Web Server,Often referred to as simply <a href="http://httpd.apache.org/">Apache</a>, a public-domain open source Web server developed by a loosely-knit group of programmers which runs roughly 50% of the servers in the world.
-Here i show you the simple steps to install LAMP on your Arch System:</p>
+    <p>奇迹般的迎来了我今年的第一个双休，周五白天还在火急火燎的改Bug，晚上就通知说明天休息吧，什么鬼。。。不过，正好得空建个博客，其实今年刚来北京那会就想建个博客用来积(zhuang)累(bi)了，只不过当时尚且年轻，没什么好写的，也就作罢。不过自从工作了这几个月的时间，或多或少也学到了点东西，谈不上什么经验分享，权当是个public笔记本吧 ^_^</p>
 
-<p>Install php,php-apache,apache and mariadb:
-(note: use your favorite text editor, am using “gedit”)</p>
+<p>先大体说一下这个博客的结构吧：</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">sudo</span> <span class="no">Pacman</span> <span class="o">-</span><span class="n">S</span> <span class="n">php</span><span class="o">-</span><span class="n">apache</span> <span class="n">apache</span> <span class="n">mariadb</span></code></pre></figure>
+<p>1.我使用Jekyll来创建博客，它来帮我们直接生成静态页面。对，买错，就是直接生成静态页面，没有服务器后台，没有数据库。 为什么用这个呢？因为我懒。我就想写点东西放到网上，我干嘛要去配置主机，干嘛要去整数据库，怎么省事怎么来吧 -<em>-#</em><br />
+2.其次使用了GitHub Page来托管我的网站，Jekyll 可以运行在 GitHub Page 上，所以写完一篇文章之后你是需要push一下就OK了</p>
 
-<p>Now configure apache:</p>
+<p>先提一下，我用的MacBook(没钱买，公司的)，所以是在mac的环境下安装的，windows下估计差不多。先从Jekyll的搭建开始讲起，首先Jekyll是用Ruby写的，所以需要先搭建Ruby环境（写这篇文章的时候已经是下周二晚上了，我也不记得是不是需要安装Ruby环境，所以把Ruby环境干掉之后再启动Jekyll服务，提示找不到文件）</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">sudo</span> <span class="n">gedit</span> <span class="sr">/etc/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">httpd</span><span class="o">.</span><span class="n">conf</span> 
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#列出已知的ruby版本</span>
+<span class="err">$</span> <span class="n">rvm</span> <span class="n">list</span> <span class="n">known</span>
+<span class="c1">#安装最新的</span>
+<span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="n">ruby</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span></code></pre></figure>
 
-<span class="c1">#&gt; comment the line .i.e. put a # before it.</span>
+<p>我一直翻着墙，没觉得慢，如果感觉死慢死慢的就用淘宝的镜像</p>
 
-<span class="no">LoadModule</span> <span class="n">unique_id_module</span> <span class="n">modules</span><span class="o">/</span><span class="n">mod_unique_id</span><span class="o">.</span><span class="n">so</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">--</span><span class="n">remove</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">rubygems</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">a</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">l</span>
+    <span class="o">***</span> <span class="no">CURRENT</span> <span class="no">SOURCES</span> <span class="o">***</span>
+    <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span></code></pre></figure>
 
-<span class="c1">#&gt; restart apache</span>
+<p>然后安装Jekyll</p>
 
-<span class="err">$</span> <span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">httpd</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">jekyll</span></code></pre></figure>
 
-<p>then configure mariadb:</p>
+<p>如果提示安装Command-Line Tools，直接选Y安装就是了，<a href="http://jekyll.bootcss.com/docs/installation//">官方文档</a>上说会提示安装Xcode，因为我装好了，所以就不清楚咯</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">start</span> <span class="n">mysqld</span>
-<span class="err">$</span> <span class="n">sudo</span> <span class="n">mysql_secure_installation</span>
+<p>现在可以生成个Demo了</p>
 
-<span class="c1">#&gt; press enter and then &quot;yes&quot; to all.</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#myblog就是博客文件夹的名字</span>
+<span class="err">$</span> <span class="n">jekyll</span> <span class="kp">new</span> <span class="n">myblog</span>
+<span class="err">$</span> <span class="n">cd</span> <span class="n">myblog</span>
+<span class="c1">#博客主目录下启动服务</span>
+<span class="o">~</span><span class="sr">/myblog $ jekyll serve</span></code></pre></figure>
 
-<p>Lastly configure php and php-apache:</p>
+<p>不报错就是起动成功了（废话），在浏览器打开http://localhost:4000 看是否真的成功了吧Y(^<em>^)Y</em>)</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">sudo</span> <span class="n">gedit</span> <span class="sr">/etc/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">httpd</span><span class="o">.</span><span class="n">conf</span>
+<p>现在来把它搞到GitHub pages上
+首先需要有个GitHub的帐号，这个就不说了</p>
 
-<span class="c1">#&gt; add the following lines at the end of the files</span>
+<p>然后建个仓库，再clone到本地，<a href="https://pages.github.com/">官方文档</a>有详细教程，不过记得仓库名，username.github.io，username必须和owner的名字相同，否则只是个普通的仓库了</p>
 
-<span class="no">LoadModule</span> <span class="n">php5_module</span> <span class="n">modules</span><span class="o">/</span><span class="n">libphp5</span><span class="o">.</span><span class="n">so</span> 
-<span class="no">AddHandler</span> <span class="n">php5</span><span class="o">-</span><span class="n">script</span> <span class="n">php</span> 
-<span class="no">Include</span> <span class="n">conf</span><span class="o">/</span><span class="n">extra</span><span class="o">/</span><span class="n">php5_module</span><span class="o">.</span><span class="n">conf</span>
-
-<span class="c1">#&gt; save and exit .</span>
-
-<span class="err">$</span> <span class="n">sudo</span> <span class="n">gedit</span> <span class="sr">/srv/</span><span class="n">http</span><span class="o">/</span><span class="n">info</span><span class="o">.</span><span class="n">php</span>
-
-<span class="c1">#&gt; add this in your php file:</span>
-
-<span class="o">&lt;</span><span class="p">?</span><span class="n">php</span> <span class="n">phpinfo</span><span class="p">();</span> <span class="sc">?&gt;</span></code></pre></figure>
-
-<p>finally, restart apache and all is done.enjoy!</p>
+<p>最后只要把用Jekyll创建的文件夹copy到本地仓库文件夹就OK了，只copy文件夹内的文件就行，根目录不需要，之后如果想在本地启动服务就可以直接进入本地仓库文件夹启动了。
+现在来commit，sync，ok之后就可以在浏览器输入仓库名来打开博客看看了</p>
 
     </div>
 
@@ -203,8 +199,8 @@ Here i show you the simple steps to install LAMP on your Arch System:</p>
       
       
        
-        <li><a href="http://localhost:4000/categories.html#linux-ref">
-          linux <span>(2)</span>
+        <li><a href="http://localhost:4000/categories.html#技术-ref">
+          技术 <span>(1)</span>
           
         </a></li>
       
@@ -219,50 +215,15 @@ Here i show you the simple steps to install LAMP on your Arch System:</p>
       
        
         <li>
-          <a href="http://localhost:4000/tags.html#Arch-ref">
-          Arch <span>(1)</span>
+          <a href="http://localhost:4000/tags.html#Tech-ref">
+          Tech <span>(1)</span>
           ,
           </a>
         </li>
        
         <li>
-          <a href="http://localhost:4000/tags.html#lamp-ref">
-          lamp <span>(2)</span>
-          ,
-          </a>
-        </li>
-       
-        <li>
-          <a href="http://localhost:4000/tags.html#setup-ref">
-          setup <span>(2)</span>
-          ,
-          </a>
-        </li>
-       
-        <li>
-          <a href="http://localhost:4000/tags.html#php-ref">
-          php <span>(1)</span>
-          ,
-          </a>
-        </li>
-       
-        <li>
-          <a href="http://localhost:4000/tags.html#mariadb-ref">
-          mariadb <span>(1)</span>
-          ,
-          </a>
-        </li>
-       
-        <li>
-          <a href="http://localhost:4000/tags.html#appache-ref">
-          appache <span>(1)</span>
-          ,
-          </a>
-        </li>
-       
-        <li>
-          <a href="http://localhost:4000/tags.html#mysql-ref">
-          mysql <span>(1)</span>
+          <a href="http://localhost:4000/tags.html#生活-ref">
+          生活 <span>(1)</span>
           
           </a>
         </li>
@@ -277,7 +238,7 @@ Here i show you the simple steps to install LAMP on your Arch System:</p>
     <div>
       <section class="share col-sm-6">
         <h4 class="section-title">Share Post</h4>
-        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Lamp Installation on Arch"
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=记此博客的诞生"
            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
           <i class="fa fa-twitter fa-lg"></i>
           Twitter
@@ -305,10 +266,10 @@ Here i show you the simple steps to install LAMP on your Arch System:</p>
 
     <ul class="pager">
       
-      <li class="previous"><a href="http://localhost:4000/easiest-way-to-install-lamp-on-ubuntu" title="Easiest Way To Install Lamp On Ubuntu">&larr; Previous</a></li>
+      <li class="previous disabled"><a>&larr; Previous</a></li>
       
       
-      <li class="next"><a href="http://localhost:4000/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F" title="记此博客的诞生">Next &rarr;</a></li>
+      <li class="next disabled"><a>Next &rarr;</a>
       
     </ul>
 

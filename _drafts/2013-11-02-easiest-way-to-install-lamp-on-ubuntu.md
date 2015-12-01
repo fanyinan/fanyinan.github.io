@@ -1,11 +1,12 @@
 ---
 layout: post
 title: Easiest Way To Install Lamp On Ubuntu
-description: original post at WOWMORON
+<!-- description: original post at WOWMORON -->
 tagline: original post at wowmoron.wordpress.com
 image: /assets/media/lamp.jpg
 categories: [linux]
 tags: [ubuntu, lamp, setup, tasksel]
+published: false
 ---
 <img src="{{page.image}}" width="85%"/>
 <br/>

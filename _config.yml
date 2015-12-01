@@ -4,6 +4,7 @@ permalink: /:title
 # https://help.github.com/articles/migrating-your-pages-site-from-maruku
 markdown: kramdown
 
+gems: [jekyll-paginate]
 highlighter: pygments
 paginate: 20 # pagination based on number of posts
 paginate_path: "page/:num"
@@ -14,20 +15,16 @@ paginate_path: "page/:num"
 categories_path : categories.html
 tags_path : tags.html
 
-BASE_PATH : http://blog.ankanbiswas.in/uno-dbyll
+BASE_PATH : http://localhost:4000
 
 
-title : uno-dbyll
-gems: [jekyll-paginate]
+title : 顽主的一亩三分地 !#_#
 
 
 author:
-  name: Ankan Biswas
-  role: Jekyll Theme
-  email: support@ankanbiswas.in
-  github: talk2ankan
-  twitter: talk2ankan
-  facebook: talk2ankan
-  googleplus: +AnkanBiswasWorkspace
-  bio: "Simple, clean, responsive and stylist theme for jekyll. "
-  uno-dbyll: https://raw.githubusercontent.com/talk2ankan/uno-dbyll/gh-pages/uno-dbyll.png
+  name: fanyinan
+  role: 顽主的一亩三分地!#_#
+  email: fanyinan93@126.com
+  github: 
+  bio: 我叫范祎(yi)楠。IOS开发者一枚，也是个北漂。爱IOS胜过爱女朋友，天哪噜，我没女朋友，我没有女朋友，我没有女朋友（重要的事情说三遍）。有点强迫症，有点完美主义，也有点稀里糊涂。总之爱生活，爱自由，始终在坚持做自己心水的事。
+  # uno-dbyll: https://raw.githubusercontent.com/talk2ankan/uno-dbyll/gh-pages/uno-dbyll.png
