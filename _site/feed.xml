@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Dec 2015 01:47:45 +0800</pubDate>
-    <lastBuildDate>Wed, 02 Dec 2015 01:47:45 +0800</lastBuildDate>
+    <pubDate>Wed, 02 Dec 2015 11:29:53 +0800</pubDate>
+    <lastBuildDate>Wed, 02 Dec 2015 11:29:53 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -57,7 +57,7 @@
 &lt;p&gt;最后只要把用Jekyll创建的文件夹copy到本地仓库文件夹就OK了，只copy文件夹内的文件就行，根目录不需要，之后如果想在本地启动服务就可以直接进入本地仓库文件夹启动了。
 现在来commit，sync，ok之后就可以在浏览器输入仓库名来打开博客看看了&lt;/p&gt;
 </description>
-        <pubDate>Sun, 29 Nov 2015 00:00:00 +0800</pubDate>
+        <pubDate>Wed, 02 Dec 2015 00:00:00 +0800</pubDate>
         <link>/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F</link>
         <guid isPermaLink="true">/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F</guid>
         
