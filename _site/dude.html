@@ -2,8 +2,10 @@
 <html>
 	<head>
 
-		<title>记此博客的诞生</title>
+		<title>dude</title>
 
+	
+	<meta name="description" content="dude post.">
 	
 
 	<meta charset="utf-8">
@@ -138,7 +140,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 <div class="col-sm-8 col-sm-offset-4" id="container">
   
 <div class="page-header">
-  <h1>记此博客的诞生 </h1>
+  <h1>dude </h1>
 </div>
   
 <article>
@@ -146,103 +148,79 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
   <div class="col-sm-10">
    <span class="post-date">
      
-     December 
-     2nd,
-       
-     2015
+     August 
+     8th,
+     
+     2014
       
    </span>
     <div class="article_body" id="article_body">
-    <p>奇迹般的迎来了我今年的第一个双休，周五白天还在火急火燎的改Bug，晚上就通知说明天休息吧，什么鬼。。。不过，正好得空建个博客，其实今年刚来北京那会就想建个博客用来积(zhuang)累(bi)了，只不过当时尚且年轻，没什么好写的，也就作罢。不过自从工作了这几个月的时间，或多或少也学到了点东西，谈不上什么经验分享，权当是个public笔记本吧 ^_^</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-<p>先大体说一下这个博客的结构吧：</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-<p>1.我使用Jekyll来创建博客，它来帮我们直接生成静态页面。对，没错，就是直接生成静态页面，没有服务器后台，没有数据库。 为什么用这个呢？因为我懒。我就想写点东西放到网上，我干嘛要去配置主机，干嘛要去整数据库，怎么省事怎么来吧 -<em>-#</em><br />
-2.其次使用了GitHub Pages来托管我的网站，Jekyll 可以运行在 GitHub Pages上，所以写完一篇文章之后你是需要push一下就OK了</p>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">foo</span>
+  <span class="nb">puts</span> <span class="s1">&#39;foo&#39;</span>
+<span class="k">end</span></code></pre></figure>
 
-<p>先提一下，我用的MacBook(没钱买，公司的)，所以是在mac的环境下安装的，windows下估计差不多。先从Jekyll的搭建开始讲起，首先Jekyll是用Ruby写的，所以需要先搭建Ruby环境（写这篇文章的时候已经是下周二晚上了，我也不记得是不是需要安装Ruby环境，所以把Ruby环境干掉之后再启动Jekyll服务，提示找不到文件）</p>
+<p>Lorem ipsum dolor sit amet,  consectetur adipisicing elit,  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,  sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># 先查看是否已经安装过ruby，安装过就算了</span>
-<span class="err">$</span> <span class="n">rvm</span> <span class="n">list</span>
-<span class="c1">#列出已知的ruby版本</span>
-<span class="err">$</span> <span class="n">rvm</span> <span class="n">list</span> <span class="n">known</span>
-<span class="c1">#安装最新的</span>
-<span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="n">ruby</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span></code></pre></figure>
+<p>Lorem ipsum dolor sit amet,  consectetur adipisicing elit,  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,  sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-<p>我一直翻着墙，没觉得慢，如果感觉死慢死慢的就用淘宝的镜像</p>
+<p>In your config file change these settings</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">--</span><span class="n">remove</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">rubygems</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
-<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">a</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
-<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">l</span>
-    <span class="o">***</span> <span class="no">CURRENT</span> <span class="no">SOURCES</span> <span class="o">***</span>
-    <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">dbyll</span>
+<span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span>  
+  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yourname</span>  
+  <span class="l-Scalar-Plain">email</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">youremail</span>  
+  <span class="l-Scalar-Plain">github</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">asd123</span>  
+  <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">asd123</span>  
+  <span class="l-Scalar-Plain">pinterest</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">asd123</span>  
+  <span class="l-Scalar-Plain">linkedin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">asd123</span>  
+  <span class="l-Scalar-Plain">resume</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">asd123</span>  
+  <span class="l-Scalar-Plain">bio</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Your stylish,  minimalist theme!</span>  
+  <span class="l-Scalar-Plain">email_md5</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">md5ofemail</span>  </code></pre></figure>
 
-<p>然后安装Jekyll</p>
+<p><strong>dbyll</strong> is minimalist, stylish theme for jekyll. Supports gravatar, account links (github, twitter, e-mail, pinterest, résume file) and a bio.</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">jekyll</span></code></pre></figure>
+<p><strong>dbyll</strong> is brought to you by <strong><a href="http://ismaildemirbilek.com">dbtek</a></strong>. Open sourced under <a href="http://opensource.org/licenses/MIT">MIT</a> license.</p>
 
-<p>如果提示安装Command-Line Tools，直接选Y安装就是了，<a href="http://jekyll.bootcss.com/docs/installation//">官方文档</a>上说会提示安装Xcode，因为我装好了，所以就不清楚咯</p>
+<h3 id="dbyll-is-on-github">dbyll is on GitHub</h3>
 
-<p>现在可以生成个Demo了</p>
+<p><a class="btn btn-default" href="https://github.com/dbtek/dbyll">Grab your copy now!</a></p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#myblog就是博客文件夹的名字</span>
-<span class="err">$</span> <span class="n">jekyll</span> <span class="kp">new</span> <span class="n">myblog</span>
-<span class="err">$</span> <span class="n">cd</span> <span class="n">myblog</span>
-<span class="c1">#博客主目录下启动服务</span>
-<span class="o">~</span><span class="sr">/myblog $ jekyll serve</span></code></pre></figure>
+<p><strong>dbyll</strong> is minimalist, stylish theme for jekyll. Supports gravatar, account links (github, twitter, e-mail, pinterest, résume file) and a bio.</p>
 
-<p>不报错就是起动成功了（废话），在浏览器打开http://localhost:4000 看是否真的成功了吧Y(^<em>^)Y</em>)</p>
+<p><strong>dbyll</strong> is brought to you by <strong><a href="http://ismaildemirbilek.com">dbtek</a></strong>. Open sourced under <a href="http://opensource.org/licenses/MIT">MIT</a> license.</p>
 
-<p>现在来把它搞到GitHub Pages上
-首先需要有个GitHub的帐号，这个就不说了</p>
+<h3 id="dbyll-is-on-github-1">dbyll is on GitHub</h3>
 
-<p>然后建个仓库，再clone到本地，<a href="https://pages.github.com/">官方文档</a>有详细教程，不过记得仓库名，username.github.io，username必须和owner的名字相同，否则只是个普通的仓库了</p>
+<p><a class="btn btn-default" href="https://github.com/dbtek/dbyll">Grab your copy now!</a></p>
 
-<p>最后只要把用Jekyll创建的文件夹copy到本地仓库文件夹就OK了，只copy文件夹内的文件就行，根目录不需要，之后如果想在本地启动服务就可以直接进入本地仓库文件夹启动了。
-现在来commit，sync，ok之后就可以在浏览器输入仓库名（也就是博客网址）来打开博客看看了</p>
+<p><strong>dbyll</strong> is minimalist, stylish theme for jekyll. Supports gravatar, account links (github, twitter, e-mail, pinterest, résume file) and a bio.</p>
 
-<p>下面来整个域名，当然不用也可以，不过逼格就不那么的高了,推荐去godaddy上购买域名，毕竟是最大的域名提供商，不过我直接在万网上买了，购买的步骤就不写了，交钱拿货而已</p>
+<p><strong>dbyll</strong> is brought to you by <strong><a href="http://ismaildemirbilek.com">dbtek</a></strong>. Open sourced under <a href="http://opensource.org/licenses/MIT">MIT</a> license.</p>
 
-<p>说一下域名的解析设置吧</p>
+<h3 id="dbyll-is-on-github-2">dbyll is on GitHub</h3>
 
-<p><img src="/assets/source/2015-12-2-1.png" width="100%" /></p>
+<p><a class="btn btn-default" href="https://github.com/dbtek/dbyll">Grab your copy now!</a></p>
 
-<p>记录类型一般是选<code>CANME</code>和<code>A(adderss)记录</code>：</p>
+<p><strong>dbyll</strong> is minimalist, stylish theme for jekyll. Supports gravatar, account links (github, twitter, e-mail, pinterest, résume file) and a bio.</p>
 
-<p><code>A记录</code>：将你的域名直接指向IP地址，这样DNS直接根据域名找到对应的IP</p>
+<p><strong>dbyll</strong> is brought to you by <strong><a href="http://ismaildemirbilek.com">dbtek</a></strong>. Open sourced under <a href="http://opensource.org/licenses/MIT">MIT</a> license.</p>
 
-<p><code>CNAME</code>：简单来说就是给主机起一个别名，就像swift中的alias关键字，加个名字而已，本质上还是和原来的网址（也就是你的仓库名）做一样的事情，这样的一个好处是，如果IP地址换了，使用新注册的这个域名依然可以找到IP地址，不过A记录的方式就不可以了</p>
+<h3 id="dbyll-is-on-github-3">dbyll is on GitHub</h3>
 
-<p>不过我当时随便弄的，也没管太多，就用的A记录的</p>
+<p><a class="btn btn-default" href="https://github.com/dbtek/dbyll">Grab your copy now!</a></p>
 
-<p><code>主机记录</code>：用<code>www</code>做前缀就填<code>www</code>，不带就填<code>@</code>或不填，不过网上看到不带<code>www</code>的不能用<code>CNAME</code>，没有验证过，感兴趣的话可以试试</p>
+<p><strong>dbyll</strong> is minimalist, stylish theme for jekyll. Supports gravatar, account links (github, twitter, e-mail, pinterest, résume file) and a bio.</p>
 
-<p><code>解析线路</code>：默认就好</p>
+<p><strong>dbyll</strong> is brought to you by <strong><a href="http://ismaildemirbilek.com">dbtek</a></strong>. Open sourced under <a href="http://opensource.org/licenses/MIT">MIT</a> license.</p>
 
-<p><code>记录值</code>：使用<code>CNAME</code>就填你的网址（仓库名）；使用<code>A记录</code>的话，用命令行<code>PING</code>一下你的网址（仓库名），把得到的IP地址填上就可以了</p>
+<h3 id="dbyll-is-on-github-4">dbyll is on GitHub</h3>
 
-<p><img src="/assets/source/2015-12-2-2.png" width="100%" /></p>
+<p><a class="btn btn-default" href="https://github.com/dbtek/dbyll">Grab your copy now!</a></p>
 
-<p>保存，等个十几分钟就可以了</p>
-
-<p>基本的建站方法就是这样，装修博客的工作就不多说了，对H5不熟悉的同学或向我一样比较懒的可以直接下载模板，有能力的话还是自己来写比较好</p>
-
-<p>不管是下载模板还是自己写，都需要用到下面两个插件</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#高亮插件</span>
-<span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">pygments</span><span class="o">.</span><span class="n">rb</span>
-<span class="c1">#分页插件</span>
-<span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">jekyll</span><span class="o">-</span><span class="n">paginate</span></code></pre></figure>
-
-<p>下面是几个文档链接：</p>
-
-<p><a href="http://www.appinn.com/markdown/">markdown</a>：写博客是用到的标注，很方便的说</p>
-
-<p><a href="http://pygments.org">pygments</a>：代码高亮</p>
-
-<p><a href="https://github.com/shopify/liquid/wiki/liquid-for-designers">liquid</a>：H5 liquid模版语法</p>
-
-<p><a href="http://jekyll.bootcss.com/docs/">jekyll</a>：jekyll官方文档</p>
 
     </div>
 
@@ -252,8 +230,13 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
       
       
        
-        <li><a href="http://localhost:4000/categories.html#技术-ref">
-          技术 <span>(1)</span>
+        <li><a href="http://localhost:4000/categories.html#general-ref">
+          general <span>(4)</span>
+          ,
+        </a></li>
+       
+        <li><a href="http://localhost:4000/categories.html#demo-ref">
+          demo <span>(4)</span>
           
         </a></li>
       
@@ -268,15 +251,22 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
       
        
         <li>
-          <a href="http://localhost:4000/tags.html#Tech-ref">
-          Tech <span>(1)</span>
+          <a href="http://localhost:4000/tags.html#demo-ref">
+          demo <span>(4)</span>
           ,
           </a>
         </li>
        
         <li>
-          <a href="http://localhost:4000/tags.html#生活-ref">
-          生活 <span>(1)</span>
+          <a href="http://localhost:4000/tags.html#dbyll-ref">
+          dbyll <span>(4)</span>
+          ,
+          </a>
+        </li>
+       
+        <li>
+          <a href="http://localhost:4000/tags.html#dbtek-ref">
+          dbtek <span>(4)</span>
           
           </a>
         </li>
@@ -291,7 +281,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
     <div>
       <section class="share col-sm-6">
         <h4 class="section-title">Share Post</h4>
-        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=记此博客的诞生"
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=dude"
            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
           <i class="fa fa-twitter fa-lg"></i>
           Twitter
@@ -319,10 +309,10 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
     <ul class="pager">
       
-      <li class="previous disabled"><a>&larr; Previous</a></li>
+      <li class="previous"><a href="http://localhost:4000/welcome-to-jekyll" title="Welcome to Jekyll!">&larr; Previous</a></li>
       
       
-      <li class="next disabled"><a>Next &rarr;</a>
+      <li class="next"><a href="http://localhost:4000/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F" title="记此博客的诞生">Next &rarr;</a></li>
       
     </ul>
 

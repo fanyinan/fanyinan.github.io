@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Dec 2015 11:29:53 +0800</pubDate>
-    <lastBuildDate>Wed, 02 Dec 2015 11:29:53 +0800</lastBuildDate>
+    <pubDate>Wed, 02 Dec 2015 15:49:55 +0800</pubDate>
+    <lastBuildDate>Wed, 02 Dec 2015 15:49:55 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -15,12 +15,14 @@
 
 &lt;p&gt;先大体说一下这个博客的结构吧：&lt;/p&gt;
 
-&lt;p&gt;1.我使用Jekyll来创建博客，它来帮我们直接生成静态页面。对，买错，就是直接生成静态页面，没有服务器后台，没有数据库。 为什么用这个呢？因为我懒。我就想写点东西放到网上，我干嘛要去配置主机，干嘛要去整数据库，怎么省事怎么来吧 -&lt;em&gt;-#&lt;/em&gt;&lt;br /&gt;
-2.其次使用了GitHub Page来托管我的网站，Jekyll 可以运行在 GitHub Page 上，所以写完一篇文章之后你是需要push一下就OK了&lt;/p&gt;
+&lt;p&gt;1.我使用Jekyll来创建博客，它来帮我们直接生成静态页面。对，没错，就是直接生成静态页面，没有服务器后台，没有数据库。 为什么用这个呢？因为我懒。我就想写点东西放到网上，我干嘛要去配置主机，干嘛要去整数据库，怎么省事怎么来吧 -&lt;em&gt;-#&lt;/em&gt;&lt;br /&gt;
+2.其次使用了GitHub Pages来托管我的网站，Jekyll 可以运行在 GitHub Pages上，所以写完一篇文章之后你是需要push一下就OK了&lt;/p&gt;
 
 &lt;p&gt;先提一下，我用的MacBook(没钱买，公司的)，所以是在mac的环境下安装的，windows下估计差不多。先从Jekyll的搭建开始讲起，首先Jekyll是用Ruby写的，所以需要先搭建Ruby环境（写这篇文章的时候已经是下周二晚上了，我也不记得是不是需要安装Ruby环境，所以把Ruby环境干掉之后再启动Jekyll服务，提示找不到文件）&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#列出已知的ruby版本&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# 先查看是否已经安装过ruby，安装过就算了&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rvm&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#列出已知的ruby版本&lt;/span&gt;
 &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rvm&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;known&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;#安装最新的&lt;/span&gt;
 &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rvm&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -49,13 +51,56 @@
 
 &lt;p&gt;不报错就是起动成功了（废话），在浏览器打开http://localhost:4000 看是否真的成功了吧Y(^&lt;em&gt;^)Y&lt;/em&gt;)&lt;/p&gt;
 
-&lt;p&gt;现在来把它搞到GitHub pages上
+&lt;p&gt;现在来把它搞到GitHub Pages上
 首先需要有个GitHub的帐号，这个就不说了&lt;/p&gt;
 
 &lt;p&gt;然后建个仓库，再clone到本地，&lt;a href=&quot;https://pages.github.com/&quot;&gt;官方文档&lt;/a&gt;有详细教程，不过记得仓库名，username.github.io，username必须和owner的名字相同，否则只是个普通的仓库了&lt;/p&gt;
 
 &lt;p&gt;最后只要把用Jekyll创建的文件夹copy到本地仓库文件夹就OK了，只copy文件夹内的文件就行，根目录不需要，之后如果想在本地启动服务就可以直接进入本地仓库文件夹启动了。
-现在来commit，sync，ok之后就可以在浏览器输入仓库名来打开博客看看了&lt;/p&gt;
+现在来commit，sync，ok之后就可以在浏览器输入仓库名（也就是博客网址）来打开博客看看了&lt;/p&gt;
+
+&lt;p&gt;下面来整个域名，当然不用也可以，不过逼格就不那么的高了,推荐去godaddy上购买域名，毕竟是最大的域名提供商，不过我直接在万网上买了，购买的步骤就不写了，交钱拿货而已&lt;/p&gt;
+
+&lt;p&gt;说一下域名的解析设置吧&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-2-1.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;记录类型一般是选&lt;code&gt;CANME&lt;/code&gt;和&lt;code&gt;A(adderss)记录&lt;/code&gt;：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;A记录&lt;/code&gt;：将你的域名直接指向IP地址，这样DNS直接根据域名找到对应的IP&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;CNAME&lt;/code&gt;：简单来说就是给主机起一个别名，就像swift中的alias关键字，加个名字而已，本质上还是和原来的网址（也就是你的仓库名）做一样的事情，这样的一个好处是，如果IP地址换了，使用新注册的这个域名依然可以找到IP地址，不过A记录的方式就不可以了&lt;/p&gt;
+
+&lt;p&gt;不过我当时随便弄的，也没管太多，就用的A记录的&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;主机记录&lt;/code&gt;：用&lt;code&gt;www&lt;/code&gt;做前缀就填&lt;code&gt;www&lt;/code&gt;，不带就填&lt;code&gt;@&lt;/code&gt;或不填，不过网上看到不带&lt;code&gt;www&lt;/code&gt;的不能用&lt;code&gt;CNAME&lt;/code&gt;，没有验证过，感兴趣的话可以试试&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;解析线路&lt;/code&gt;：默认就好&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;记录值&lt;/code&gt;：使用&lt;code&gt;CNAME&lt;/code&gt;就填你的网址（仓库名）；使用&lt;code&gt;A记录&lt;/code&gt;的话，用命令行&lt;code&gt;PING&lt;/code&gt;一下你的网址（仓库名），把得到的IP地址填上就可以了&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-2-2.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;保存，等个十几分钟就可以了&lt;/p&gt;
+
+&lt;p&gt;基本的建站方法就是这样，装修博客的工作就不多说了，对H5不熟悉的同学或向我一样比较懒的可以直接下载模板，有能力的话还是自己来写比较好&lt;/p&gt;
+
+&lt;p&gt;不管是下载模板还是自己写，都需要用到下面两个插件&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#高亮插件&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pygments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#分页插件&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jekyll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;paginate&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;下面是几个文档链接：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.appinn.com/markdown/&quot;&gt;markdown&lt;/a&gt;：写博客是用到的标注，很方便的说&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://pygments.org&quot;&gt;pygments&lt;/a&gt;：代码高亮&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/shopify/liquid/wiki/liquid-for-designers&quot;&gt;liquid&lt;/a&gt;：H5 liquid模版语法&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://jekyll.bootcss.com/docs/&quot;&gt;jekyll&lt;/a&gt;：jekyll官方文档&lt;/p&gt;
 </description>
         <pubDate>Wed, 02 Dec 2015 00:00:00 +0800</pubDate>
         <link>/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F</link>
