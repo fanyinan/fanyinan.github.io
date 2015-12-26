@@ -5,9 +5,367 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Dec 2015 15:49:55 +0800</pubDate>
-    <lastBuildDate>Wed, 02 Dec 2015 15:49:55 +0800</lastBuildDate>
+    <pubDate>Sat, 26 Dec 2015 16:50:25 +0800</pubDate>
+    <lastBuildDate>Sat, 26 Dec 2015 16:50:25 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>一个拼图游戏的实现</title>
+        <description>&lt;p&gt;公司项目中需要一个拼图游戏，看了网上没有特别好的，就自己写一个吧 ^&lt;em&gt;^&lt;/em&gt;，后来自己又加了自动完成的功能，这篇博客主要写一下随机打乱和自动完成部分，UI和手动拼图稍微写一点&lt;/p&gt;
+
+&lt;h3 id=&quot;ui&quot;&gt;UI部分&lt;/h3&gt;
+&lt;p&gt;首先一个最重要的成员变量&lt;code&gt;puzzleIndex&lt;/code&gt;用来记录每一块拼图的当前位置，比如：3x3拼图的初始顺序为&lt;code&gt;[0,1,2,3,4,5,6,7,8]&lt;/code&gt;，当&lt;code&gt;0&lt;/code&gt;和&lt;code&gt;1&lt;/code&gt;交换后为&lt;code&gt;[1,0,2,3,4,5,6,7,8]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;先简单说一下UI部分，基本就是用一张图片用下面这个方法先裁剪成一个正方形，然后再裁成九张图&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;n&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CGImageCreateWithImageInRect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;CGImage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;rect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;CGRect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;CGImage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;当然也可以用&lt;code&gt;contentsRect&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;值得注意的是，如果图片是来自手机相册的话，图片可能会旋转，那是因为&lt;code&gt;UIImage&lt;/code&gt;的&lt;code&gt;imageOrientation&lt;/code&gt;属性，该属性是一个枚举类型&lt;code&gt;UIImageOrientation&lt;/code&gt;，表示图片的方向&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;n&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;UIImageOrientation&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Up&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// default orientation&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Down&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 180 deg rotation&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 90 deg CCW&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Right&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 90 deg CW&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UpMirrored&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// as above but image mirrored along other axis. horizontal flip&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DownMirrored&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// horizontal flip&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LeftMirrored&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// vertical flip&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RightMirrored&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// vertical flip&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;如果把一个&lt;code&gt;UIImage&lt;/code&gt;直接放在一个&lt;code&gt;UIImageView&lt;/code&gt;中，无论&lt;code&gt;UIImageOrientation&lt;/code&gt;为何值，都会把图片转为&lt;code&gt;.Up&lt;/code&gt;的方向，所以无论我们用手机拍照时手机处于什么方向，在相册中看到的图片方向都是拍照时在相机中看到的图片方向。&lt;/p&gt;
+
+&lt;p&gt;不过，图片实际的方向并没有改变，所以在分割图片的时候要先调整图片的方向，这里就不贴代码了，可以到我的&lt;a href=&quot;https://github.com/fanyinan/PuzzleProject&quot;&gt;GitHub&lt;/a&gt;中下载源码&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;手动拼图&lt;/h3&gt;
+&lt;p&gt;先说下需求：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1.可以一次拖动多个块
+
+2.块可以被拖动，随着手势移动
+
+3.松开手时块会根据当前的位置自动移动到偏向的位置
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-1.gif&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt; &lt;span class=&quot;c1&quot;&gt;//需求一:当手指点击到屏幕时计算移动块所需的数据，只说下思路，就不贴代码了&lt;/span&gt;
+ &lt;span class=&quot;kr&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;touchesBegan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;touches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;UITouch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;withEvent&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;UIEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_touch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;touches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;//计算坐标点坐在块&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//如果点击块和空块在同行或同列，计算点击块和空块之间的所有块，否则不可移动&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//计算点击块可移动的坐标范围，注意是点击块不是所有可以移动的块&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//需求二：块可以被拖动，随着手势移动&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;touchesMoved&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;touches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;UITouch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;withEvent&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;UIEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;//点击块在之前算出的可移动范围内移动，根据点击块的位移距离移动所有可以移动的块&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//需求三：松开手时块会根据当前的位置自动移动到偏向的位置&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;touchesEnded&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;touches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;UITouch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;withEvent&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;UIEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//判断块的当前位置更靠近哪一侧&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//直接用动画移动到更靠近的一侧&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;随机排序&lt;/h3&gt;
+&lt;p&gt;先明确几个概念：&lt;/p&gt;
+
+&lt;p&gt;1、位置：表示当前块位于某行某列，被移动就会改变&lt;/p&gt;
+
+&lt;p&gt;2、位置序号：拼图中的位置对应的序号，比如在3X3的拼图中，第1行(row = 0) 2列(col = 1)的位置序号为1&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Position&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;col&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;随机排序主要分两步：&lt;/p&gt;
+
+&lt;p&gt;1、计算出随机排序的路径&lt;/p&gt;
+
+&lt;p&gt;2、递归路径，进行动画&lt;/p&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;先来说第一步，：&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//交换路径，表示块从某个位置序号移动到另一个位置序号&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SwapPath&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   获取打乱路径&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;randomPuzzlePath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SwapPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]{&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;pathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SwapPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//保存一份当前空白块的位置序号，这两个变量都是成员变量，保存一份是防止在获取随机路径但是还没有真正去移动的时候改变真正空白块的位置序号&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;blankIndexForCal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blankIndex&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//需要随机的次数&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;swapNum&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//当前空白块的位置(即：Position）&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blankPosition&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blankIndexForCal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//获取空白块的相邻块的位置&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;atPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blankPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//swapCountList是一个保存每个位置序号被移动次数的数组，注意不是每个块，而是每个位置&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//比如初始数组为[0,0,0,0,0,0,0,1],因为空白块在右下角，所以第九个元素为1&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//假如空白块移动到第三排第二列，则为[0,0,0,0,0,0,1,1]&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//以此来使每一块都尽量被移动相近的次数&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//所以下面这句话是对每个相邻块被移动过的次数进行排序&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;swapCountList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;swapCountList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]})&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//这句比较容易理解，就是指过滤掉移动过来的位置，保证空白块不会在两个位置反复移动&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;previousPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)})&lt;/span&gt;
+
+      &lt;span class=&quot;c1&quot;&gt;//获取所有被移动过次数最少的块，因为可能会有多个位置被移动的次数相等&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;swapCountList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;swapCountList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]})&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//在剩余位置中随机一个位置作为被交换位置&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;positionToSwap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arc4random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UInt32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt;
+
+      &lt;span class=&quot;c1&quot;&gt;//添加进随机路径的数组&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//swap方法中修改swapCountList(移动次数数组)，blankIndexForCal(空白块的位置)，生成移动路径&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;pathList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blankPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;positionToSwap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//记录当前空白块的位置序号，用来被过滤&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;previousPosition&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blankPosition&lt;/span&gt;
+      
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pathList&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;第二步：&lt;/h4&gt;
+
+&lt;p&gt;一个递归&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;  &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   自动移动&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   &lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   - parameter pathList: 移动路径&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   - parameter completionHandle: 移动完成所有路径后的回调&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;moveItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;withSwapPathList&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;pathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SwapPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;durationPerStep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NSTimeInterval&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.05&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;completionHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//递归的终止条件，当所有路径都被移动过了，就结束&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isEmpty&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//定义移动完成一步的回调，&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;moveCompletion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//移动完成一步再继续递归，同时移除移动路径的第一个&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;moveItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;withSwapPathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;durationPerStep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;durationPerStep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;completionHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;completionHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//移动一步，这个方法中处理了位移动画，和移动一步需要修改的数据&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;durationPerStep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;targetIndexList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toIndexList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pathList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;finishCompletion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;moveCompletion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;自动完成&lt;/h3&gt;
+
+&lt;p&gt;大概思路：先从最外层的开始，即先完成0，1，2，3，再完成4，8，12，这样就完成了第一层；然后再5，6，7，再9，13，以此类推，这样每一层的逻辑都一样，逐步简化拼图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-2.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;基本步骤：&lt;/p&gt;
+
+&lt;p&gt;比如：现在要把0号块，移动到位置序号为0的位置，需要经过以下几步：&lt;/p&gt;
+
+&lt;p&gt;1、0号块的位置序号是&lt;code&gt;5&lt;/code&gt;，所以需要获得&lt;code&gt;5 -&amp;gt; 0&lt;/code&gt; 的移动路径，即 &lt;code&gt;5 -&amp;gt; 4 -&amp;gt; 1 -&amp;gt; 0&lt;/code&gt;，值得注意的是这几个数字是位置序号，不是块上标的序号&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-3.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2、但是只有空白块相临的块可以移动，所以需要先将空白块移动到&lt;code&gt;4&lt;/code&gt;，即2号块所在的位置，以便使位置序号&lt;code&gt;5&lt;/code&gt;上的0号块移动到位置序号&lt;code&gt;4&lt;/code&gt;的位置上，这样以此类推最终把0号块移动到位置序号&lt;code&gt;0&lt;/code&gt;上，并且整个拼图基本也是这个逻辑，除了两种特殊情况，这两种情况后面会讲到&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-4.png&quot; width=&quot;30%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18-5.png&quot; width=&quot;30%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18-6.png&quot; width=&quot;30%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这两步的原理都是一样的，都是把一个块移动到另一个位置所经过的路径，不过值得注意的是，在获取路径时，有的块是不能被移动的，所以需要避开这些块，具体方法：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt; &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   获得移动块所需的路径，比如要获取位置序号`5`到位置序号`0`的路径，那么首先会得到在5的相邻块中，位置序号`4`是一条路径，就又了第一个路径`5 -&amp;gt; 4`，然后就会转化为求位置序号4到位置序号`0`的计算，以此类推，直到去求&amp;#39;0 -&amp;gt; 0&amp;#39;的路径时，表示获得完整路径 可以看出这也是一个递归，并且类似于树的递归，&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   &lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   - parameter fromIndex: 起始位置，UI上index&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   - parameter toIndex:   目的位置，UI上的index&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   - parameter avoidIndexList: 不可被移动的块&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   &lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   - returns: 移动路径&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fromIndex&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;avoidIndexList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SwapPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;fromIndex \(fromIndex), toIndex \(toIndex)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;//当移动的开始位置等于结束位置时，则已获得完整路径，标识递归结束&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromIndex&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndex&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromPosition&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//获得相邻的position&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;atPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//过滤掉移动过来的position&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;previousPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)})&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//过滤掉不会被移动的index的position&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//这里的`avoidIndex`包括已完成的块，和即将要移动的块&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//比如上面三个图中的图1，位置序号`5`的0号块不可以被移动&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndex&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndexList&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//按照blankindex与toindex的距离排序&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//具体解释见图解1&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)})&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//如果有多个相邻position且前两个距离toindex的距离相同&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//见图解2&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//获得toindex的相邻position&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;atPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndex&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndexList&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))})&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//如果toindex的可移动的position只有一个，就按照之前两个距离相同的position距离该position的距离排序；否则有死循环情况&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])})&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//开始递归&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPosition&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//进行交换处理&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentPath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//保存，用于下一次过滤掉这个位置，避免往回走&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;previousPosition&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromPosition&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//递归&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextPathList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;avoidIndexList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndexList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextPathList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        
+        &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;finalPathList&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextPathList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;finalPathList&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nil&lt;/span&gt;
+    
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;图解1：&lt;/p&gt;
+
+&lt;p&gt;为什么选择的路径不是绿色路径而是红色路径，因为红色路径更近，好吧，这是一句废话，不过却是事实，我们要选择尽可能近的路径来完成，这里我没有用移动次数来表示远近与否，因为&lt;code&gt;没必要&lt;/code&gt;，而是直接用勾股定理算的；当然蓝色路径实际上和红色路径的移动次数是一样的，不过那又有什么关系呢，有一条可通的不就得了。。。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-7.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18-8.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;图解2:&lt;/p&gt;
+
+&lt;p&gt;这个处理的前提是图解一的处理，即先对其进行排序&lt;/p&gt;
+
+&lt;p&gt;先描述一下图中的情况：现在是在准备完成1号块，即&lt;code&gt;5 -&amp;gt; 1&lt;/code&gt;，那么空白块需要先移动到位置序号&lt;code&gt;1&lt;/code&gt;，如果不加这个处理会怎么样呢？？空白块会先和8号块交换，再和4号块交换，再通过筛选不可移动块发现没有可以移动的位置了，则此分支递归结束，进行下一个分支，即回到和8号块交换之后的情况，当前空白块在位置序号&lt;code&gt;8&lt;/code&gt;，与12号块交换，在与9号块交换，再与位置序号为9（即空白块开始的位置）的块进行交换，好吧，又回来的，之后就是无尽的死循环。。。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-9.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;那么该怎么办呢，先来观察一下，1号块所在的位置(即位置序号5)不可移动，可交换的8号、5号两个块的位置距离位置序号&lt;code&gt;1&lt;/code&gt;相等，最重要的是，空白块移动到位置序号&lt;code&gt;1&lt;/code&gt;的路径只有1条，见图。所以我的处理方法见代码注释&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-10.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18-11.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//获得toindex的相邻position&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//即图中位置序号`1`的相邻块，`0，2，5`，&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;atPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;//但是`0，5`不可被移动，那么就只剩`2`了&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndex&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndexList&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avoidIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))})&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      
+      
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        
+        &lt;span class=&quot;c1&quot;&gt;//比较图中两个距离，选择较近的&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toIndexAdjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])})&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;现在来写一下两种特殊情况：&lt;/h3&gt;
+
+&lt;p&gt;情况1：&lt;/p&gt;
+
+&lt;p&gt;这时2号块无法完成，所以必须要0号、1号块来让位，以便使2号块完成，直接上图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-12.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18-16.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-13.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-14.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里我没想到什么合适的方法，所以也是和图中一样，分步去移动的，有点蠢 ^_^&lt;/p&gt;
+
+&lt;p&gt;情况2:&lt;/p&gt;
+
+&lt;p&gt;和情况1基本一样，以完成6号块为例：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-17.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18-18.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-19.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-20.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-21.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-22.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接着就知需要一步一步写出来就好了&lt;/p&gt;
+
+&lt;p&gt;就先写这么多了，我已经努力去表达清楚了。。。&lt;/p&gt;
+</description>
+        <pubDate>Fri, 18 Dec 2015 00:00:00 +0800</pubDate>
+        <link>/%E4%B8%80%E4%B8%AA%E6%8B%BC%E5%9B%BE%E6%B8%B8%E6%88%8F%E7%9A%84%E5%AE%9E%E7%8E%B0</link>
+        <guid isPermaLink="true">/%E4%B8%80%E4%B8%AA%E6%8B%BC%E5%9B%BE%E6%B8%B8%E6%88%8F%E7%9A%84%E5%AE%9E%E7%8E%B0</guid>
+        
+        <category>Tech</category>
+        
+        <category>Swift</category>
+        
+        
+        <category>技术</category>
+        
+      </item>
     
       <item>
         <title>记此博客的诞生</title>

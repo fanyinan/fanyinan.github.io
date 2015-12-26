@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<title>一个拼图游戏的实现</title>
+
+	
+
+	<meta charset="utf-8">
+
+	<meta name="author" content="fanyinan">
+
+		<!-- Enable responsive viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" href="/assets/resources/syntax/syntax.css">
+<link rel="stylesheet" type="text/css" href="/assets/resources/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/assets/resources/font-awesome/css/font-awesome.min.css">
+<link rel="icon" href="https://raw.githubusercontent.com/fanyinan/fanyinan.github.io/master/assets/ico/favicon.jpg">
+
+<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.js"></script>
+	
+<script type="text/javascript">
+$(document).ready(function(){
+if(window.location.href=="http://blog.ankanbiswas.in/uno-dbyll/")
+{
+$("#sidebar").css({width:'100%'});
+$("#btnblog").click(function(){
+$("#sidebar").animate({width:'33.3333%'},'slow');
+});
+}
+});
+	
+</script>
+	</head>
+<body>
+
+<nav class="navbar navbar-default visible-xs" role="navigation">
+
+
+ <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarHeaderCollapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a type="button" class="navbar-toggle nav-link" href="http://github.com/fanyinan">
+        <i class="fa fa-github"></i>
+      </a>
+      
+      
+       
+      <a type="button" class="navbar-toggle nav-link" href="mailto:fanyinan93@126.com">
+        <i class="fa fa-envelope"></i>
+      </a>
+      
+     
+
+     
+      <a class="navbar-brand" href="http://localhost:4000">
+        <img src="" class="img-circle" style="height:35px;width:35px"/>
+        顽主的一亩三分地 !#_#
+      </a>
+    </div>
+    
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbarHeaderCollapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="http://localhost:4000">Home</a></li>
+        <li><a href="http://localhost:4000/categories.html">Categories</a></li>
+        <li><a href="http://localhost:4000/tags.html">Tags</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+
+</nav>
+
+  <!-- nav-menu-dropdown -->
+  <div class="btn-group hidden-xs" id="nav-menu">
+   <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown">
+     <i class="fa fa-bars"></i>
+   </button>
+   <ul class="dropdown-menu pull-right" role="menu">
+     <li><a href="http://localhost:4000"><i class="fa fa-home"></i> Home</a></li>
+     <li><a href="http://localhost:4000/categories.html"><i class="fa fa-folder"></i> Categories</a></li>
+     <li><a href="http://localhost:4000/tags.html"><i class="fa fa-tags"></i> Tags</a></li>
+     <li class="divider"></li>
+     <li><a href="#"><i class="fa fa-arrow-up"></i> Top of Page</a></li>
+   </ul>
+ </div>
+
+<div class="sidebar hidden-xs" id="sidebar" style="width: 30%">
+		<! -- sidebar.html -->
+<header class="sidebar-header" role="banner">
+	<a href="http://localhost:4000">
+<img src="/assets/media/avatar.jpg" class="img-circle" style="border-radius: 50%;border: 3px solid #FFF; height:120px;width:120px" />	</a>
+	<h3>
+        <!-- <a href="http://localhost:4000">顽主的一亩三分地 !#_#</a> -->
+         <p style="font-size:30px; text-shadow:1px 1px 1px #666666;">顽主的一亩三分地!#_#</p>
+    </h3>
+    
+<h3 class="title" style="margin-top:50px; line-height: 25px; width: 80%; margin-left:20%; text-align:justify">
+         <p style="font-size:16px; font-weight:400">我叫范祎(yi)楠。IOS开发者一枚，也是个北漂。爱IOS胜过爱女朋友，天哪噜，我没女朋友，我没有女朋友，我没有女朋友(重要的事情说三遍)。有点强迫症，有点完美主义，也有点稀里糊涂。总之爱生活，爱自由，始终在坚持做自己心水的事。</p>
+    </h3>
+
+ <!-- <h3 class="title" style="font-size:30px;">
+ 
+       
+      <a type="button" class="social1" href="http://github.com/fanyinan">
+        <i class="fa fa-github"></i>
+      </a>
+      
+       
+     
+      
+      <a type="button" class="social3" href="mailto:fanyinan93@126.com">
+        <i class="fa fa-envelope"></i>
+      </a>
+      
+       <a type="button"  style="font-size:20px; padding:7px; padding-left:13px;padding-right:13px;margin-right: 10px;" class="social3 " id="btnblog" href="http://localhost:4000/#blog">
+        <i class="fa" style="font-weight:bold;letter-spacing:0; font-family:arial,sans-serif">Blog</i>
+      </a>
+      </h3> -->
+
+</header>
+
+
+<! -- sidebar.html end -->
+
+	</div>
+
+<div class="col-sm-8 col-sm-offset-4" id="container">
+  
+<div class="page-header">
+  <h1>一个拼图游戏的实现 </h1>
+</div>
+  
+<article>
+
+  <div class="col-sm-10">
+   <span class="post-date">
+     
+     December 
+     18th,
+     
+     2015
+      
+   </span>
+    <div class="article_body" id="article_body">
+    <p>公司项目中需要一个拼图游戏，看了网上没有特别好的，就自己写一个吧 ^<em>^</em>，后来自己又加了自动完成的功能，这篇博客主要写一下随机打乱和自动完成部分，UI和手动拼图稍微写一点</p>
+
+<h3 id="ui">UI部分</h3>
+<p>首先一个最重要的成员变量<code>puzzleIndex</code>用来记录每一块拼图的当前位置，比如：3x3拼图的初始顺序为<code>[0,1,2,3,4,5,6,7,8]</code>，当<code>0</code>和<code>1</code>交换后为<code>[1,0,2,3,4,5,6,7,8]</code></p>
+
+<p>先简单说一下UI部分，基本就是用一张图片用下面这个方法先裁剪成一个正方形，然后再裁成九张图</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">public</span> <span class="k">func</span> <span class="n">CGImageCreateWithImageInRect</span><span class="p">(</span><span class="nl">image</span><span class="p">:</span> <span class="bp">CGImage</span><span class="o">?</span><span class="p">,</span> <span class="n">_</span> <span class="nl">rect</span><span class="p">:</span> <span class="bp">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">CGImage</span><span class="o">?</span></code></pre></figure>
+
+<p>当然也可以用<code>contentsRect</code></p>
+
+<p>值得注意的是，如果图片是来自手机相册的话，图片可能会旋转，那是因为<code>UIImage</code>的<code>imageOrientation</code>属性，该属性是一个枚举类型<code>UIImageOrientation</code>，表示图片的方向</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">public</span> <span class="k">enum</span> <span class="nl">UIImageOrientation</span> <span class="p">:</span> <span class="n">Int</span> <span class="p">{</span>
+    
+    <span class="k">case</span> <span class="n">Up</span> <span class="c1">// default orientation</span>
+    <span class="k">case</span> <span class="n">Down</span> <span class="c1">// 180 deg rotation</span>
+    <span class="k">case</span> <span class="n">Left</span> <span class="c1">// 90 deg CCW</span>
+    <span class="k">case</span> <span class="n">Right</span> <span class="c1">// 90 deg CW</span>
+    <span class="k">case</span> <span class="n">UpMirrored</span> <span class="c1">// as above but image mirrored along other axis. horizontal flip</span>
+    <span class="k">case</span> <span class="n">DownMirrored</span> <span class="c1">// horizontal flip</span>
+    <span class="k">case</span> <span class="n">LeftMirrored</span> <span class="c1">// vertical flip</span>
+    <span class="k">case</span> <span class="n">RightMirrored</span> <span class="c1">// vertical flip</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>如果把一个<code>UIImage</code>直接放在一个<code>UIImageView</code>中，无论<code>UIImageOrientation</code>为何值，都会把图片转为<code>.Up</code>的方向，所以无论我们用手机拍照时手机处于什么方向，在相册中看到的图片方向都是拍照时在相机中看到的图片方向。</p>
+
+<p>不过，图片实际的方向并没有改变，所以在分割图片的时候要先调整图片的方向，这里就不贴代码了，可以到我的<a href="https://github.com/fanyinan/PuzzleProject">GitHub</a>中下载源码</p>
+
+<h3 id="section">手动拼图</h3>
+<p>先说下需求：</p>
+
+<pre><code>1.可以一次拖动多个块
+
+2.块可以被拖动，随着手势移动
+
+3.松开手时块会根据当前的位置自动移动到偏向的位置
+</code></pre>
+
+<p><img src="/assets/source/2015-12-18-1.gif" width="50%" /></p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"> <span class="c1">//需求一:当手指点击到屏幕时计算移动块所需的数据，只说下思路，就不贴代码了</span>
+ <span class="kr">override</span> <span class="k">func</span> <span class="nf">touchesBegan</span><span class="p">(</span><span class="nl">touches</span><span class="p">:</span> <span class="n">Set</span><span class="o">&lt;</span><span class="bp">UITouch</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">withEvent</span> <span class="nl">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="o">?</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="k">if</span> <span class="k">let</span> <span class="n">_touch</span> <span class="o">=</span> <span class="n">touches</span><span class="p">.</span><span class="n">first</span> <span class="p">{</span>
+
+        <span class="c1">//计算坐标点坐在块</span>
+        <span class="c1">//如果点击块和空块在同行或同列，计算点击块和空块之间的所有块，否则不可移动</span>
+        <span class="c1">//计算点击块可移动的坐标范围，注意是点击块不是所有可以移动的块</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//需求二：块可以被拖动，随着手势移动</span>
+<span class="kr">override</span> <span class="k">func</span> <span class="nf">touchesMoved</span><span class="p">(</span><span class="nl">touches</span><span class="p">:</span> <span class="n">Set</span><span class="o">&lt;</span><span class="bp">UITouch</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">withEvent</span> <span class="nl">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="o">?</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">//点击块在之前算出的可移动范围内移动，根据点击块的位移距离移动所有可以移动的块</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//需求三：松开手时块会根据当前的位置自动移动到偏向的位置</span>
+<span class="kr">override</span> <span class="k">func</span> <span class="nf">touchesEnded</span><span class="p">(</span><span class="nl">touches</span><span class="p">:</span> <span class="n">Set</span><span class="o">&lt;</span><span class="bp">UITouch</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">withEvent</span> <span class="nl">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="o">?</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//判断块的当前位置更靠近哪一侧</span>
+    <span class="c1">//直接用动画移动到更靠近的一侧</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="section-1">随机排序</h3>
+<p>先明确几个概念：</p>
+
+<p>1、位置：表示当前块位于某行某列，被移动就会改变</p>
+
+<p>2、位置序号：拼图中的位置对应的序号，比如在3X3的拼图中，第1行(row = 0) 2列(col = 1)的位置序号为1</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">struct</span> <span class="n">Position</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nl">row</span><span class="p">:</span> <span class="n">Int</span>
+    <span class="k">var</span> <span class="nl">col</span><span class="p">:</span> <span class="n">Int</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>随机排序主要分两步：</p>
+
+<p>1、计算出随机排序的路径</p>
+
+<p>2、递归路径，进行动画</p>
+
+<h4 id="section-2">先来说第一步，：</h4>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//交换路径，表示块从某个位置序号移动到另一个位置序号</span>
+<span class="k">struct</span> <span class="n">SwapPath</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nl">fromIndex</span><span class="p">:</span> <span class="n">Int</span>
+    <span class="k">var</span> <span class="nl">toIndex</span><span class="p">:</span> <span class="n">Int</span>
+<span class="p">}</span>
+<span class="cm">/**</span>
+<span class="cm">   获取打乱路径</span>
+<span class="cm">   */</span>
+  <span class="n">private</span> <span class="k">func</span> <span class="n">randomPuzzlePath</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">SwapPath</span><span class="p">]{</span>
+    
+    <span class="k">var</span> <span class="nl">pathList</span><span class="p">:</span> <span class="p">[</span><span class="n">SwapPath</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1">//保存一份当前空白块的位置序号，这两个变量都是成员变量，保存一份是防止在获取随机路径但是还没有真正去移动的时候改变真正空白块的位置序号</span>
+    <span class="n">blankIndexForCal</span> <span class="o">=</span> <span class="n">blankIndex</span>
+    
+    <span class="c1">//需要随机的次数</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="k">in</span> <span class="mf">0.</span><span class="p">.</span><span class="o">&lt;</span><span class="n">swapNum</span> <span class="p">{</span>
+      
+      <span class="c1">//当前空白块的位置(即：Position）</span>
+      <span class="k">let</span> <span class="n">blankPosition</span> <span class="o">=</span> <span class="n">getPosition</span><span class="p">(</span><span class="nl">fromIndex</span><span class="p">:</span> <span class="n">blankIndexForCal</span><span class="p">)</span>
+      <span class="c1">//获取空白块的相邻块的位置</span>
+      <span class="k">var</span> <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">getAdjacentPositions</span><span class="p">(</span><span class="nl">atPosition</span><span class="p">:</span> <span class="n">blankPosition</span><span class="p">)</span>
+      
+      <span class="c1">//swapCountList是一个保存每个位置序号被移动次数的数组，注意不是每个块，而是每个位置</span>
+      <span class="c1">//比如初始数组为[0,0,0,0,0,0,0,1],因为空白块在右下角，所以第九个元素为1</span>
+      <span class="c1">//假如空白块移动到第三排第二列，则为[0,0,0,0,0,0,1,1]</span>
+      <span class="c1">//以此来使每一块都尽量被移动相近的次数</span>
+      <span class="c1">//所以下面这句话是对每个相邻块被移动过的次数进行排序</span>
+      <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">sort</span><span class="p">({</span><span class="n">swapCountList</span><span class="p">[</span><span class="n">getIndex</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">0</span><span class="p">)]</span> <span class="o">&lt;</span> <span class="n">swapCountList</span><span class="p">[</span><span class="n">getIndex</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">1</span><span class="p">)]})</span>
+      
+      <span class="c1">//这句比较容易理解，就是指过滤掉移动过来的位置，保证空白块不会在两个位置反复移动</span>
+      <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="o">!</span><span class="err">$</span><span class="mf">0.</span><span class="n">equal</span><span class="p">(</span><span class="nl">toPosition</span><span class="p">:</span> <span class="n">previousPosition</span><span class="p">)})</span>
+
+      <span class="c1">//获取所有被移动过次数最少的块，因为可能会有多个位置被移动的次数相等</span>
+      <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="n">swapCountList</span><span class="p">[</span><span class="n">getIndex</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">==</span> <span class="n">swapCountList</span><span class="p">[</span><span class="n">getIndex</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">0</span><span class="p">)]})</span>
+      
+      <span class="c1">//在剩余位置中随机一个位置作为被交换位置</span>
+      <span class="k">let</span> <span class="n">positionToSwap</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="n">Int</span><span class="p">(</span><span class="n">arc4random</span><span class="p">()</span> <span class="o">%</span> <span class="kt">UInt32</span><span class="p">(</span><span class="n">adjacentPositions</span><span class="p">.</span><span class="n">count</span><span class="p">))]</span>
+
+      <span class="c1">//添加进随机路径的数组</span>
+      <span class="c1">//swap方法中修改swapCountList(移动次数数组)，blankIndexForCal(空白块的位置)，生成移动路径</span>
+      <span class="n">pathList</span> <span class="o">+=</span> <span class="p">[</span><span class="n">swap</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="n">blankPosition</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">positionToSwap</span><span class="p">)]</span>
+      <span class="c1">//记录当前空白块的位置序号，用来被过滤</span>
+      <span class="n">previousPosition</span> <span class="o">=</span> <span class="n">blankPosition</span>
+      
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">pathList</span>
+  <span class="p">}</span>
+  </code></pre></figure>
+
+<h4 id="section-3">第二步：</h4>
+
+<p>一个递归</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">  <span class="cm">/**</span>
+<span class="cm">   自动移动</span>
+<span class="cm">   </span>
+<span class="cm">   - parameter pathList: 移动路径</span>
+<span class="cm">   - parameter completionHandle: 移动完成所有路径后的回调</span>
+<span class="cm">   */</span>
+  <span class="n">private</span> <span class="k">func</span> <span class="nf">moveItem</span><span class="p">(</span><span class="n">withSwapPathList</span> <span class="nl">pathList</span><span class="p">:</span> <span class="p">[</span><span class="n">SwapPath</span><span class="p">],</span> <span class="nl">durationPerStep</span><span class="p">:</span> <span class="n">NSTimeInterval</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="nl">completionHandle</span><span class="p">:</span> <span class="p">(()</span><span class="o">-&gt;</span><span class="n">Void</span><span class="p">)</span><span class="o">?</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="c1">//递归的终止条件，当所有路径都被移动过了，就结束</span>
+    <span class="k">if</span> <span class="n">pathList</span><span class="p">.</span><span class="n">isEmpty</span> <span class="p">{</span>
+      <span class="k">return</span>
+    <span class="p">}</span>
+    
+    <span class="c1">//定义移动完成一步的回调，</span>
+    <span class="k">func</span> <span class="n">moveCompletion</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//移动完成一步再继续递归，同时移除移动路径的第一个</span>
+      <span class="n">moveItem</span><span class="p">(</span><span class="nl">withSwapPathList</span><span class="p">:</span> <span class="n">Array</span><span class="p">(</span><span class="n">pathList</span><span class="p">[</span><span class="mf">1.</span><span class="p">.</span><span class="o">&lt;</span><span class="n">pathList</span><span class="p">.</span><span class="n">count</span><span class="p">]),</span> <span class="nl">durationPerStep</span><span class="p">:</span> <span class="n">durationPerStep</span><span class="p">,</span> <span class="nl">completionHandle</span><span class="p">:</span> <span class="n">completionHandle</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">//移动一步，这个方法中处理了位移动画，和移动一步需要修改的数据</span>
+    <span class="n">move</span><span class="p">(</span><span class="n">durationPerStep</span><span class="p">,</span> <span class="nl">targetIndexList</span><span class="p">:</span> <span class="p">[</span><span class="n">pathList</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">toIndex</span><span class="p">],</span> <span class="nl">toIndexList</span><span class="p">:</span> <span class="p">[</span><span class="n">pathList</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">fromIndex</span><span class="p">],</span> <span class="nl">finishCompletion</span><span class="p">:</span> <span class="n">moveCompletion</span><span class="p">)</span>
+    
+  <span class="p">}</span>
+  </code></pre></figure>
+
+<h3 id="section-4">自动完成</h3>
+
+<p>大概思路：先从最外层的开始，即先完成0，1，2，3，再完成4，8，12，这样就完成了第一层；然后再5，6，7，再9，13，以此类推，这样每一层的逻辑都一样，逐步简化拼图</p>
+
+<p><img src="/assets/source/2015-12-18-2.png" width="50%" /></p>
+
+<p>基本步骤：</p>
+
+<p>比如：现在要把0号块，移动到位置序号为0的位置，需要经过以下几步：</p>
+
+<p>1、0号块的位置序号是<code>5</code>，所以需要获得<code>5 -&gt; 0</code> 的移动路径，即 <code>5 -&gt; 4 -&gt; 1 -&gt; 0</code>，值得注意的是这几个数字是位置序号，不是块上标的序号</p>
+
+<p><img src="/assets/source/2015-12-18-3.png" width="50%" /></p>
+
+<p>2、但是只有空白块相临的块可以移动，所以需要先将空白块移动到<code>4</code>，即2号块所在的位置，以便使位置序号<code>5</code>上的0号块移动到位置序号<code>4</code>的位置上，这样以此类推最终把0号块移动到位置序号<code>0</code>上，并且整个拼图基本也是这个逻辑，除了两种特殊情况，这两种情况后面会讲到</p>
+
+<p><img src="/assets/source/2015-12-18-4.png" width="30%" style="float: left; margin-right:3%" />
+<img src="/assets/source/2015-12-18-5.png" width="30%" style="float: left; margin-right:3%" />
+<img src="/assets/source/2015-12-18-6.png" width="30%" /></p>
+
+<p>这两步的原理都是一样的，都是把一个块移动到另一个位置所经过的路径，不过值得注意的是，在获取路径时，有的块是不能被移动的，所以需要避开这些块，具体方法：</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"> <span class="cm">/**</span>
+<span class="cm">   获得移动块所需的路径，比如要获取位置序号`5`到位置序号`0`的路径，那么首先会得到在5的相邻块中，位置序号`4`是一条路径，就又了第一个路径`5 -&gt; 4`，然后就会转化为求位置序号4到位置序号`0`的计算，以此类推，直到去求&#39;0 -&gt; 0&#39;的路径时，表示获得完整路径 可以看出这也是一个递归，并且类似于树的递归，</span>
+<span class="cm">   </span>
+<span class="cm">   - parameter fromIndex: 起始位置，UI上index</span>
+<span class="cm">   - parameter toIndex:   目的位置，UI上的index</span>
+<span class="cm">   - parameter avoidIndexList: 不可被移动的块</span>
+<span class="cm">   </span>
+<span class="cm">   - returns: 移动路径</span>
+<span class="cm">   */</span>
+  <span class="n">private</span> <span class="k">func</span> <span class="nf">getPath</span><span class="p">(</span><span class="n">fromIndex</span> <span class="nl">fromIndex</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="nl">toIndex</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="nl">avoidIndexList</span><span class="p">:</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Int</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">SwapPath</span><span class="p">]</span><span class="o">?</span> <span class="p">{</span>
+    
+    <span class="n">print</span><span class="p">(</span><span class="s">&quot;fromIndex \(fromIndex), toIndex \(toIndex)&quot;</span><span class="p">)</span>
+
+    <span class="c1">//当移动的开始位置等于结束位置时，则已获得完整路径，标识递归结束</span>
+    <span class="k">if</span> <span class="n">fromIndex</span> <span class="o">==</span> <span class="n">toIndex</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">[]</span>
+    <span class="p">}</span>
+    
+    <span class="k">let</span> <span class="n">fromPosition</span> <span class="o">=</span> <span class="n">getPosition</span><span class="p">(</span><span class="nl">fromIndex</span><span class="p">:</span> <span class="n">fromIndex</span><span class="p">)</span>
+    <span class="k">let</span> <span class="n">toPosition</span> <span class="o">=</span> <span class="n">getPosition</span><span class="p">(</span><span class="nl">fromIndex</span><span class="p">:</span> <span class="n">toIndex</span><span class="p">)</span>
+    
+    <span class="c1">//获得相邻的position</span>
+    <span class="k">var</span> <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">getAdjacentPositions</span><span class="p">(</span><span class="nl">atPosition</span><span class="p">:</span> <span class="n">fromPosition</span><span class="p">)</span>
+    <span class="c1">//过滤掉移动过来的position</span>
+    <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="o">!</span><span class="err">$</span><span class="mf">0.</span><span class="n">equal</span><span class="p">(</span><span class="nl">toPosition</span><span class="p">:</span> <span class="n">previousPosition</span><span class="p">)})</span>
+    
+    <span class="c1">//过滤掉不会被移动的index的position</span>
+    <span class="c1">//这里的`avoidIndex`包括已完成的块，和即将要移动的块</span>
+    <span class="c1">//比如上面三个图中的图1，位置序号`5`的0号块不可以被移动</span>
+    <span class="k">for</span> <span class="n">avoidIndex</span> <span class="k">in</span> <span class="n">avoidIndexList</span> <span class="p">{</span>
+      <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="o">!</span><span class="err">$</span><span class="mf">0.</span><span class="n">equal</span><span class="p">(</span><span class="nl">toPosition</span><span class="p">:</span> <span class="n">getPosition</span><span class="p">(</span><span class="nl">fromIndex</span><span class="p">:</span> <span class="n">avoidIndex</span><span class="p">))})</span>
+    <span class="p">}</span>
+    
+    <span class="c1">//按照blankindex与toindex的距离排序</span>
+    <span class="c1">//具体解释见图解1</span>
+    <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">sort</span><span class="p">({</span><span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)})</span>
+    
+    <span class="c1">//如果有多个相邻position且前两个距离toindex的距离相同</span>
+    <span class="c1">//见图解2</span>
+    <span class="k">if</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span> <span class="o">==</span> <span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span> <span class="p">{</span>
+      
+      <span class="c1">//获得toindex的相邻position</span>
+      <span class="k">var</span> <span class="n">toIndexAdjacentPositions</span> <span class="o">=</span> <span class="n">getAdjacentPositions</span><span class="p">(</span><span class="nl">atPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span>
+      
+      <span class="k">for</span> <span class="n">avoidIndex</span> <span class="k">in</span> <span class="n">avoidIndexList</span> <span class="p">{</span>
+        <span class="n">toIndexAdjacentPositions</span> <span class="o">=</span> <span class="n">toIndexAdjacentPositions</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="o">!</span><span class="err">$</span><span class="mf">0.</span><span class="n">equal</span><span class="p">(</span><span class="nl">toPosition</span><span class="p">:</span> <span class="n">getPosition</span><span class="p">(</span><span class="nl">fromIndex</span><span class="p">:</span> <span class="n">avoidIndex</span><span class="p">))})</span>
+      <span class="p">}</span>
+      
+      <span class="c1">//如果toindex的可移动的position只有一个，就按照之前两个距离相同的position距离该position的距离排序；否则有死循环情况</span>
+      <span class="k">if</span> <span class="n">toIndexAdjacentPositions</span><span class="p">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+        
+        <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">sort</span><span class="p">({</span><span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toIndexAdjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toIndexAdjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">])})</span>
+      <span class="p">}</span>
+      
+    <span class="p">}</span>
+    
+    <span class="c1">//开始递归</span>
+    <span class="k">for</span> <span class="n">adjacentPosition</span> <span class="k">in</span> <span class="n">adjacentPositions</span> <span class="p">{</span>
+      
+      <span class="c1">//进行交换处理</span>
+      <span class="k">let</span> <span class="n">currentPath</span> <span class="o">=</span> <span class="n">swap</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="n">fromPosition</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">adjacentPosition</span><span class="p">)</span>
+      
+      <span class="c1">//保存，用于下一次过滤掉这个位置，避免往回走</span>
+      <span class="n">previousPosition</span> <span class="o">=</span> <span class="n">fromPosition</span>
+      
+      <span class="c1">//递归</span>
+      <span class="k">let</span> <span class="n">nextPathList</span> <span class="o">=</span> <span class="n">getPath</span><span class="p">(</span><span class="nl">fromIndex</span><span class="p">:</span> <span class="n">currentPath</span><span class="p">.</span><span class="n">toIndex</span><span class="p">,</span> <span class="nl">toIndex</span><span class="p">:</span> <span class="n">toIndex</span><span class="p">,</span> <span class="nl">avoidIndexList</span><span class="p">:</span> <span class="n">avoidIndexList</span><span class="p">)</span>
+      
+      <span class="k">if</span> <span class="n">nextPathList</span> <span class="o">==</span> <span class="nb">nil</span> <span class="p">{</span>
+        
+        <span class="k">continue</span>
+      <span class="p">}</span>
+      
+      <span class="k">let</span> <span class="n">finalPathList</span> <span class="o">=</span> <span class="p">[</span><span class="n">currentPath</span><span class="p">]</span> <span class="o">+</span> <span class="n">nextPathList</span><span class="o">!</span>
+      
+      <span class="k">return</span> <span class="n">finalPathList</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="nb">nil</span>
+    
+  <span class="p">}</span>
+  </code></pre></figure>
+
+<p>图解1：</p>
+
+<p>为什么选择的路径不是绿色路径而是红色路径，因为红色路径更近，好吧，这是一句废话，不过却是事实，我们要选择尽可能近的路径来完成，这里我没有用移动次数来表示远近与否，因为<code>没必要</code>，而是直接用勾股定理算的；当然蓝色路径实际上和红色路径的移动次数是一样的，不过那又有什么关系呢，有一条可通的不就得了。。。</p>
+
+<p><img src="/assets/source/2015-12-18-7.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18-8.png" width="45%" /></p>
+
+<p>图解2:</p>
+
+<p>这个处理的前提是图解一的处理，即先对其进行排序</p>
+
+<p>先描述一下图中的情况：现在是在准备完成1号块，即<code>5 -&gt; 1</code>，那么空白块需要先移动到位置序号<code>1</code>，如果不加这个处理会怎么样呢？？空白块会先和8号块交换，再和4号块交换，再通过筛选不可移动块发现没有可以移动的位置了，则此分支递归结束，进行下一个分支，即回到和8号块交换之后的情况，当前空白块在位置序号<code>8</code>，与12号块交换，在与9号块交换，再与位置序号为9（即空白块开始的位置）的块进行交换，好吧，又回来的，之后就是无尽的死循环。。。</p>
+
+<p><img src="/assets/source/2015-12-18-9.png" width="45%" /></p>
+
+<p>那么该怎么办呢，先来观察一下，1号块所在的位置(即位置序号5)不可移动，可交换的8号、5号两个块的位置距离位置序号<code>1</code>相等，最重要的是，空白块移动到位置序号<code>1</code>的路径只有1条，见图。所以我的处理方法见代码注释</p>
+
+<p><img src="/assets/source/2015-12-18-10.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18-11.png" width="45%" /></p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">if</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span> <span class="o">==</span> <span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span> <span class="p">{</span>
+      
+      <span class="c1">//获得toindex的相邻position</span>
+      <span class="c1">//即图中位置序号`1`的相邻块，`0，2，5`，</span>
+      <span class="k">var</span> <span class="n">toIndexAdjacentPositions</span> <span class="o">=</span> <span class="n">getAdjacentPositions</span><span class="p">(</span><span class="nl">atPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span>
+      
+      <span class="c1">//但是`0，5`不可被移动，那么就只剩`2`了</span>
+      <span class="k">for</span> <span class="n">avoidIndex</span> <span class="k">in</span> <span class="n">avoidIndexList</span> <span class="p">{</span>
+        <span class="n">toIndexAdjacentPositions</span> <span class="o">=</span> <span class="n">toIndexAdjacentPositions</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="o">!</span><span class="err">$</span><span class="mf">0.</span><span class="n">equal</span><span class="p">(</span><span class="nl">toPosition</span><span class="p">:</span> <span class="n">getPosition</span><span class="p">(</span><span class="nl">fromIndex</span><span class="p">:</span> <span class="n">avoidIndex</span><span class="p">))})</span>
+      <span class="p">}</span>
+      
+      
+      <span class="k">if</span> <span class="n">toIndexAdjacentPositions</span><span class="p">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+        
+        <span class="c1">//比较图中两个距离，选择较近的</span>
+        <span class="n">adjacentPositions</span> <span class="o">=</span> <span class="n">adjacentPositions</span><span class="p">.</span><span class="n">sort</span><span class="p">({</span><span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toIndexAdjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">getDistance</span><span class="p">(</span><span class="nl">fromPosition</span><span class="p">:</span> <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="nl">toPosition</span><span class="p">:</span> <span class="n">toIndexAdjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">])})</span>
+      <span class="p">}</span>
+      
+    <span class="p">}</span>
+  </code></pre></figure>
+
+<h3 id="section-5">现在来写一下两种特殊情况：</h3>
+
+<p>情况1：</p>
+
+<p>这时2号块无法完成，所以必须要0号、1号块来让位，以便使2号块完成，直接上图</p>
+
+<p><img src="/assets/source/2015-12-18-12.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18-16.png" width="45%" /></p>
+
+<p><img src="/assets/source/2015-12-18-13.png" width="45%" style="float: left; margin-right:5%" /></p>
+
+<p><img src="/assets/source/2015-12-18-14.png" width="45%" /></p>
+
+<p>这里我没想到什么合适的方法，所以也是和图中一样，分步去移动的，有点蠢 ^_^</p>
+
+<p>情况2:</p>
+
+<p>和情况1基本一样，以完成6号块为例：</p>
+
+<p><img src="/assets/source/2015-12-18-17.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18-18.png" width="45%" /></p>
+
+<p><img src="/assets/source/2015-12-18-19.png" width="45%" style="float: left; margin-right:5%" /></p>
+
+<p><img src="/assets/source/2015-12-18-20.png" width="45%" /></p>
+
+<p><img src="/assets/source/2015-12-18-21.png" width="45%" style="float: left; margin-right:5%" /></p>
+
+<p><img src="/assets/source/2015-12-18-22.png" width="45%" /></p>
+
+<p>接着就知需要一步一步写出来就好了</p>
+
+<p>就先写这么多了，我已经努力去表达清楚了。。。</p>
+
+    </div>
+
+    
+    <ul class="tag_box list-unstyled list-inline">
+      <li><i class="fa fa-folder-open"></i></li>
+      
+      
+       
+        <li><a href="http://localhost:4000/categories.html#技术-ref">
+          技术 <span>(2)</span>
+          
+        </a></li>
+      
+      
+    </ul>
+      
+
+    
+    <ul class="list-inline">
+      <li><i class="fa fa-tags"></i></li>
+      
+      
+       
+        <li>
+          <a href="http://localhost:4000/tags.html#Tech-ref">
+          Tech <span>(2)</span>
+          ,
+          </a>
+        </li>
+       
+        <li>
+          <a href="http://localhost:4000/tags.html#Swift-ref">
+          Swift <span>(1)</span>
+          
+          </a>
+        </li>
+      
+      
+      
+    </ul>
+      
+
+    <hr>
+
+    <div>
+      <section class="share col-sm-6">
+        <h4 class="section-title">Share Post</h4>
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=一个拼图游戏的实现"
+           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+          <i class="fa fa-twitter fa-lg"></i>
+          Twitter
+        </a>
+        <a class="btn btn-default btn-sm facebook" href="https://www.facebook.com/sharer/sharer.php"
+           onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+          <i class="fa fa-facebook fa-lg"></i>
+          Facebook
+        </a>
+        <a class="btn btn-default btn-sm gplus"
+           onclick="window.open('https://plus.google.com/share?url='+window.location.href, 'google-plus-share', 'width=490,height=530');return false;">
+          <i class="fa fa-google-plus fa-lg"></i>
+          Google+
+        </a>
+      </section>
+
+      <section class="col-sm-6 author">
+        <img src="" style="height:100px;width:100px;" class="img-rounded author-image" />
+        <h4 class="section-title author-name"><b>顽主的一亩三分地 !#_#</b><br/><p style="color:#888;font-size:13px;">顽主的一亩三分地!#_#</p></h4>
+        <p class="author-bio">我叫范祎(yi)楠。IOS开发者一枚，也是个北漂。爱IOS胜过爱女朋友，天哪噜，我没女朋友，我没有女朋友，我没有女朋友(重要的事情说三遍)。有点强迫症，有点完美主义，也有点稀里糊涂。总之爱生活，爱自由，始终在坚持做自己心水的事。</p>
+      </section>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <ul class="pager">
+      
+      <li class="previous"><a href="http://localhost:4000/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F" title="记此博客的诞生">&larr; Previous</a></li>
+      
+      
+      <li class="next disabled"><a>Next &rarr;</a>
+      
+    </ul>
+
+  
+  </div>
+  
+       <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'talk2ankan'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    
+</article>
+<div class="clearfix"></div>
+
+
+<footer class="navbar navbar-default">
+    <div class="container">
+      <p class="navbar-text pull-left">Some rights reserved &copy; 2015 fanyinan. </br>
+      Created using <a class="navbar-button" href="https://github.com/twbs/bootstrap">Bootstrap3</a> and <a class="navbar-button" href="https://github.com/jekyll/jekyll">Jekyll</a>. Theme : <a class="navbar-button" href="https://github.com/talk2ankan/uno-dbyll">uno-dbyll</a> by talk2ankan.
+ </p>
+ </div>
+  </footer>
+</div>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'talk2ankan'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+    </script>
+    
+</body>
+</html>
