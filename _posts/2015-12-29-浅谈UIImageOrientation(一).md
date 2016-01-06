@@ -5,6 +5,7 @@ description: UIImageOrientation －－－ 一个不起眼的属性
 categories: [技术]
 tags: [Tech,Swift]
 imagePrefix: /assets/source/2015-12-29- 
+github: https://github.com/fanyinan/ImageOrientationDemo
 ---
 
 ###问题的起因
@@ -168,4 +169,4 @@ __因为`CGContextConcatCTM`相当于改变的整个坐标系，所以一定要�
 
 其他几种情况包括Mirrored变换的都大同小异。
 
-嗯，就到这了
+嗯，就到这了，最后附上源码地址[GitHub]({{page.github}})
