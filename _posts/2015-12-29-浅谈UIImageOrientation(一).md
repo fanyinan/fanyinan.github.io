@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 浅谈UIImageOrientation
+title: 浅谈UIImageOrientation（一）
 description: UIImageOrientation －－－ 一个不起眼的属性
 categories: [技术]
 tags: [Tech,Swift]
@@ -148,6 +148,15 @@ func getFixTransform(image: UIImage) -> CGAffineTransform {
 {% endhighlight %}
 
 代码不难看懂，只是不够具象，下面我以一个.Right的图片来举个例子
+
+{% highlight swift %}
+
+transform = CGAffineTransformTranslate(transform, 0, height)
+transform = CGAffineTransformRotate(transform, CGFloat(-M_PI_2))
+
+{% endhighlight %}  
+
+__注意:坐标系原点在左下角__
 
 <img src="{{page.imagePrefix}}9.png" width="95%">
 
