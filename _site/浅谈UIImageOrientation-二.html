@@ -195,7 +195,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
     
   <span class="p">}</span></code></pre></figure>
 
-<p>接着上面的图说，依然以<code>.Right</code>为例：</p>
+<p>依然以<code>.Right</code>为例：</p>
 
 <figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">rectTransform</span> <span class="o">=</span> <span class="n">CGAffineTransformMakeRotation</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">(</span><span class="o">-</span><span class="n">M_PI_2</span><span class="p">))</span>
 <span class="n">rectTransform</span> <span class="o">=</span> <span class="n">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rectTransform</span><span class="p">,</span> <span class="o">-</span><span class="n">originImage</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></code></pre></figure>
@@ -211,7 +211,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p>UIView的CGAffineTransformTranslate实际上也是这样的</p>
 
-<p>其他几个方向的图片也和<code>.Right</code>的一样，就不再赘述了</p>
+<p>其他几个方向的图片也和<code>.Right</code>的原理一样，找到转换的方式就可以，就不再赘述了</p>
 
 <p>嗯，就到这了，最后附上演示Demo的源码地址<a href="https://github.com/fanyinan/ImageOrientationDemo2">GitHub</a></p>
 

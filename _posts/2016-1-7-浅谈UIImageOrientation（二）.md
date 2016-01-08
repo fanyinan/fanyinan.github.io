@@ -53,7 +53,7 @@ private func transformOrientationRect(originImage: UIImage, rect: CGRect) -> CGR
 
 {% endhighlight%}
 
-接着上面的图说，依然以`.Right`为例：
+依然以`.Right`为例：
 
 {% highlight swift %}
 
@@ -73,7 +73,7 @@ rectTransform = CGAffineTransformTranslate(rectTransform, -originImage.size.widt
 
 UIView的CGAffineTransformTranslate实际上也是这样的
 
-其他几个方向的图片也和`.Right`的一样，就不再赘述了
+其他几个方向的图片也和`.Right`的原理一样，找到转换的方式就可以，就不再赘述了
 
 嗯，就到这了，最后附上演示Demo的源码地址[GitHub]({{page.github}})
 

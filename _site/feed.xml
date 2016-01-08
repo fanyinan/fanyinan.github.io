@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 08 Jan 2016 15:48:00 +0800</pubDate>
-    <lastBuildDate>Fri, 08 Jan 2016 15:48:00 +0800</lastBuildDate>
+    <pubDate>Fri, 08 Jan 2016 15:54:43 +0800</pubDate>
+    <lastBuildDate>Fri, 08 Jan 2016 15:54:43 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -51,7 +51,7 @@
     
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;接着上面的图说，依然以&lt;code&gt;.Right&lt;/code&gt;为例：&lt;/p&gt;
+&lt;p&gt;依然以&lt;code&gt;.Right&lt;/code&gt;为例：&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;n&quot;&gt;rectTransform&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CGAffineTransformMakeRotation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CGFloat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;M_PI_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;rectTransform&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CGAffineTransformTranslate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rectTransform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -67,7 +67,7 @@
 
 &lt;p&gt;UIView的CGAffineTransformTranslate实际上也是这样的&lt;/p&gt;
 
-&lt;p&gt;其他几个方向的图片也和&lt;code&gt;.Right&lt;/code&gt;的一样，就不再赘述了&lt;/p&gt;
+&lt;p&gt;其他几个方向的图片也和&lt;code&gt;.Right&lt;/code&gt;的原理一样，找到转换的方式就可以，就不再赘述了&lt;/p&gt;
 
 &lt;p&gt;嗯，就到这了，最后附上演示Demo的源码地址&lt;a href=&quot;https://github.com/fanyinan/ImageOrientationDemo2&quot;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
 
