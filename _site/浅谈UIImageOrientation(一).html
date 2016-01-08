@@ -145,7 +145,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
   
 <article>
 
-  <div class="col-sm-10">
+  <div class="col-sm-11">
    <span class="post-date">
      
      December 
@@ -184,7 +184,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p>那这个属性有什么用呢？不知道大家有没有发现，在手机的相册中，无论拍摄照片时手机是什么方向，照片永远是拍摄时你在相机中看的的方向。为什么呢？我也不知道（不要打我），不过我推测是是<code>imageview</code>会帮你把图片旋转为.Up，不过图片本身并没有任何变化，只是看上去正了。</p>
 
-<p>与此同时，<code>image</code>的<code>size</code>也就为校正之后的也就是把<code>image</code>直接放进<code>imageview</code>中是看到的<code>size</code></p>
+<p>与此同时，<code>image</code>的<code>size</code>也就为校正之后的也就是把<code>image</code>直接放进<code>imageview</code>中是看到的<code>size</code>。也就是说，如果把一个方向为<code>.Right</code>的图片设为<code>.Up</code>，那么它的size也会改变(<code>width</code>和<code>height</code>互换)，因为图片已经是<code>.Up</code>了，不需要调整。</p>
 
 <p>那么出现这种情况的原因为：</p>
 
@@ -301,7 +301,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p>其他几种情况包括Mirrored变换的都大同小异。</p>
 
-<p>嗯，就到这了，最后附上源码地址<a href="https://github.com/fanyinan/ImageOrientationDemo">GitHub</a></p>
+<p>嗯，就到这了，最后附上演示Demo源码地址<a href="https://github.com/fanyinan/ImageOrientationDemo">GitHub</a></p>
 
     </div>
 
@@ -312,7 +312,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
       
        
         <li><a href="http://localhost:4000/categories.html#技术-ref">
-          技术 <span>(3)</span>
+          技术 <span>(4)</span>
           
         </a></li>
       
@@ -328,14 +328,14 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
        
         <li>
           <a href="http://localhost:4000/tags.html#Tech-ref">
-          Tech <span>(3)</span>
+          Tech <span>(4)</span>
           ,
           </a>
         </li>
        
         <li>
           <a href="http://localhost:4000/tags.html#Swift-ref">
-          Swift <span>(2)</span>
+          Swift <span>(3)</span>
           
           </a>
         </li>
@@ -381,7 +381,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
       <li class="previous"><a href="http://localhost:4000/%E4%B8%80%E4%B8%AA%E6%8B%BC%E5%9B%BE%E6%B8%B8%E6%88%8F%E7%9A%84%E5%AE%9E%E7%8E%B0" title="一个拼图游戏的实现">&larr; Previous</a></li>
       
       
-      <li class="next disabled"><a>Next &rarr;</a>
+      <li class="next"><a href="http://localhost:4000/%E6%B5%85%E8%B0%88UIImageOrientation-%E4%BA%8C" title="浅谈UIImageOrientation（二）">Next &rarr;</a></li>
       
     </ul>
 

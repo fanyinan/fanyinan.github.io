@@ -39,7 +39,7 @@ enum UIImageOrientation : Int {
 
 那这个属性有什么用呢？不知道大家有没有发现，在手机的相册中，无论拍摄照片时手机是什么方向，照片永远是拍摄时你在相机中看的的方向。为什么呢？我也不知道（不要打我），不过我推测是是`imageview`会帮你把图片旋转为.Up，不过图片本身并没有任何变化，只是看上去正了。
 
-与此同时，`image`的`size`也就为校正之后的也就是把`image`直接放进`imageview`中是看到的`size`
+与此同时，`image`的`size`也就为校正之后的也就是把`image`直接放进`imageview`中是看到的`size`。也就是说，如果把一个方向为`.Right`的图片设为`.Up`，那么它的size也会改变(`width`和`height`互换)，因为图片已经是`.Up`了，不需要调整。
 
 那么出现这种情况的原因为：
 
@@ -169,4 +169,4 @@ __因为`CGContextConcatCTM`相当于改变的整个坐标系，所以一定要�
 
 其他几种情况包括Mirrored变换的都大同小异。
 
-嗯，就到这了，最后附上源码地址[GitHub]({{page.github}})
+嗯，就到这了，最后附上演示Demo源码地址[GitHub]({{page.github}})
