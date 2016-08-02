@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 02 Aug 2016 16:01:21 +0800</pubDate>
-    <lastBuildDate>Tue, 02 Aug 2016 16:01:21 +0800</lastBuildDate>
+    <pubDate>Tue, 02 Aug 2016 16:46:17 +0800</pubDate>
+    <lastBuildDate>Tue, 02 Aug 2016 16:46:17 +0800</lastBuildDate>
     <generator>Jekyll v3.2.0</generator>
     
       <item>
@@ -73,8 +73,8 @@
 
 </description>
         <pubDate>Thu, 07 Jan 2016 00:00:00 +0800</pubDate>
-        <link>/%E6%B5%85%E8%B0%88UIImageOrientation-%E4%BA%8C</link>
-        <guid isPermaLink="true">/%E6%B5%85%E8%B0%88UIImageOrientation-%E4%BA%8C</guid>
+        <link>/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C)</link>
+        <guid isPermaLink="true">/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C)</guid>
         
         <category>Tech</category>
         
@@ -711,6 +711,60 @@
         
         
         <category>技术</category>
+        
+      </item>
+    
+      <item>
+        <title>Easiest Way To Install Lamp On Ubuntu</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/assets/media/lamp.jpg&quot; width=&quot;85%&quot; /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+LAMP(Linux, Apache, MySQL, PHP or Perl) is one of the most essential servers needed by the web developers or web entrepreneurs around the globe. This tutorial explains one of the easiest ways to install LAMP on Ubuntu. Because Ubuntu uses Linux as it’s kernel we are done with the Linux part ;) .&lt;/p&gt;
+
+&lt;p&gt;Install tasksel on your system:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;update&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tasksel&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Tasksel is a Debian/Ubuntu tool that installs multiple related packages as a co-ordinated “task” onto your system.
+Start tasksel:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tasksel&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;select the lamp-server and press ‘Ok’. Follow the steps as directed and create your Mysql password.&amp;lt;/br&amp;gt;
+Lastly,start apache2 server:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;service&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apache2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restart&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Congratulations you have successfully installed LAMP server on your system. To test just visit your web browser and type in the following url:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost/&quot;&gt;http://localhost/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;To test the php installation:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nano&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/var/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;www&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phptest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;type in and save:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phpinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;and open the following url in your browser:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://localhost/phptest.php&quot;&gt;http://localhost/phptest.php&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 02 Nov 2013 00:00:00 +0800</pubDate>
+        <link>/easiest-way-to-install-lamp-on-ubuntu</link>
+        <guid isPermaLink="true">/easiest-way-to-install-lamp-on-ubuntu</guid>
+        
+        <category>ubuntu</category>
+        
+        <category>lamp</category>
+        
+        <category>setup</category>
+        
+        <category>tasksel</category>
+        
+        
+        <category>linux</category>
         
       </item>
     

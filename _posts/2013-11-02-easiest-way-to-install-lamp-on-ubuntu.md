@@ -6,7 +6,7 @@ tagline: original post at wowmoron.wordpress.com
 image: /assets/media/lamp.jpg
 categories: [linux]
 tags: [ubuntu, lamp, setup, tasksel]
-published: false
+<!-- published: false -->
 ---
 <img src="{{page.image}}" width="85%"/>
 <br/>
