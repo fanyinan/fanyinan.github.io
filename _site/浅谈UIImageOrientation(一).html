@@ -23,7 +23,7 @@
 
 <link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"   integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="   crossorigin="anonymous"></script>
 	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.js"></script>
 	
 <script type="text/javascript">
@@ -37,6 +37,14 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 }
 });
 	
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-81807619-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 	</head>
 <body>
@@ -155,7 +163,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
       
    </span>
     <div class="article_body" id="article_body">
-    <h3 id="section">问题的起因</h3>
+    <p>###问题的起因</p>
 
 <p>我在之前做一个拼图游戏的时候，需要将一张图片裁成九份，于是我用<code>CGImageCreateWithImageInRect</code>，当我直接Assets中取图片是，everything is okay，然而当我在手机中真的选图片时，我就呵呵啦，理论上应该是图1中的样子，结果却是图2中的样子</p>
 
@@ -213,7 +221,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p><img src="/assets/source/2015-12-29-4.png" width="50%" /></p>
 
-<h3 id="section-1">问题的解决</h3>
+<p>###问题的解决</p>
 
 <p>让我们来把图片转一转，然后用<code>contentsRect</code>是否可以取到正确的区域来检测是否真的旋转了，<code>contentsRect</code>会先确定要显示的范围，然后再调整图片，可以达到和直接裁剪图片一样的效果，至于<code>contentsRect</code>的具体用途就不做解释了</p>
 

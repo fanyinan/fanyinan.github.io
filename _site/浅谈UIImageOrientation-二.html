@@ -23,7 +23,7 @@
 
 <link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"   integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="   crossorigin="anonymous"></script>
 	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.js"></script>
 	
 <script type="text/javascript">
@@ -37,6 +37,14 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 }
 });
 	
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-81807619-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 	</head>
 <body>
@@ -159,7 +167,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p>在做一个裁剪图片的时候，发现裁剪得到的部分并不是选定的部分，然后有了之前的经验，就联想到时<code>UIImageOrientation</code>的问题</p>
 
-<h3 id="section">来说一下问题的原因</h3>
+<p>###来说一下问题的原因</p>
 
 <p>直接上图</p>
 
@@ -167,7 +175,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p>看着可能拥挤了点，不过应该能看清楚，如果有不明白的可以去看<a href="http://fanyinan.me/浅谈UIImageOrientation(一)">浅谈UIImageOrientation（一）</a></p>
 
-<h3 id="section-1">解决它</h3>
+<p>###解决它</p>
 
 <p>转换<code>CGRect</code>的代码如下：</p>
 

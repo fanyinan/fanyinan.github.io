@@ -21,7 +21,7 @@
 
 <link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"   integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="   crossorigin="anonymous"></script>
 	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.js"></script>
 	
 <script type="text/javascript">
@@ -35,6 +35,14 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 }
 });
 	
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-81807619-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 	</head>
 <body>
@@ -155,8 +163,8 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
     <div class="article_body" id="article_body">
     <p>公司项目中需要一个拼图游戏，看了网上没有特别好的，就自己写一个吧 ^<em>^</em>，后来自己又加了自动完成的功能，这篇博客主要写一下随机打乱和自动完成部分，UI和手动拼图稍微写一点</p>
 
-<h3 id="ui">UI部分</h3>
-<p>首先一个最重要的成员变量<code>puzzleIndex</code>用来记录每一块拼图的当前位置，比如：3x3拼图的初始顺序为<code>[0,1,2,3,4,5,6,7,8]</code>，当<code>0</code>和<code>1</code>交换后为<code>[1,0,2,3,4,5,6,7,8]</code></p>
+<p>###UI部分
+首先一个最重要的成员变量<code>puzzleIndex</code>用来记录每一块拼图的当前位置，比如：3x3拼图的初始顺序为<code>[0,1,2,3,4,5,6,7,8]</code>，当<code>0</code>和<code>1</code>交换后为<code>[1,0,2,3,4,5,6,7,8]</code></p>
 
 <p>先简单说一下UI部分，基本就是用一张图片用下面这个方法先裁剪成一个正方形，然后再裁成九张图</p>
 
@@ -182,8 +190,8 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p>不过，图片实际的方向并没有改变，所以在分割图片的时候要先调整图片的方向，这里就不贴代码了，可以到我的<a href="https://github.com/fanyinan/PuzzleProject">GitHub</a>中下载源码</p>
 
-<h3 id="section">手动拼图</h3>
-<p>先说下需求：</p>
+<p>###手动拼图
+先说下需求：</p>
 
 <pre><code>1.可以一次拖动多个块
 
@@ -217,8 +225,8 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
     <span class="c1">//直接用动画移动到更靠近的一侧</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="section-1">随机排序</h3>
-<p>先明确几个概念：</p>
+<p>###随机排序
+先明确几个概念：</p>
 
 <p>1、位置：表示当前块位于某行某列，被移动就会改变</p>
 
@@ -235,7 +243,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
 
 <p>2、递归路径，进行动画</p>
 
-<h4 id="section-2">先来说第一步，：</h4>
+<p>####先来说第一步，：</p>
 
 <figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//交换路径，表示块从某个位置序号移动到另一个位置序号</span>
 <span class="k">struct</span> <span class="n">SwapPath</span> <span class="p">{</span>
@@ -287,7 +295,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
   <span class="p">}</span>
   </code></pre></figure>
 
-<h4 id="section-3">第二步：</h4>
+<p>####第二步：</p>
 
 <p>一个递归</p>
 
@@ -316,7 +324,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
   <span class="p">}</span>
   </code></pre></figure>
 
-<h3 id="section-4">自动完成</h3>
+<p>###自动完成</p>
 
 <p>大概思路：先从最外层的开始，即先完成0，1，2，3，再完成4，8，12，这样就完成了第一层；然后再5，6，7，再9，13，以此类推，这样每一层的逻辑都一样，逐步简化拼图</p>
 
@@ -462,7 +470,7 @@ $("#sidebar").animate({width:'33.3333%'},'slow');
     <span class="p">}</span>
   </code></pre></figure>
 
-<h3 id="section-5">现在来写一下两种特殊情况：</h3>
+<p>###现在来写一下两种特殊情况：</p>
 
 <p>情况1：</p>
 

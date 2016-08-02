@@ -1,12 +1,12 @@
 ---
 layout: post
-title: 双击图片放大————zoomToRect
+title: UIScrollview中的双击图片放大—-zoomToRect
 <!-- description: original post at WOWMORON -->
 <!-- tagline: original post at wowmoron.wordpress.com -->
 categories: [技术]
 tags: [Tech,Swift]
 github: https://github.com/fanyinan/PuzzleProject
 imagePrefix: /assets/source/2015-12-18- 
+published: false
 ---
 
-asaassa

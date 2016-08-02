@@ -5,9 +5,9 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 11 Jan 2016 13:36:30 +0800</pubDate>
-    <lastBuildDate>Mon, 11 Jan 2016 13:36:30 +0800</lastBuildDate>
-    <generator>Jekyll v3.0.1</generator>
+    <pubDate>Tue, 02 Aug 2016 16:01:21 +0800</pubDate>
+    <lastBuildDate>Tue, 02 Aug 2016 16:01:21 +0800</lastBuildDate>
+    <generator>Jekyll v3.2.0</generator>
     
       <item>
         <title>浅谈UIImageOrientation（二）</title>
@@ -15,7 +15,7 @@
 
 &lt;p&gt;在做一个裁剪图片的时候，发现裁剪得到的部分并不是选定的部分，然后有了之前的经验，就联想到时&lt;code&gt;UIImageOrientation&lt;/code&gt;的问题&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;来说一下问题的原因&lt;/h3&gt;
+&lt;p&gt;###来说一下问题的原因&lt;/p&gt;
 
 &lt;p&gt;直接上图&lt;/p&gt;
 
@@ -23,7 +23,7 @@
 
 &lt;p&gt;看着可能拥挤了点，不过应该能看清楚，如果有不明白的可以去看&lt;a href=&quot;http://fanyinan.me/浅谈UIImageOrientation(一)&quot;&gt;浅谈UIImageOrientation（一）&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;解决它&lt;/h3&gt;
+&lt;p&gt;###解决它&lt;/p&gt;
 
 &lt;p&gt;转换&lt;code&gt;CGRect&lt;/code&gt;的代码如下：&lt;/p&gt;
 
@@ -87,7 +87,7 @@
     
       <item>
         <title>浅谈UIImageOrientation（一）</title>
-        <description>&lt;h3 id=&quot;section&quot;&gt;问题的起因&lt;/h3&gt;
+        <description>&lt;p&gt;###问题的起因&lt;/p&gt;
 
 &lt;p&gt;我在之前做一个拼图游戏的时候，需要将一张图片裁成九份，于是我用&lt;code&gt;CGImageCreateWithImageInRect&lt;/code&gt;，当我直接Assets中取图片是，everything is okay，然而当我在手机中真的选图片时，我就呵呵啦，理论上应该是图1中的样子，结果却是图2中的样子&lt;/p&gt;
 
@@ -145,7 +145,7 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29-4.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;问题的解决&lt;/h3&gt;
+&lt;p&gt;###问题的解决&lt;/p&gt;
 
 &lt;p&gt;让我们来把图片转一转，然后用&lt;code&gt;contentsRect&lt;/code&gt;是否可以取到正确的区域来检测是否真的旋转了，&lt;code&gt;contentsRect&lt;/code&gt;会先确定要显示的范围，然后再调整图片，可以达到和直接裁剪图片一样的效果，至于&lt;code&gt;contentsRect&lt;/code&gt;的具体用途就不做解释了&lt;/p&gt;
 
@@ -252,8 +252,8 @@
         <title>一个拼图游戏的实现</title>
         <description>&lt;p&gt;公司项目中需要一个拼图游戏，看了网上没有特别好的，就自己写一个吧 ^&lt;em&gt;^&lt;/em&gt;，后来自己又加了自动完成的功能，这篇博客主要写一下随机打乱和自动完成部分，UI和手动拼图稍微写一点&lt;/p&gt;
 
-&lt;h3 id=&quot;ui&quot;&gt;UI部分&lt;/h3&gt;
-&lt;p&gt;首先一个最重要的成员变量&lt;code&gt;puzzleIndex&lt;/code&gt;用来记录每一块拼图的当前位置，比如：3x3拼图的初始顺序为&lt;code&gt;[0,1,2,3,4,5,6,7,8]&lt;/code&gt;，当&lt;code&gt;0&lt;/code&gt;和&lt;code&gt;1&lt;/code&gt;交换后为&lt;code&gt;[1,0,2,3,4,5,6,7,8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;###UI部分
+首先一个最重要的成员变量&lt;code&gt;puzzleIndex&lt;/code&gt;用来记录每一块拼图的当前位置，比如：3x3拼图的初始顺序为&lt;code&gt;[0,1,2,3,4,5,6,7,8]&lt;/code&gt;，当&lt;code&gt;0&lt;/code&gt;和&lt;code&gt;1&lt;/code&gt;交换后为&lt;code&gt;[1,0,2,3,4,5,6,7,8]&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;先简单说一下UI部分，基本就是用一张图片用下面这个方法先裁剪成一个正方形，然后再裁成九张图&lt;/p&gt;
 
@@ -279,8 +279,8 @@
 
 &lt;p&gt;不过，图片实际的方向并没有改变，所以在分割图片的时候要先调整图片的方向，这里就不贴代码了，可以到我的&lt;a href=&quot;https://github.com/fanyinan/PuzzleProject&quot;&gt;GitHub&lt;/a&gt;中下载源码&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;手动拼图&lt;/h3&gt;
-&lt;p&gt;先说下需求：&lt;/p&gt;
+&lt;p&gt;###手动拼图
+先说下需求：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;1.可以一次拖动多个块
 
@@ -314,8 +314,8 @@
     &lt;span class=&quot;c1&quot;&gt;//直接用动画移动到更靠近的一侧&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;随机排序&lt;/h3&gt;
-&lt;p&gt;先明确几个概念：&lt;/p&gt;
+&lt;p&gt;###随机排序
+先明确几个概念：&lt;/p&gt;
 
 &lt;p&gt;1、位置：表示当前块位于某行某列，被移动就会改变&lt;/p&gt;
 
@@ -332,7 +332,7 @@
 
 &lt;p&gt;2、递归路径，进行动画&lt;/p&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;先来说第一步，：&lt;/h4&gt;
+&lt;p&gt;####先来说第一步，：&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//交换路径，表示块从某个位置序号移动到另一个位置序号&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SwapPath&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -384,7 +384,7 @@
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
   &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h4 id=&quot;section-3&quot;&gt;第二步：&lt;/h4&gt;
+&lt;p&gt;####第二步：&lt;/p&gt;
 
 &lt;p&gt;一个递归&lt;/p&gt;
 
@@ -413,7 +413,7 @@
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
   &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h3 id=&quot;section-4&quot;&gt;自动完成&lt;/h3&gt;
+&lt;p&gt;###自动完成&lt;/p&gt;
 
 &lt;p&gt;大概思路：先从最外层的开始，即先完成0，1，2，3，再完成4，8，12，这样就完成了第一层；然后再5，6，7，再9，13，以此类推，这样每一层的逻辑都一样，逐步简化拼图&lt;/p&gt;
 
@@ -559,7 +559,7 @@
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
   &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h3 id=&quot;section-5&quot;&gt;现在来写一下两种特殊情况：&lt;/h3&gt;
+&lt;p&gt;###现在来写一下两种特殊情况：&lt;/p&gt;
 
 &lt;p&gt;情况1：&lt;/p&gt;
 
@@ -614,7 +614,7 @@
 
 &lt;p&gt;先大体说一下这个博客的结构吧：&lt;/p&gt;
 
-&lt;p&gt;1.我使用Jekyll来创建博客，它来帮我们直接生成静态页面。对，没错，就是直接生成静态页面，没有服务器后台，没有数据库。 为什么用这个呢？因为我懒。我就想写点东西放到网上，我干嘛要去配置主机，干嘛要去整数据库，怎么省事怎么来吧 -&lt;em&gt;-#&lt;/em&gt;&lt;br /&gt;
+&lt;p&gt;1.我使用Jekyll来创建博客，它来帮我们直接生成静态页面。对，没错，就是直接生成静态页面，没有服务器后台，没有数据库。 为什么用这个呢？因为我懒。我就想写点东西放到网上，我干嘛要去配置主机，干嘛要去整数据库，怎么省事怎么来吧 -_-#_&lt;br /&gt;
 2.其次使用了GitHub Pages来托管我的网站，Jekyll 可以运行在 GitHub Pages上，所以写完一篇文章之后你是需要push一下就OK了&lt;/p&gt;
 
 &lt;p&gt;先提一下，我用的MacBook(没钱买，公司的)，所以是在mac的环境下安装的，windows下估计差不多。先从Jekyll的搭建开始讲起，首先Jekyll是用Ruby写的，所以需要先搭建Ruby环境（写这篇文章的时候已经是下周二晚上了，我也不记得是不是需要安装Ruby环境，所以把Ruby环境干掉之后再启动Jekyll服务，提示找不到文件）&lt;/p&gt;
