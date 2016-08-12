@@ -5,9 +5,170 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 03 Aug 2016 14:35:55 +0800</pubDate>
-    <lastBuildDate>Wed, 03 Aug 2016 14:35:55 +0800</lastBuildDate>
+    <pubDate>Fri, 12 Aug 2016 16:08:19 +0800</pubDate>
+    <lastBuildDate>Fri, 12 Aug 2016 16:08:19 +0800</lastBuildDate>
     <generator>Jekyll v3.2.0</generator>
+    
+      <item>
+        <title>UIScrollView中的双击图片放大—zoomToRect</title>
+        <description>&lt;p&gt;突然有一天，我想给我的&lt;a href=&quot;https://github.com/fanyinan/WZPhotoBrowser&quot;&gt;图片浏览器&lt;/a&gt;加上双击放大功能，想想这么简单又遍地都是的功能应该很好加吧。然而并没有，我被打脸了。&lt;/p&gt;
+
+&lt;p&gt;虽然找到了这个方法&lt;code&gt;zoomToRect(_ rect: CGRect, animated animated: Bool)&lt;/code&gt;，但是完全不懂怎么用，第一个参数&lt;code&gt;rect&lt;/code&gt;到底该传个什么东西。官方解释是：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;A rectangle defining an area of the content view. The rectangle should be in the coordinate space of the view returned by viewForZoomingInScrollView:&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;rect&lt;/code&gt;是要显示的内容的区域，需要在&lt;code&gt;viewForZoomingInScrollView:&lt;/code&gt;的返回的view的坐标空间内&lt;/p&gt;
+
+&lt;p&gt;开始真的不懂什么意思（好吧，我傻），不过在做了几次测试后，知道了这货表示什么了。不过在说这个之前，我先简单说明一下我是怎么实现图片缩放的：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;新建一个继承UIScrollView的类，用作控制缩放的容器；&lt;/li&gt;
+  &lt;li&gt;新建一个UIImageView，&lt;code&gt;frame.size&lt;/code&gt;为要显示图片的&lt;code&gt;image.size&lt;/code&gt;；&lt;/li&gt;
+  &lt;li&gt;实现&lt;code&gt;UIScrollViewDelegate&lt;/code&gt;的&lt;code&gt;viewForZoomingInScrollView:&lt;/code&gt;方法，返回值为需要缩放的&lt;code&gt;UIImageView&lt;/code&gt;。此时&lt;code&gt;contentSize&lt;/code&gt;始终为这个&lt;code&gt;UIImageView&lt;/code&gt;的&lt;code&gt;frame.size&lt;/code&gt;，所以不需要特别设置&lt;code&gt;contentSize&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;根据长边计算把图片完全显示出来的缩放比例&lt;code&gt;zoomScale&lt;/code&gt;，同时设置最小缩放比例&lt;code&gt;minimumZoomScale&lt;/code&gt;和&lt;code&gt;zoomScale&lt;/code&gt;相同，为了当图片被捏合缩小时可以反弹回来；然后随意设置最大缩放比例&lt;code&gt;maximumZoomScale&lt;/code&gt;，我设置的为&lt;code&gt;3&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;最后，当&lt;code&gt;scrollView&lt;/code&gt;调用&lt;code&gt;layoutSubviews&lt;/code&gt;时，修改&lt;code&gt;UIImageView&lt;/code&gt;的&lt;code&gt;frame.origin&lt;/code&gt;，保证图片可以显示在中间&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;第四步的代码&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt; &lt;span class=&quot;n&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;calculateZoomScale&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boundSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bounds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scaleX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boundSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scaleY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boundSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minScale&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scaleX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scaleY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//当图片的尺寸比scrollView小时，不进行缩放，显示原比例&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scaleX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scaleY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;minScale&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;minimumZoomScale&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minScale&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;zoomScale&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minimumZoomScale&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;maximumZoomScale&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;第五步的代码&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt; &lt;span class=&quot;kr&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;layoutSubviews&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;moveFrameToCenter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;moveFrameToCenter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boundsSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bounds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageViewSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//1&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;adjustX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CGFloat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;adjustY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CGFloat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//2&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boundsSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageViewSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;adjustX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;boundsSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageViewSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//3&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boundsSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageViewSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;adjustY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;boundsSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageViewSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;origin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;CGPoint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjustX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjustY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;第五步的代码说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;可以想象&lt;code&gt;scrollView&lt;/code&gt;有一个&lt;code&gt;contentView&lt;/code&gt;，&lt;code&gt;origin&lt;/code&gt;为&lt;code&gt;contentOffset&lt;/code&gt;，&lt;code&gt;size&lt;/code&gt;为&lt;code&gt;contentSize&lt;/code&gt;，&lt;code&gt;imageView&lt;/code&gt;在这个&lt;code&gt;contentView&lt;/code&gt;中，且与之重合，当滑动&lt;code&gt;scrollView&lt;/code&gt;时，&lt;code&gt;imageView&lt;/code&gt;的&lt;code&gt;frame.origin&lt;/code&gt;不会改变，始终为0&lt;/li&gt;
+  &lt;li&gt;当&lt;code&gt;scrollView&lt;/code&gt;的&lt;code&gt;width&lt;/code&gt;比&lt;code&gt;imageView&lt;/code&gt;的&lt;code&gt;width&lt;/code&gt;大，就把&lt;code&gt;imageView&lt;/code&gt;的水平位置设在&lt;code&gt;contentView&lt;/code&gt;中间&lt;/li&gt;
+  &lt;li&gt;同2&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/source/2016-8-5-1.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5-2.png&quot; width=&quot;23%&quot; style=&quot;margin-right:2%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;绿色的部分可以认为是&lt;code&gt;contentView&lt;/code&gt;的位置&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;下面进入正题&lt;/h3&gt;
+
+&lt;p&gt;根据代码来解释&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;	
+  &lt;span class=&quot;c1&quot;&gt;//1&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;imageViewDoubleTap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;UITapGestureRecognizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  
+  	&lt;span class=&quot;c1&quot;&gt;//2&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;guard&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomScale&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minimumZoomScale&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;setZoomScale&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minimumZoomScale&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;animated&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//3&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;zoomRectScale&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CGFloat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//4&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;position&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;locationInView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;//5&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomWidth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomRectScale&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomHeight&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomRectScale&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//6&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomWidth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomRectScale&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomHeight&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomRectScale&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//7&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;zoomToRect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;CGRect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomWidth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zoomHeight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;animated&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;代码说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;双击事件加在&lt;code&gt;imageView&lt;/code&gt;上，只有双击&lt;code&gt;imageView&lt;/code&gt;才进行缩放&lt;/li&gt;
+  &lt;li&gt;当&lt;code&gt;scrollView&lt;/code&gt;的&lt;code&gt;zoomScale&lt;/code&gt;不是最小比例时，设为最小比例，用于当放大后再次双击时缩小&lt;/li&gt;
+  &lt;li&gt;设置双击放的的比例，这里设置为双击放大2倍&lt;/li&gt;
+  &lt;li&gt;获取点击在&lt;code&gt;imageView&lt;/code&gt;的位置，这里值得一提的是，虽然此时&lt;code&gt;imageView&lt;/code&gt;被缩小，其&lt;code&gt;frame&lt;/code&gt;也是当前被缩小时的值，但是&lt;code&gt;position&lt;/code&gt;依然是未被缩小时的位置，比如：图片尺寸为&lt;code&gt;640*300&lt;/code&gt;，那么&lt;code&gt;imageView&lt;/code&gt;在未被缩小时的尺寸也是&lt;code&gt;640*300&lt;/code&gt;，假设被缩小后为&lt;code&gt;320*150&lt;/code&gt;，此时点击&lt;code&gt;imageView&lt;/code&gt;的右下角，我们得到的&lt;code&gt;position&lt;/code&gt;为&lt;code&gt;640*300&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;这一步是关键，计算放大的尺寸。先来解释一下&lt;code&gt;zoomToRect&lt;/code&gt;的参数，这是一个&lt;code&gt;CGRect&lt;/code&gt;的值，表示一块矩形区域，这个区域指的是当zoomScale为1时，取&lt;code&gt;contentView&lt;/code&gt;的&lt;code&gt;CGRect&lt;/code&gt;的部分，然后把&lt;code&gt;contentView&lt;/code&gt;按长边的比例缩放(自动计算&lt;code&gt;zoomScale&lt;/code&gt;，当然我们不用关心这个&lt;code&gt;zoomScale&lt;/code&gt;是多少)，使这部分填充&lt;code&gt;scrollView&lt;/code&gt;, 
+先看图：
+&lt;img src=&quot;/assets/source/2016-8-5-3.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5-4.png&quot; width=&quot;48%&quot; style=&quot;margin-right:2%&quot; /&gt;
+先来算宽度，我们把放大的比例设为2（这个比例为我们的变量&lt;code&gt;zoomRectScale&lt;/code&gt;，而不是&lt;code&gt;zoomScale&lt;/code&gt;），那么假如我们要把图片放大1倍（也就是不变），显示在&lt;code&gt;scrollView&lt;/code&gt;中的是整张图片，所以当放大1倍时，这个宽度为图片的宽度；同理，当放大2倍时，显示在&lt;code&gt;scrollView&lt;/code&gt;中的部分的宽度为1倍时的1/2，也就是图片宽度的一半，即&lt;code&gt;image.size.width/ zoomRectScale&lt;/code&gt;。
+当然这里指的是当图片的尺寸比&lt;code&gt;scrollView&lt;/code&gt;大的情况，但是当图片很小的时候，极端一点，一张&lt;code&gt;10*10&lt;/code&gt;的图片，当放大两倍时需要把长度为5放大到屏幕宽，显然不是2倍。所以如下图，我们需要把蓝色框部分当做一张图片，也就是说周围的空白也当做图片的一部分，来进行放大，就得到&lt;code&gt;(image.size.width + imageView.frame.minX * 2) / zoomRectScale&lt;/code&gt;。高度也是同理
+&lt;img src=&quot;/assets/source/2016-8-5-5.png&quot; width=&quot;70%&quot; /&gt;。&lt;/li&gt;
+  &lt;li&gt;再来计算&lt;code&gt;origin&lt;/code&gt;，现在我们有了中点坐标，也就是&lt;code&gt;position&lt;/code&gt;，也有了宽度，那么&lt;code&gt;zoomX&lt;/code&gt;就很容易计算，&lt;code&gt;position.x - zoomWidth / 2&lt;/code&gt;，&lt;code&gt;zoomY&lt;/code&gt;同理。
+但是这里有一个特殊情况，就是当一张图片其长宽都小于&lt;code&gt;scrollView&lt;/code&gt;，但是放大后的长或宽大于&lt;code&gt;scrollView&lt;/code&gt;长或宽的的时候，放大图片后，图片偏左。如下图（为了方便观察，我把scrollView的长和宽都缩小1/2，这样可以看到超出的部分。右图是双击图片中点放大后的样子）：                       &lt;br /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5-6.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5-7.png&quot; width=&quot;48%&quot; style=&quot;margin-right:2%&quot; /&gt;
+那么这是为什么呢，我也不知道，真的不知道，只是发现当执行&lt;code&gt;zoomScale&lt;/code&gt;之后，&lt;code&gt;scrollView&lt;/code&gt;的&lt;code&gt;contentOffset&lt;/code&gt;会比预期的值增加了&lt;code&gt;imageView.frame.minX&lt;/code&gt;，也就是说上方右图的&lt;code&gt;imageView&lt;/code&gt;向左距中心偏移的值等于上方左图中&lt;code&gt;imageView&lt;/code&gt;的&lt;code&gt;frame.minX&lt;/code&gt;，但是我不知道为什么。
+先来看这个问题怎么解决吧，既然&lt;code&gt;scrollView&lt;/code&gt;的&lt;code&gt;contentOffset&lt;/code&gt;增加了，使得图片向左移动了，就导致图片的左侧的一部分被遮住了，那么我们选取的放大区域就需要向左移动一点，也就是计算&lt;code&gt;zoomX&lt;/code&gt;的时候可以减去一个值来调整位置。由于图片在放大后偏移了&lt;code&gt;imageView.frame.minX&lt;/code&gt;，而且放大倍数为2，那么在未放大时需要向左调整的距离就为&lt;code&gt;imageView.frame.minX / zoomRectScale&lt;/code&gt;，所以就需要&lt;code&gt;position.x - zoomWidth / 2 - imageView.frame.minX / zoomRectScale&lt;/code&gt;。&lt;code&gt;zoomY&lt;/code&gt;同理&lt;/li&gt;
+  &lt;li&gt;执行缩放&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;就酱&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Github链接&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/fanyinan/WZPhotoBrowser&quot;&gt;此文章Demo&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/fanyinan/ZoomImageScrollViewDemo&quot;&gt;图片浏览器Demo&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 02 Aug 2016 00:00:00 +0800</pubDate>
+        <link>/UIScrollview%E4%B8%AD%E7%9A%84%E5%8F%8C%E5%87%BB%E5%9B%BE%E7%89%87%E6%94%BE%E5%A4%A7-zoomToRect</link>
+        <guid isPermaLink="true">/UIScrollview%E4%B8%AD%E7%9A%84%E5%8F%8C%E5%87%BB%E5%9B%BE%E7%89%87%E6%94%BE%E5%A4%A7-zoomToRect</guid>
+        
+        <category>Tech</category>
+        
+        <category>Swift</category>
+        
+        
+        <category>技术</category>
+        
+      </item>
     
       <item>
         <title>浅谈UIImageOrientation（二）</title>
@@ -693,7 +854,7 @@
 
 &lt;p&gt;下面是几个文档链接：&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://www.appinn.com/markdown/&quot;&gt;markdown&lt;/a&gt;：写博客是用到的标注，很方便的说&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.appinn.com/markdown/&quot;&gt;markdown&lt;/a&gt;：写博客时用到的标注，很方便的说&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://pygments.org&quot;&gt;pygments&lt;/a&gt;：代码高亮&lt;/p&gt;
 
@@ -711,60 +872,6 @@
         
         
         <category>技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Easiest Way To Install Lamp On Ubuntu</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/assets/media/lamp.jpg&quot; width=&quot;85%&quot; /&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-LAMP(Linux, Apache, MySQL, PHP or Perl) is one of the most essential servers needed by the web developers or web entrepreneurs around the globe. This tutorial explains one of the easiest ways to install LAMP on Ubuntu. Because Ubuntu uses Linux as it’s kernel we are done with the Linux part ;) .&lt;/p&gt;
-
-&lt;p&gt;Install tasksel on your system:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;update&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tasksel&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Tasksel is a Debian/Ubuntu tool that installs multiple related packages as a co-ordinated “task” onto your system.
-Start tasksel:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tasksel&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;select the lamp-server and press ‘Ok’. Follow the steps as directed and create your Mysql password.&amp;lt;/br&amp;gt;
-Lastly,start apache2 server:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;service&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;apache2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;restart&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Congratulations you have successfully installed LAMP server on your system. To test just visit your web browser and type in the following url:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://localhost/&quot;&gt;http://localhost/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;To test the php installation:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nano&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/var/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;www&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phptest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;type in and save:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;phpinfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;and open the following url in your browser:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://localhost/phptest.php&quot;&gt;http://localhost/phptest.php&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sat, 02 Nov 2013 00:00:00 +0800</pubDate>
-        <link>/easiest-way-to-install-lamp-on-ubuntu</link>
-        <guid isPermaLink="true">/easiest-way-to-install-lamp-on-ubuntu</guid>
-        
-        <category>ubuntu</category>
-        
-        <category>lamp</category>
-        
-        <category>setup</category>
-        
-        <category>tasksel</category>
-        
-        
-        <category>linux</category>
         
       </item>
     
