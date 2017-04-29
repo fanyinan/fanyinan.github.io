@@ -6,8 +6,8 @@ markdown: kramdown
 highlighter: pygments
 logo: false
 paginate: 15
-baseurl: /
-# baseurl: http://fanyinan.me
+# baseurl: /
+baseurl: http://fanyinan.me
 domain_name: 'http://fanyinan.me'
 google_analytics: 'UA-81807619-1'
 gems: [jekyll-paginate]
