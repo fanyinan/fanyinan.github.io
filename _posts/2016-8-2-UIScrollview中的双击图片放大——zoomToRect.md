@@ -118,11 +118,12 @@ __第五步的代码__
     let position = tap.locationInView(imageView)
     
     //5
-    let zoomWidth = (image.size.width + imageView.frame.minX * 2) / zoomRectScale
-    let zoomHeight = (image.size.height + imageView.frame.minY * 2) / zoomRectScale
+    let zoomWidth = frame.width / zoomScale / zoomRectScale
+    let zoomHeight = frame.height / zoomScale / zoomRectScale
     //6
-    let zoomX = position.x - zoomWidth / 2 - imageView.frame.minX / zoomRectScale
-    let zoomY = position.y - zoomHeight / 2 - imageView.frame.minY / zoomRectScale
+    let zoomX = position.x - zoomWidth / 2 - imageView.frame.minX / zoomScale / zoomRectScale
+    let zoomY = position.y - zoomHeight / 2 - imageView.frame.minY / zoomScale / zoomRectScale
+
     //7
     zoomToRect(CGRect(x: zoomX, y: zoomY, width: zoomWidth, height: zoomHeight), animated: true)
     
@@ -140,15 +141,15 @@ __第五步的代码__
 先看图：
 <img src="{{page.imagePrefix}}3.png" width="48%" style="float: left; margin-right:2%">
 <img src="{{page.imagePrefix}}4.png" width="48%" style="margin-right:2%">
-先来算宽度，我们把放大的比例设为2（这个比例为我们的变量`zoomRectScale`，而不是`zoomScale`），那么假如我们要把图片放大1倍（也就是不变），显示在`scrollView`中的是整张图片，所以当放大1倍时，这个宽度为图片的宽度；同理，当放大2倍时，显示在`scrollView`中的部分的宽度为1倍时的1/2，也就是图片宽度的一半，即`image.size.width/ zoomRectScale`。
-当然这里指的是当图片的尺寸比`scrollView`大的情况，但是当图片很小的时候，极端一点，一张`10*10`的图片，当放大两倍时需要把长度为5放大到屏幕宽，显然不是2倍。所以如下图，我们需要把蓝色框部分当做一张图片，也就是说周围的空白也当做图片的一部分，来进行放大，就得到`(image.size.width + imageView.frame.minX * 2) / zoomRectScale`。高度也是同理
+先来算宽度，我们把放大的比例设为2（这个比例为我们的变量`zoomRectScale`，而不是`zoomScale`），那么假如我们要把图片放大1倍（也就是不变），显示在`scrollView`中的是整张图片，所以当放大1倍时，这个宽度为图片的宽度；同理，当放大2倍时，显示在`scrollView`中的部分的宽度为1倍时的1/2，也就是图片宽度的一半，即`image.size.width / zoomRectScale`。
+当然这里指的是当图片的尺寸比`scrollView`大的情况，但是当图片很小的时候，极端一点，一张`10*10`的图片，当放大时需要把长度为5（宽度的1/2）放大到屏幕宽，显然不是2倍。所以如下图，我们需要把蓝色框部分当做一张图片来进行放大，就得到`(image.size.width + imageView.frame.minX / zoomScale * 2) / zoomRectScale`，由于`image.size.width`等价于`imageView.frame.width / zoomScale`，所以也就是`frame.width / zoomScale / zoomRectScale`（`frame.width`为`scrollView`的宽度）。高度也是同理
 <img src="{{page.imagePrefix}}5.png" width="70%">。
 6. 再来计算`origin`，现在我们有了中点坐标，也就是`position`，也有了宽度，那么`zoomX`就很容易计算，`position.x - zoomWidth / 2`，`zoomY`同理。
 但是这里有一个特殊情况，就是当一张图片其长宽都小于`scrollView`，但是放大后的长或宽大于`scrollView`长或宽的的时候，放大图片后，图片偏左。如下图（为了方便观察，我把scrollView的长和宽都缩小1/2，这样可以看到超出的部分。右图是双击图片中点放大后的样子）：                         
 <img src="{{page.imagePrefix}}6.png" width="48%" style="float: left; margin-right:2%">
 <img src="{{page.imagePrefix}}7.png" width="48%" style="margin-right:2%">
 那么这是为什么呢，我也不知道，真的不知道，只是发现当执行`zoomScale`之后，`scrollView`的`contentOffset`会比预期的值增加了`imageView.frame.minX`，也就是说上方右图的`imageView`向左距中心偏移的值等于上方左图中`imageView`的`frame.minX`，但是我不知道为什么。
-先来看这个问题怎么解决吧，既然`scrollView`的`contentOffset`增加了，使得图片向左移动了，就导致图片的左侧的一部分被遮住了，那么我们选取的放大区域就需要向左移动一点，也就是计算`zoomX`的时候可以减去一个值来调整位置。由于图片在放大后偏移了`imageView.frame.minX`，而且放大倍数为2，那么在未放大时需要向左调整的距离就为`imageView.frame.minX / zoomRectScale`，所以就需要`position.x - zoomWidth / 2 - imageView.frame.minX / zoomRectScale`。`zoomY`同理
+先来看这个问题怎么解决吧，既然`scrollView`的`contentOffset`增加了，使得图片向左移动了，就导致图片的左侧的一部分被遮住了，那么我们选取的放大区域就需要向左移动一点，也就是计算`zoomX`的时候可以减去一个值来调整位置。由于图片在放大后偏移了`imageView.frame.minX`，而且放大倍数为2，那么在未放大时需要向左调整的距离就为`imageView.frame.minX / zoomScale / zoomRectScale`，所以就需要`position.x - zoomWidth / 2 - imageView.frame.minX / zoomScale / zoomRectScale`。`zoomY`同理
 7. 执行缩放
 
 就酱
@@ -156,6 +157,6 @@ __第五步的代码__
 
 **Github链接**
 
-[此文章Demo]({{page.github1}})
+[图片浏览器Demo]({{page.github1}})
 
-[图片浏览器Demo]({{page.github2}})
+[此文章Demo]({{page.github2}})
