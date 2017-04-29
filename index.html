@@ -1,74 +1,62 @@
 ---
 layout: default
-title: "顽主的博客"
+title: Home
+cover: false
+about: 'about.html'
 ---
 
-<br/>
-{% for post in paginator.posts %}
+<header class="main-header {% if page.cover %}" style="background-image: url({{ page.cover }}) {%else%}no-cover{% endif %}">
+    <nav class="main-nav overlay clearfix">
+            {% if page.logo %}
+                <a class="blog-logo" href="{{ site.baseurl }}">
+                    <img src="{{ page.logo }}" alt="Blog Logo" />
+                </a>
+            {% endif %}
+    </nav>
+    <div class="vertical">
+        <div class="main-header-content inner">
+            <h1 class="page-title">{{ site.name }}</h1>
+            <h2 class="page-description">
+                {% if site.description %} {{ site.description }}. {% endif %}
+            </h2>
+        </div>
+    </div>
+    <a class="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span class="hidden">Scroll Down</span></a>
+</header>
 
-<article class="home">
 
-  <h2>
- <p class="post-date">
-    {% assign d = post.date | date: "%d" | plus:'0' %}
-    {{ post.date | date: "%B" }}
-    {% case d %}
-    {% when 1 or 21 or 31 %}{{ d }}st,
-    {% when 2 or 22 %}{{ d }}nd,
-    {% when 3 or 23 %}{{ d }}rd,
-    {% else %}{{ d }}th,
-    {% endcase %}
-    {{ post.date | date: "%Y" }}
-  </p>
-    <a href="{{ site.BASE_PATH }}{{ post.url }}" style="font-family: ubuntu">{{ post.title }}</a>
-  </h2>
+<main id="content" class="content" role="main">
 
-  <div style="font-family: 'Raleway', sans-serif;font-size:16px; color: #999999">
-    {% if post.fullview %}
-    {{ post.content }}
-    {% else %}
-    {% if post.shortinfo %}
-    {{ post.shortinfo }}
-    {% elsif post.description %}
-    {{ post.description }}
-    {% else %}
-    {{ post.excerpt }}
-    {% endif %}
-    {% endif %}
-    <hr class="hr-line1 " style="background-color:#D8D8D8;width:25%;" align="left">
-  </div>
-</article>
-{% endfor %}
-<hr/>
 
-<ul class="pager"> 
+    <div class="extra-pagination inner">
+        {% include pagination.html %}
+    </div>
 
-  {% if paginator.previous_page %}
-  <li class="previous">
-    {% if paginator.previous_page == 1 %}
-    <a href="{{ site.BASE_PATH }}/#blog">&larr; Newer</a>
-    {% else %}
-    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.previous_page }}">&larr; Newer</a>
-    {% endif %}
-  </li>
-  {% else %}
-  <li class="previous disabled">
-    <a>&larr; Newer</a>
-  </li>
-  {% endif %}
-  
-  <li>
-    <span class="page_number">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
-  </li>
+    {% for post in paginator.posts %}
 
-  {% if paginator.next_page %}
-  <li class="next">
-    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.next_page }}">Older &rarr;</a>
-  </li>
-  {% else %}
-  <li class="next disabled">
-    <a>Older &rarr;</a>        
-  </li>
-  {% endif %}
+    <article class="post">
+        <header class="post-header">
+            <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+        </header>
+        <section class="post-excerpt">
+            {{ post.excerpt }} <a class="read-more" href="{{ post.url }}">&raquo;</a>
+        </section>
+        <footer class="post-meta">
+            {% if site.author %}
+                <img class="author-thumb" src="/assets/images/profile.png" alt="Author's profile picture" nopin="nopin" />
+                {{ site.author }}
+            {% endif %}
+            {% if post.categories.size > 0 %} 
+                {{ post.categories | array_to_sentence_string | prepend: 'on ' }} 
+            {% endif %}
+            <time class="post-date" datetime="{{ post.date | date:"%Y-%m-%d" }}">
+                {{ post.date | date_to_string }}
+            </time> 
+        </footer>
+    </article>
 
-</ul>
+    {% endfor %}
+
+    {% include pagination.html %}
+
+</main>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>顽主的一亩三分地 !#_#</title>
-    <description></description>
-    <link>/</link>
-    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 12 Aug 2016 16:08:19 +0800</pubDate>
-    <lastBuildDate>Fri, 12 Aug 2016 16:08:19 +0800</lastBuildDate>
+    <title></title>
+    <description>原创，没有烂大街的东西</description>
+    <link>http://fanyinan.me//</link>
+    <atom:link href="http://fanyinan.me//feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 29 Apr 2017 12:25:04 +0800</pubDate>
+    <lastBuildDate>Sat, 29 Apr 2017 12:25:04 +0800</lastBuildDate>
     <generator>Jekyll v3.2.0</generator>
     
       <item>
@@ -158,8 +158,8 @@
 &lt;p&gt;&lt;a href=&quot;https://github.com/fanyinan/ZoomImageScrollViewDemo&quot;&gt;图片浏览器Demo&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Tue, 02 Aug 2016 00:00:00 +0800</pubDate>
-        <link>/UIScrollview%E4%B8%AD%E7%9A%84%E5%8F%8C%E5%87%BB%E5%9B%BE%E7%89%87%E6%94%BE%E5%A4%A7-zoomToRect</link>
-        <guid isPermaLink="true">/UIScrollview%E4%B8%AD%E7%9A%84%E5%8F%8C%E5%87%BB%E5%9B%BE%E7%89%87%E6%94%BE%E5%A4%A7-zoomToRect</guid>
+        <link>http://fanyinan.me//%E6%8A%80%E6%9C%AF/2016/08/02/UIScrollview%E4%B8%AD%E7%9A%84%E5%8F%8C%E5%87%BB%E5%9B%BE%E7%89%87%E6%94%BE%E5%A4%A7-zoomToRect.html</link>
+        <guid isPermaLink="true">http://fanyinan.me//%E6%8A%80%E6%9C%AF/2016/08/02/UIScrollview%E4%B8%AD%E7%9A%84%E5%8F%8C%E5%87%BB%E5%9B%BE%E7%89%87%E6%94%BE%E5%A4%A7-zoomToRect.html</guid>
         
         <category>Tech</category>
         
@@ -234,8 +234,8 @@
 
 </description>
         <pubDate>Thu, 07 Jan 2016 00:00:00 +0800</pubDate>
-        <link>/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C)</link>
-        <guid isPermaLink="true">/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C)</guid>
+        <link>http://fanyinan.me//%E6%8A%80%E6%9C%AF/2016/01/07/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C).html</link>
+        <guid isPermaLink="true">http://fanyinan.me//%E6%8A%80%E6%9C%AF/2016/01/07/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C).html</guid>
         
         <category>Tech</category>
         
@@ -397,8 +397,8 @@
 &lt;p&gt;嗯，就到这了，最后附上演示Demo源码地址&lt;a href=&quot;https://github.com/fanyinan/ImageOrientationDemo&quot;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Tue, 29 Dec 2015 00:00:00 +0800</pubDate>
-        <link>/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%B8%80)</link>
-        <guid isPermaLink="true">/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%B8%80)</guid>
+        <link>http://fanyinan.me//%E6%8A%80%E6%9C%AF/2015/12/29/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%B8%80).html</link>
+        <guid isPermaLink="true">http://fanyinan.me//%E6%8A%80%E6%9C%AF/2015/12/29/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%B8%80).html</guid>
         
         <category>Tech</category>
         
@@ -757,8 +757,8 @@
 &lt;p&gt;最后附上源码地址&lt;a href=&quot;https://github.com/fanyinan/PuzzleProject&quot;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 18 Dec 2015 00:00:00 +0800</pubDate>
-        <link>/%E4%B8%80%E4%B8%AA%E6%8B%BC%E5%9B%BE%E6%B8%B8%E6%88%8F%E7%9A%84%E5%AE%9E%E7%8E%B0</link>
-        <guid isPermaLink="true">/%E4%B8%80%E4%B8%AA%E6%8B%BC%E5%9B%BE%E6%B8%B8%E6%88%8F%E7%9A%84%E5%AE%9E%E7%8E%B0</guid>
+        <link>http://fanyinan.me//%E6%8A%80%E6%9C%AF/2015/12/18/%E4%B8%80%E4%B8%AA%E6%8B%BC%E5%9B%BE%E6%B8%B8%E6%88%8F%E7%9A%84%E5%AE%9E%E7%8E%B0.html</link>
+        <guid isPermaLink="true">http://fanyinan.me//%E6%8A%80%E6%9C%AF/2015/12/18/%E4%B8%80%E4%B8%AA%E6%8B%BC%E5%9B%BE%E6%B8%B8%E6%88%8F%E7%9A%84%E5%AE%9E%E7%8E%B0.html</guid>
         
         <category>Tech</category>
         
@@ -863,8 +863,8 @@
 &lt;p&gt;&lt;a href=&quot;http://jekyll.bootcss.com/docs/&quot;&gt;jekyll&lt;/a&gt;：jekyll官方文档&lt;/p&gt;
 </description>
         <pubDate>Wed, 02 Dec 2015 00:00:00 +0800</pubDate>
-        <link>/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F</link>
-        <guid isPermaLink="true">/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F</guid>
+        <link>http://fanyinan.me//%E6%8A%80%E6%9C%AF/2015/12/02/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F.html</link>
+        <guid isPermaLink="true">http://fanyinan.me//%E6%8A%80%E6%9C%AF/2015/12/02/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F.html</guid>
         
         <category>Tech</category>
         

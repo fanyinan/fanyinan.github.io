@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>顽主の博客 - 原创，没有烂大街的东西</title>
+    <meta name="description" content="WTF" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <!-- Customisation  -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
+
+</head>
+<body class="home-template">
+
+    <header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="subscribe-button icon-feed" href="/feed.xml">Subscribe</a>
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">记此博客的诞生</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2015-12-02">02 Dec 2015</time>
+                
+                    on 技术
+                
+            </section>
+        </header>
+
+<!--         <header class="post-header">
+            <a id="blog-logo" href="http://fanyinan.me">
+                
+                    <span class="blog-title">顽主の博客</span>
+                
+            </a>
+        </header> -->
+
+        <!-- <span class="post-meta">
+            <time datetime="2015-12-02">02 Dec 2015</time>
+            
+                on 技术
+            
+        </span> -->
+
+        <!-- <h1 class="post-title">记此博客的诞生</h1> -->
+
+        <section class="post-content">
+            <p>奇迹般的迎来了我今年的第一个双休，周五白天还在火急火燎的改Bug，晚上就通知说明天休息吧，什么鬼。。。不过，正好得空建个博客，其实今年刚来北京那会就想建个博客用来积(zhuang)累(bi)了，只不过当时尚且年轻，没什么好写的，也就作罢。不过自从工作了这几个月的时间，或多或少也学到了点东西，谈不上什么经验分享，权当是个public笔记本吧 ^_^</p>
+
+<p>先大体说一下这个博客的结构吧：</p>
+
+<p>1.我使用Jekyll来创建博客，它来帮我们直接生成静态页面。对，没错，就是直接生成静态页面，没有服务器后台，没有数据库。 为什么用这个呢？因为我懒。我就想写点东西放到网上，我干嘛要去配置主机，干嘛要去整数据库，怎么省事怎么来吧 -_-#_<br />
+2.其次使用了GitHub Pages来托管我的网站，Jekyll 可以运行在 GitHub Pages上，所以写完一篇文章之后你是需要push一下就OK了</p>
+
+<p>先提一下，我用的MacBook(没钱买，公司的)，所以是在mac的环境下安装的，windows下估计差不多。先从Jekyll的搭建开始讲起，首先Jekyll是用Ruby写的，所以需要先搭建Ruby环境（写这篇文章的时候已经是下周二晚上了，我也不记得是不是需要安装Ruby环境，所以把Ruby环境干掉之后再启动Jekyll服务，提示找不到文件）</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># 先查看是否已经安装过ruby，安装过就算了</span>
+<span class="err">$</span> <span class="n">rvm</span> <span class="n">list</span>
+<span class="c1">#列出已知的ruby版本</span>
+<span class="err">$</span> <span class="n">rvm</span> <span class="n">list</span> <span class="n">known</span>
+<span class="c1">#安装最新的</span>
+<span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="n">ruby</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span></code></pre></figure>
+
+<p>我一直翻着墙，没觉得慢，如果感觉死慢死慢的就用淘宝的镜像</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">--</span><span class="n">remove</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">rubygems</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">a</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">l</span>
+    <span class="o">***</span> <span class="no">CURRENT</span> <span class="no">SOURCES</span> <span class="o">***</span>
+    <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span></code></pre></figure>
+
+<p>然后安装Jekyll</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">jekyll</span></code></pre></figure>
+
+<p>如果提示安装Command-Line Tools，直接选Y安装就是了，<a href="http://jekyll.bootcss.com/docs/installation//">官方文档</a>上说会提示安装Xcode，因为我装好了，所以就不清楚咯</p>
+
+<p>现在可以生成个Demo了</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#myblog就是博客文件夹的名字</span>
+<span class="err">$</span> <span class="n">jekyll</span> <span class="kp">new</span> <span class="n">myblog</span>
+<span class="err">$</span> <span class="n">cd</span> <span class="n">myblog</span>
+<span class="c1">#博客主目录下启动服务</span>
+<span class="o">~</span><span class="sr">/myblog $ jekyll serve</span></code></pre></figure>
+
+<p>不报错就是起动成功了（废话），在浏览器打开http://localhost:4000 看是否真的成功了吧Y(^<em>^)Y</em>)</p>
+
+<p>现在来把它搞到GitHub Pages上
+首先需要有个GitHub的帐号，这个就不说了</p>
+
+<p>然后建个仓库，再clone到本地，<a href="https://pages.github.com/">官方文档</a>有详细教程，不过记得仓库名，username.github.io，username必须和owner的名字相同，否则只是个普通的仓库了</p>
+
+<p>最后只要把用Jekyll创建的文件夹copy到本地仓库文件夹就OK了，只copy文件夹内的文件就行，根目录不需要，之后如果想在本地启动服务就可以直接进入本地仓库文件夹启动了。
+现在来commit，sync，ok之后就可以在浏览器输入仓库名（也就是博客网址）来打开博客看看了</p>
+
+<p>下面来整个域名，当然不用也可以，不过逼格就不那么的高了,推荐去godaddy上购买域名，毕竟是最大的域名提供商，不过我直接在万网上买了，购买的步骤就不写了，交钱拿货而已</p>
+
+<p>说一下域名的解析设置吧</p>
+
+<p><img src="/assets/source/2015-12-2-1.png" width="100%" /></p>
+
+<p>记录类型一般是选<code>CANME</code>和<code>A(adderss)记录</code>：</p>
+
+<p><code>A记录</code>：将你的域名直接指向IP地址，这样DNS直接根据域名找到对应的IP</p>
+
+<p><code>CNAME</code>：简单来说就是给主机起一个别名，就像swift中的alias关键字，加个名字而已，本质上还是和原来的网址（也就是你的仓库名）做一样的事情，这样的一个好处是，如果IP地址换了，使用新注册的这个域名依然可以找到IP地址，不过A记录的方式就不可以了</p>
+
+<p>不过我当时随便弄的，也没管太多，就用的A记录的</p>
+
+<p><code>主机记录</code>：用<code>www</code>做前缀就填<code>www</code>，不带就填<code>@</code>或不填，不过网上看到不带<code>www</code>的不能用<code>CNAME</code>，没有验证过，感兴趣的话可以试试</p>
+
+<p><code>解析线路</code>：默认就好</p>
+
+<p><code>记录值</code>：使用<code>CNAME</code>就填你的网址（仓库名）；使用<code>A记录</code>的话，用命令行<code>PING</code>一下你的网址（仓库名），把得到的IP地址填上就可以了</p>
+
+<p><img src="/assets/source/2015-12-2-2.png" width="100%" /></p>
+
+<p>保存，等个十几分钟就可以了</p>
+
+<p>基本的建站方法就是这样，装修博客的工作就不多说了，对H5不熟悉的同学或向我一样比较懒的可以直接下载模板，有能力的话还是自己来写比较好</p>
+
+<p>不管是下载模板还是自己写，都需要用到下面两个插件</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#高亮插件</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">pygments</span><span class="o">.</span><span class="n">rb</span>
+<span class="c1">#分页插件</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">jekyll</span><span class="o">-</span><span class="n">paginate</span></code></pre></figure>
+
+<p>下面是几个文档链接：</p>
+
+<p><a href="http://www.appinn.com/markdown/">markdown</a>：写博客时用到的标注，很方便的说</p>
+
+<p><a href="http://pygments.org">pygments</a>：代码高亮</p>
+
+<p><a href="https://github.com/shopify/liquid/wiki/liquid-for-designers">liquid</a>：H5 liquid模版语法</p>
+
+<p><a href="http://jekyll.bootcss.com/docs/">jekyll</a>：jekyll官方文档</p>
+
+        </section>
+
+        
+
+        <footer class="post-footer">
+            <!-- If we want to display author's name and bio -->
+            
+                <figure class="author-image">
+                    <a class="img" href="/" style="background-image: url(/assets/images/profile.png)">
+                    <span class="hidden">顽主's Picture</span></a>
+                </figure>
+                <section class="author">
+                    <!-- Author Name -->
+                    <h4> 顽主 </h4>
+                    <!-- Author Bio -->
+                    <p>
+                        Here goes the author description. You might want to place some links too in here
+                    </p>
+                </section>
+            
+
+            <!-- Share links section -->
+            <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?text=记此博客的诞生&amp;url=http://fanyinan.me/%E6%8A%80%E6%9C%AF/2015/12/02/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F.html"
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://fanyinan.me/%E6%8A%80%E6%9C%AF/2015/12/02/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F.html"
+        onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://fanyinan.me/%E6%8A%80%E6%9C%AF/2015/12/02/%E8%AE%B0%E6%AD%A4%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%9E%E7%94%9F.html"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+
+            <!-- Disqus comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+    <footer class="site-footer clearfix">
+      <section class="copyright">
+        <a href="/">顽主の博客</a> &copy; 
+              2017-04-29 12:25 &bull; All rights reserved.
+      </section>
+      <section class="poweredby">Made with Jekyll using 
+        <a href="http://github.com/rosario/kasper">Kasper theme</a>
+      </section>
+    </footer>
+    
+    <script type="text/javascript" src="/assets/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Google Analytics Tracking code -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-81807619-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>   
+</body>
+</html>

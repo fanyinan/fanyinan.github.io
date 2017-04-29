@@ -1,31 +1,17 @@
-# This is the default format.
-# For more see: http://jekyllrb.com/docs/permalinks/
-permalink: /:title
-# https://help.github.com/articles/migrating-your-pages-site-from-maruku
+name: 顽主の博客
+description: 原创，没有烂大街的东西
+meta_description: "WTF"
+
 markdown: kramdown
-
-gems: [jekyll-paginate]
 highlighter: pygments
-paginate: 20 # pagination based on number of posts
-paginate_path: "page/:num"
+logo: false
+paginate: 15
+baseurl: /
+# baseurl: http://fanyinan.me
+domain_name: 'http://fanyinan.me'
+google_analytics: 'UA-81807619-1'
+gems: [jekyll-paginate]
 
-# These paths are to the main pages Jekyll-Bootstrap ships with.
-# Some JB helpers refer to these paths; change them here if needed.
-#
-categories_path : categories.html
-tags_path : tags.html
-
-# BASE_PATH : http://localhost:4000
-BASE_PATH : http://fanyinan.me
-
-
-title : 顽主的一亩三分地 !#_#
-
-
-author:
-  name: fanyinan
-  role: 顽主的一亩三分地!#_#
-  email: fanyinan93@126.com
-  github: fanyinan
-  bio: 我叫范祎(yi)楠。iOS开发者一枚，也是个北漂。爱iOS也爱女朋友，天哪噜，我没女朋友，我没有女朋友，我没有女朋友(重要的事情说三遍)。有点强迫症，有点完美主义，也有点稀里糊涂。总之爱生活，爱自由，始终在坚持做自己喜欢的事。
-  # uno-dbyll: https://raw.githubusercontent.com/talk2ankan/uno-dbyll/gh-pages/uno-dbyll.png
+# Details for the RSS feed generator
+url:            'http://fanyinan.me'
+author:         '顽主'
