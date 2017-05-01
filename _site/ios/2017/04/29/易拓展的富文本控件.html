@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>顽主の博客 - 原创，不写烂大街的东西</title>
+    <meta name="description" content="WTF" />
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <!-- Customisation  -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
+
+</head>
+<body class="home-template">
+
+    <header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="/">Home</a>
+    </nav>
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">易拓展的富文本控件</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2017-04-29">29 Apr 2017</time>
+                
+                    on iOS
+                
+            </section>
+        </header>
+
+<!--         <header class="post-header">
+            <a id="blog-logo" href="http://fanyinan.me">
+                
+                    <span class="blog-title">顽主の博客</span>
+                
+            </a>
+        </header> -->
+
+        <!-- <span class="post-meta">
+            <time datetime="2017-04-29">29 Apr 2017</time>
+            
+                on iOS
+            
+        </span> -->
+
+        <!-- <h1 class="post-title">易拓展的富文本控件</h1> -->
+
+
+        <section class="post-content" style="margin-top:30px">
+            <p>公司在做即时通讯软件，所以显示文字消息是必须的。之前一直都在用label显示文字，像我一样单纯的文字，没有图文混排，没有点击事件，只有文字。但是偶然之间发现一个问题：在UITableView中显示文字的时候，由于cell的复用，当cell需要显示的时候才设置相应的文字，但是如果设置的文字过多（可多可多了）的时候，label在渲染的时候会有严重的性能问题，出现了特别明显的卡顿。很明显需要优化一下（通常没人会输入这么多字，但是这种已知的潜在的性能问题不解决一下怎么能忍），所以根据性能优化的经验，可以做一下异步渲染、预加载、缓存，能缓存和预加载的肯定就是处理成UIImage了，所以肯定需要CoreText。</p>
+
+<p><br /></p>
+
+<h3 id="section">简单介绍一下</h3>
+
+<hr />
+
+<p>先看一下大致结构：
+<img src="/assets/source/2017-4-29-1.png" /></p>
+
+<ul>
+  <li>
+    <p>主要结构</p>
+
+    <p>主要控件WZRichTextView继承自UIView，用于展示通过CoreText绘制文字生成的图片；通过WZTextStyle配置文字样式；可以配置多个Interpreter来处理文字</p>
+  </li>
+  <li>
+    <p>易拓展</p>
+
+    <p>将对文字的处理的逻辑抽象出一个Interpreter，主要包括对文字的解析，点击时的样式，点击事件的处理，在上下文中进行绘制。通过具体的Interpreter来实现需要的接口完成相应的功能。传入的多个Interpreter按顺序依次处理文字，但是如果一个<code class="highlighter-rouge">CTRun</code>对应了多个Interpreter，只有第一个Interpreter的点击事件和点击时的样式会生效</p>
+  </li>
+  <li>
+    <p>灵活</p>
+
+    <p>需要解析文字时只需传入相应的InterPreter即可，不做多余的文字处理。需要注意的是，当传入多个Interpreter时，需要注意在数组中的顺序，这个顺序决定了文字的处理顺序</p>
+  </li>
+  <li>
+    <p>缓存</p>
+
+    <p>CoreText绘制文字生成的图片以及尺寸等相关信息会存入缓存中，以便高效的复用，缓存的key有文字内容、文字样式、Interpreter共同生成，防止发生混乱</p>
+  </li>
+  <li>
+    <p>预加载</p>
+
+    <p>即使有缓存功能，但是在首次加载时依然会出现由于异步渲染无法立即显示文字的问题。
+预加载可以解决这个问题，文字尺寸的计算和绘制文字生成图片都是静态方式，不需要实例化WZRichTextView即可在控件加载之前便已完成对文字内容的缓存，当控件需要显示文字时便可直接在缓存中取得。所以使用者需要合理控制预加载的时机</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="section-1">总会遇到的坑</h3>
+
+<hr />
+
+<ol>
+  <li>
+    <p>众所周知，当用<code class="highlighter-rouge">CoreText</code>进行图文混排的时候，可以将占位的标志替换成空格，再为	其添加<code class="highlighter-rouge">kCTRunDelegateAttributeName</code>样式。但是如果<code class="highlighter-rouge">CTLineBreakMode</code>的	值设为<code class="highlighter-rouge">byWordWrapping</code>，则会出现左图下面的情况，但实际上应该是右图的样子：</p>
+
+    <p><img src="/assets/source/2017-4-29-2.png" width="45%" style="float: left; margin-right:5%" />
+ <img src="/assets/source/2017-4-29-3.png" width="45%" /></p>
+
+    <p>这不是难点，赤裸裸的坑啊，也不懂是因为什么，这种乍一看像是苹果的bug的问题也不	太想深究，我的处理方法时把占位的标志替换成一个透明的字符而不是空格</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">CTRun</code>指的是在一行中所有属性都相同的连续的文字，所以如果要显示三个连续的相同	的图片的话，那么绘制图片之前用到的这三个站位的字符的属性就必须加以区分。</p>
+
+    <p>首先当做图文混排的时候，至少需要给这个占位的字符添加俩个属性，一个是自定义的属	性，存放图片的名字或其他什么可以索引到图片的方法；第二个就是	<code class="highlighter-rouge">kCTRunDelegateAttributeName</code>。如果第一个属性的值是一个字符串，第二个属	性的值是<code class="highlighter-rouge">CTRunDelegateCreate(&amp;runDelegateCallbacks, nil)</code>，那么有一	定几率（不知道为什么不是必现的）会在这本应该绘制两个图片的位置只绘制一个图片。</p>
+
+    <p>```swift</p>
+
+    <p>let insertSpace = NSMutableAttributedString(string: “*”)</p>
+
+    <p>insertSpace.addAttribute(keyAttributeName, value: imageName, range: NSRange(location: 0, length: insertSpace.length))
+ let runDelegate = CTRunDelegateCreate(&amp;runDelegateCallbacks, nil)
+ insertSpace.addAttribute(kCTRunDelegateAttributeName as String, value: runDelegate!, range: NSRange(location: 0, length: insertSpace.length))</p>
+
+    <p>```</p>
+
+    <p>并且这个时候在<code class="highlighter-rouge">runDelegateCallbacks</code>中也无法取得文字的高度来设置预留位置	的大小，通常是写死一个值，所以可以像下面这样写：</p>
+  </li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">	
+<span class="c1">//控制图片尺寸的文字的相关尺寸</span>
+  <span class="kd">class</span> <span class="kt">PictureRunInfo</span> <span class="p">{</span>
+  	<span class="k">var</span> <span class="nv">ascender</span><span class="p">:</span> <span class="kt">CGFloat</span>
+	<span class="k">var</span> <span class="nv">descender</span><span class="p">:</span> <span class="kt">CGFloat</span>
+	<span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span>
+  
+	<span class="nf">init</span><span class="p">(</span><span class="nv">ascender</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">descender</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="p">{</span>
+ 	<span class="k">self</span><span class="o">.</span><span class="n">ascender</span> <span class="o">=</span> <span class="n">ascender</span>
+ 	<span class="k">self</span><span class="o">.</span><span class="n">descender</span> <span class="o">=</span> <span class="n">descender</span> 
+ 	<span class="k">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">//CTRunDelegateCreate中的回调</span>
+<span class="k">var</span> <span class="nv">runDelegateCallbacks</span> <span class="o">=</span> <span class="kt">CTRunDelegateCallbacks</span><span class="p">(</span><span class="nv">version</span><span class="p">:</span> <span class="n">kCTRunDelegateVersion1</span><span class="p">,</span> <span class="nv">dealloc</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="k">in</span>    
+    <span class="p">},</span> <span class="nv">getAscent</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
+      
+    <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">ascender</span>
+      
+    <span class="p">},</span> <span class="nv">getDescent</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
+      
+      <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">descender</span>
+      
+    <span class="p">},</span> <span class="nv">getWidth</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
+      
+    	<span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+    	<span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">width</span>
+  	<span class="p">})</span>
+  
+  	<span class="k">let</span> <span class="nv">insertSpace</span> <span class="o">=</span> <span class="kt">NSMutableAttributedString</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"*"</span><span class="p">)</span>
+	
+    <span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">keyAttributeName</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">imageName</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
+    <span class="c1">//为注明的几个值只是几个控制位置的常量而已，不用太在意</span>
+    <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="kt">PictureRunInfo</span><span class="p">(</span><span class="nv">ascender</span><span class="p">:</span> <span class="n">textStyle</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">ascender</span> <span class="o">+</span> <span class="n">extraHeight</span><span class="p">,</span> <span class="nv">descender</span><span class="p">:</span> <span class="o">-</span><span class="n">textStyle</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">descender</span> <span class="o">+</span> <span class="n">extraHeight</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="n">imageSize</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">imageHoriMargin</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">runDelegate</span> <span class="o">=</span> <span class="kt">CTRunDelegateCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">runDelegateCallbacks</span><span class="p">,</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pictureRunInfo</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">UnsafeMutableRawPointer</span><span class="o">.</span><span class="k">self</span><span class="p">))</span>
+	<span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">kCTRunDelegateAttributeName</span> <span class="k">as</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">runDelegate</span><span class="o">!</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
+	</code></pre></figure>
+
+        </section>
+
+        
+
+        <footer class="post-footer">
+            <!-- If we want to display author's name and bio -->
+            
+                <figure class="author-image">
+                    <a class="img" href="/" style="background-image: url(/assets/images/profile.png)">
+                    <span class="hidden">顽主's Picture</span></a>
+                </figure>
+                <section class="author">
+                    <!-- Author Name -->
+                    <h4> 顽主 </h4>
+                    <!-- Author Bio -->
+                    <p>
+                        Here goes the author description. You might want to place some links too in here
+                    </p>
+                </section>
+            
+
+            <!-- Share links section -->
+            <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?text=易拓展的富文本控件&amp;url=http://fanyinan.me/ios/2017/04/29/%E6%98%93%E6%8B%93%E5%B1%95%E7%9A%84%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8E%A7%E4%BB%B6.html"
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://fanyinan.me/ios/2017/04/29/%E6%98%93%E6%8B%93%E5%B1%95%E7%9A%84%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8E%A7%E4%BB%B6.html"
+        onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://fanyinan.me/ios/2017/04/29/%E6%98%93%E6%8B%93%E5%B1%95%E7%9A%84%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8E%A7%E4%BB%B6.html"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+
+            <!-- Disqus comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+    <footer class="site-footer clearfix">
+      <section class="copyright">
+        <a href="/">顽主の博客</a> &copy; 
+              2017-05-01 15:47 &bull; All rights reserved.
+      </section>
+      <section class="poweredby">Made with Jekyll using 
+        <a href="http://github.com/rosario/kasper">Kasper theme</a>
+      </section>
+    </footer>
+    
+    <script type="text/javascript" src="/assets/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Google Analytics Tracking code -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-81807619-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>   
+</body>
+</html>
