@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>顽主の博客 - 原创，不写烂大街的东西</title>
+    <meta name="description" content="WTF" />
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <!-- Customisation  -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
+
+</head>
+<body class="home-template">
+
+    <header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="http://fanyinan.me">Home</a>
+    </nav>
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">浅谈UIImageOrientation（一）</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2015-12-29">29 Dec 2015</time>
+                
+                    on iOS
+                
+            </section>
+        </header>
+
+<!--         <header class="post-header">
+            <a id="blog-logo" href="http://fanyinan.me">
+                
+                    <span class="blog-title">顽主の博客</span>
+                
+            </a>
+        </header> -->
+
+        <!-- <span class="post-meta">
+            <time datetime="2015-12-29">29 Dec 2015</time>
+            
+                on iOS
+            
+        </span> -->
+
+        <!-- <h1 class="post-title">浅谈UIImageOrientation（一）</h1> -->
+
+
+        <section class="post-content" style="margin-top:30px">
+            <p>我在之前做一个拼图游戏的时候，需要将一张图片裁成九份，于是我用<code class="highlighter-rouge">CGImageCreateWithImageInRect</code>，当我直接Assets中取图片是，everything is okay，然而当我在手机中真的选图片时，我就呵呵啦，理论上应该是图1中的样子，结果却是图2中的样子</p>
+
+<p><img src="/assets/source/2015-12-29-1.png" width="47%" style="float: left; margin-right:3%" />
+<img src="/assets/source/2015-12-29-2.png" width="50%" /></p>
+
+<p>很明显图片被逆时针旋转了90度，进过一番调查后发现是UIImaage的imageOrientation属性的原因</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">enum</span> <span class="kt">UIImageOrientation</span> <span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">Up</span>
+    <span class="k">case</span> <span class="kt">Down</span>
+    <span class="k">case</span> <span class="kt">Left</span>
+    <span class="k">case</span> <span class="kt">Right</span>
+    <span class="k">case</span> <span class="kt">UpMirrored</span>
+    <span class="k">case</span> <span class="kt">DownMirrored</span>
+    <span class="k">case</span> <span class="kt">LeftMirrored</span>
+    <span class="k">case</span> <span class="kt">RightMirrored</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>下图是得到这几个方向的图片的拍摄方法，原谅我没找到Mirrored的是怎么拍出来的，反正不是前置摄像头，(￣▽￣)</p>
+
+<p><img src="/assets/source/2015-12-29-5.png" width="23%" style="float: left; margin-right:2%" />
+<img src="/assets/source/2015-12-29-6.png" width="23%" style="float: left; margin-right:2%" />
+<img src="/assets/source/2015-12-29-7.png" width="23%" style="float: left; margin-right:2%" />
+<img src="/assets/source/2015-12-29-8.png" width="25%" /></p>
+
+<p>那这个属性有什么用呢？不知道大家有没有发现，在手机的相册中，无论拍摄照片时手机是什么方向，照片永远是拍摄时你在相机中看的的方向。为什么呢？我也不知道（不要打我），不过我推测是是<code class="highlighter-rouge">imageview</code>会帮你把图片旋转为.Up，不过图片本身并没有任何变化，只是看上去正了。</p>
+
+<p>与此同时，<code class="highlighter-rouge">image</code>的<code class="highlighter-rouge">size</code>也就为校正之后的也就是把<code class="highlighter-rouge">image</code>直接放进<code class="highlighter-rouge">imageview</code>中是看到的<code class="highlighter-rouge">size</code>。也就是说，如果把一个方向为<code class="highlighter-rouge">.Right</code>的图片设为<code class="highlighter-rouge">.Up</code>，那么它的size也会改变(<code class="highlighter-rouge">width</code>和<code class="highlighter-rouge">height</code>互换)，因为图片已经是<code class="highlighter-rouge">.Up</code>了，不需要调整。</p>
+
+<p>那么出现这种情况的原因为：</p>
+
+<p>我将选择的图片在原图(方向为右)的情况下，裁成九份，假如这九张小图的<code class="highlighter-rouge">imageOrientation</code>依然为<code class="highlighter-rouge">.Right</code>，那么<code class="highlighter-rouge">imageview</code>也会把这九张小图也旋转为<code class="highlighter-rouge">.Up</code>,如下图：</p>
+
+<p><img src="/assets/source/2015-12-29-3.png" width="50%" /></p>
+
+<p>很乱对不对，其实只要仔细看就会发现是把图2中的每张图顺时针旋转了90度。那么图2的情况是怎么来的呢，因为我在初始话裁剪后图片的时候，没有指定<code class="highlighter-rouge">imageOrientation</code>，则默认为<code class="highlighter-rouge">.Up</code>，<code class="highlighter-rouge">imageview</code>把<code class="highlighter-rouge">.Up</code>的图片旋转了0度，也就是没旋转，就成了图2的样子</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//如果设置orientation为原图的imageOrientation，则为图3</span>
+<span class="kt">UIImage</span><span class="p">(</span><span class="kt">CGImage</span><span class="p">:</span> <span class="kt">CGImage</span><span class="p">,</span> <span class="nv">scale</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">UIImageOrientation</span><span class="p">)</span>
+
+<span class="c1">//如果设置orientation为.Up(默认为.Up)，则为图2</span>
+<span class="kt">UIImage</span><span class="p">(</span><span class="kt">CGImage</span><span class="p">:</span> <span class="kt">CGImage</span><span class="p">)</span></code></pre></figure>
+
+<p>不知道你有没有发现，我说这张图片的方向是<code class="highlighter-rouge">.Right</code>，可它明明是向左转了啊。为什么会这样呢？我也不知道。不过我猜…</p>
+
+<ul>
+  <li>
+    <p>推测1：手机在Up的位置向右旋转90度拍出来的照片为.Right，同理向左旋转90拍出来的照片就为.Left</p>
+  </li>
+  <li>
+    <p>推测2：当前的坐标系是左上角为原点，图片向右转就是逆时针旋转</p>
+  </li>
+</ul>
+
+<p><img src="/assets/source/2015-12-29-4.png" width="50%" /></p>
+
+<p>###问题的解决</p>
+
+<p>让我们来把图片转一转，然后用<code class="highlighter-rouge">contentsRect</code>是否可以取到正确的区域来检测是否真的旋转了，<code class="highlighter-rouge">contentsRect</code>会先确定要显示的范围，然后再调整图片，可以达到和直接裁剪图片一样的效果，至于<code class="highlighter-rouge">contentsRect</code>的具体用途就不做解释了</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">fixOrientation</span><span class="p">(</span><span class="nv">image</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UIImage</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">imageRef</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="kt">CGImage</span>
+    <span class="k">let</span> <span class="nv">width</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+    <span class="k">let</span> <span class="nv">height</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+    
+    <span class="c1">//创建一个位图上下文，具体用法在这不是关键</span>
+    <span class="k">let</span> <span class="nv">ctx</span> <span class="o">=</span> <span class="kt">CGBitmapContextCreate</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span> <span class="kt">Int</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="kt">Int</span><span class="p">(</span><span class="n">height</span><span class="p">),</span>
+      <span class="kt">CGImageGetBitsPerComponent</span><span class="p">(</span><span class="n">imageRef</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="kt">CGImageGetColorSpace</span><span class="p">(</span><span class="n">imageRef</span><span class="p">),</span>
+      <span class="kt">CGImageGetBitmapInfo</span><span class="p">(</span><span class="n">imageRef</span><span class="p">)</span><span class="o">.</span><span class="n">rawValue</span><span class="p">)</span>
+    
+    <span class="c1">//这个方法的作用是在这个上下文中所有绘制出来的东西都按照这个transform来变换，也可以看作是直接变换坐标系。</span>
+    <span class="c1">//关键的getFixTransform方法在下面讲</span>
+    <span class="kt">CGContextConcatCTM</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="nf">getFixTransform</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
+    
+    <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">imageOrientation</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">Left</span><span class="p">,</span> <span class="o">.</span><span class="kt">LeftMirrored</span><span class="p">,</span> <span class="o">.</span><span class="kt">Right</span><span class="p">,</span> <span class="o">.</span><span class="kt">RightMirrored</span><span class="p">:</span>
+
+    <span class="c1">//最后来绘制image，如果是Left或 Right的当然要取旋转90度之后的width和height</span>
+      <span class="kt">CGContextDrawImage</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="kt">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">imageRef</span><span class="p">)</span>
+    <span class="k">default</span><span class="p">:</span>
+      <span class="kt">CGContextDrawImage</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="kt">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">imageRef</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="k">let</span> <span class="nv">fixImageRef</span> <span class="o">=</span> <span class="kt">CGBitmapContextCreateImage</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+
+    <span class="c1">//这里记得不要将原图片的imageOrientation再设回来，否则imageview又会自动调整方向了</span>
+    <span class="k">let</span> <span class="nv">fixImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="kt">CGImage</span><span class="p">:</span> <span class="n">fixImageRef</span><span class="o">!</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fixImage</span>
+    
+  <span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">getFixTransform</span><span class="p">(</span><span class="nv">image</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGAffineTransform</span> <span class="p">{</span>
+
+    <span class="k">var</span> <span class="nv">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformIdentity</span>
+    <span class="k">let</span> <span class="nv">width</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+    <span class="k">let</span> <span class="nv">height</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+    
+    <span class="c1">//调整图片的位置和方向</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">imageOrientation</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">Down</span><span class="p">,</span> <span class="o">.</span><span class="kt">DownMirrored</span><span class="p">:</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformRotate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="kt">M_PI</span><span class="p">))</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">Left</span><span class="p">,</span> <span class="o">.</span><span class="kt">LeftMirrored</span><span class="p">:</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformRotate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="kt">M_PI_2</span><span class="p">))</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">Right</span><span class="p">,</span> <span class="o">.</span><span class="kt">RightMirrored</span><span class="p">:</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformRotate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="o">-</span><span class="kt">M_PI_2</span><span class="p">))</span>
+    <span class="k">default</span><span class="p">:</span> <span class="c1">// .Up, .UpMirrored:</span>
+      <span class="k">break</span>
+    <span class="p">}</span>
+    
+    <span class="c1">//处理Mirrored的情况</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">imageOrientation</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">UpMirrored</span><span class="p">,</span> <span class="o">.</span><span class="kt">DownMirrored</span><span class="p">:</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformScale</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">LeftMirrored</span><span class="p">,</span> <span class="o">.</span><span class="kt">RightMirrored</span><span class="p">:</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformScale</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">default</span><span class="p">:</span> <span class="c1">// .Up, .Down, .Left, .Right</span>
+      <span class="k">break</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">transform</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>代码不难看懂，只是不够具象，下面我以一个.Right的图片来举个例子</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransformRotate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="o">-</span><span class="kt">M_PI_2</span><span class="p">))</span></code></pre></figure>
+
+<p><strong>注意:坐标系原点在左下角</strong></p>
+
+<p><img src="/assets/source/2015-12-29-9.png" width="95%" /></p>
+
+<p><strong>因为<code class="highlighter-rouge">CGContextConcatCTM</code>相当于改变的整个坐标系，所以一定要先平移，再旋转，否则会出现下面的情况</strong></p>
+
+<p><img src="/assets/source/2015-12-29-10.png" width="95%" /></p>
+
+<p>其他几种情况包括Mirrored变换的都大同小异。</p>
+
+<p>嗯，就到这了，最后附上演示Demo源码地址<a href="https://github.com/fanyinan/ImageOrientationDemo">GitHub</a></p>
+
+        </section>
+
+        
+
+        <footer class="post-footer">
+            <!-- If we want to display author's name and bio -->
+            
+                <figure class="author-image">
+                    <a class="img" href="http://fanyinan.me" style="background-image: url(/assets/images/profile.png)">
+                    <span class="hidden">顽主's Picture</span></a>
+                </figure>
+                <section class="author">
+                    <!-- Author Name -->
+                    <h4> 顽主 </h4>
+                    <!-- Author Bio -->
+                    <p>
+                        Here goes the author description. You might want to place some links too in here
+                    </p>
+                </section>
+            
+
+            <!-- Share links section -->
+            <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?text=浅谈UIImageOrientation（一）&amp;url=http://fanyinan.me/ios/2015/12/29/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%B8%80).html"
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://fanyinan.me/ios/2015/12/29/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%B8%80).html"
+        onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://fanyinan.me/ios/2015/12/29/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%B8%80).html"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+
+            <!-- Disqus comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+    <footer class="site-footer clearfix">
+      <section class="copyright">
+        <a href="http://fanyinan.me">顽主の博客</a> &copy; 
+              2017-05-01 15:07 &bull; All rights reserved.
+      </section>
+      <section class="poweredby">Made with Jekyll using 
+        <a href="http://github.com/rosario/kasper">Kasper theme</a>
+      </section>
+    </footer>
+    
+    <script type="text/javascript" src="/assets/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Google Analytics Tracking code -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-81807619-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>   
+</body>
+</html>

@@ -4,9 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <title>顽主の博客 - 原创，没有烂大街的东西</title>
+    <title>顽主の博客 - 原创，不写烂大街的东西</title>
     <meta name="description" content="WTF" />
-
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
     <meta name="HandheldFriendly" content="True" />
     <meta name="MobileOptimized" content="320" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,8 +21,9 @@
 
     <header class="main-header post-head no-cover">
     <nav class="main-nav  clearfix">
-        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="back-button icon-arrow-left" href="http://fanyinan.me">Home</a>
     </nav>
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
 </header>
 
 <main class="content" role="main">
@@ -56,7 +57,8 @@
 
         <!-- <h1 class="post-title">记此博客的诞生</h1> -->
 
-        <section class="post-content">
+
+        <section class="post-content" style="margin-top:30px">
             <p>奇迹般的迎来了我今年的第一个双休，周五白天还在火急火燎的改Bug，晚上就通知说明天休息吧，什么鬼。。。不过，正好得空建个博客，其实今年刚来北京那会就想建个博客用来积(zhuang)累(bi)了，只不过当时尚且年轻，没什么好写的，也就作罢。不过自从工作了这几个月的时间，或多或少也学到了点东西，谈不上什么经验分享，权当是个public笔记本吧 ^_^</p>
 
 <p>先大体说一下这个博客的结构吧：</p>
@@ -75,11 +77,11 @@
 
 <p>我一直翻着墙，没觉得慢，如果感觉死慢死慢的就用淘宝的镜像</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">--</span><span class="n">remove</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">rubygems</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
-<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">a</span> <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span><span class="o">/</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">--</span><span class="n">remove</span> <span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">rubygems</span><span class="p">.</span><span class="nf">org</span><span class="o">/</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">a</span> <span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">ruby</span><span class="p">.</span><span class="nf">taobao</span><span class="p">.</span><span class="nf">org</span><span class="o">/</span>
 <span class="err">$</span> <span class="n">gem</span> <span class="n">sources</span> <span class="o">-</span><span class="n">l</span>
     <span class="o">***</span> <span class="no">CURRENT</span> <span class="no">SOURCES</span> <span class="o">***</span>
-    <span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">ruby</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">org</span></code></pre></figure>
+    <span class="n">https</span><span class="ss">:/</span><span class="o">/</span><span class="n">ruby</span><span class="p">.</span><span class="nf">taobao</span><span class="p">.</span><span class="nf">org</span></code></pre></figure>
 
 <p>然后安装Jekyll</p>
 
@@ -111,19 +113,19 @@
 
 <p><img src="/assets/source/2015-12-2-1.png" width="100%" /></p>
 
-<p>记录类型一般是选<code>CANME</code>和<code>A(adderss)记录</code>：</p>
+<p>记录类型一般是选<code class="highlighter-rouge">CANME</code>和<code class="highlighter-rouge">A(adderss)记录</code>：</p>
 
-<p><code>A记录</code>：将你的域名直接指向IP地址，这样DNS直接根据域名找到对应的IP</p>
+<p><code class="highlighter-rouge">A记录</code>：将你的域名直接指向IP地址，这样DNS直接根据域名找到对应的IP</p>
 
-<p><code>CNAME</code>：简单来说就是给主机起一个别名，就像swift中的alias关键字，加个名字而已，本质上还是和原来的网址（也就是你的仓库名）做一样的事情，这样的一个好处是，如果IP地址换了，使用新注册的这个域名依然可以找到IP地址，不过A记录的方式就不可以了</p>
+<p><code class="highlighter-rouge">CNAME</code>：简单来说就是给主机起一个别名，就像swift中的alias关键字，加个名字而已，本质上还是和原来的网址（也就是你的仓库名）做一样的事情，这样的一个好处是，如果IP地址换了，使用新注册的这个域名依然可以找到IP地址，不过A记录的方式就不可以了</p>
 
 <p>不过我当时随便弄的，也没管太多，就用的A记录的</p>
 
-<p><code>主机记录</code>：用<code>www</code>做前缀就填<code>www</code>，不带就填<code>@</code>或不填，不过网上看到不带<code>www</code>的不能用<code>CNAME</code>，没有验证过，感兴趣的话可以试试</p>
+<p><code class="highlighter-rouge">主机记录</code>：用<code class="highlighter-rouge">www</code>做前缀就填<code class="highlighter-rouge">www</code>，不带就填<code class="highlighter-rouge">@</code>或不填，不过网上看到不带<code class="highlighter-rouge">www</code>的不能用<code class="highlighter-rouge">CNAME</code>，没有验证过，感兴趣的话可以试试</p>
 
-<p><code>解析线路</code>：默认就好</p>
+<p><code class="highlighter-rouge">解析线路</code>：默认就好</p>
 
-<p><code>记录值</code>：使用<code>CNAME</code>就填你的网址（仓库名）；使用<code>A记录</code>的话，用命令行<code>PING</code>一下你的网址（仓库名），把得到的IP地址填上就可以了</p>
+<p><code class="highlighter-rouge">记录值</code>：使用<code class="highlighter-rouge">CNAME</code>就填你的网址（仓库名）；使用<code class="highlighter-rouge">A记录</code>的话，用命令行<code class="highlighter-rouge">PING</code>一下你的网址（仓库名），把得到的IP地址填上就可以了</p>
 
 <p><img src="/assets/source/2015-12-2-2.png" width="100%" /></p>
 
@@ -134,7 +136,7 @@
 <p>不管是下载模板还是自己写，都需要用到下面两个插件</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#高亮插件</span>
-<span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">pygments</span><span class="o">.</span><span class="n">rb</span>
+<span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">pygments</span><span class="p">.</span><span class="nf">rb</span>
 <span class="c1">#分页插件</span>
 <span class="err">$</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">jekyll</span><span class="o">-</span><span class="n">paginate</span></code></pre></figure>
 
@@ -156,7 +158,7 @@
             <!-- If we want to display author's name and bio -->
             
                 <figure class="author-image">
-                    <a class="img" href="/" style="background-image: url(/assets/images/profile.png)">
+                    <a class="img" href="http://fanyinan.me" style="background-image: url(/assets/images/profile.png)">
                     <span class="hidden">顽主's Picture</span></a>
                 </figure>
                 <section class="author">
@@ -197,8 +199,8 @@
 
     <footer class="site-footer clearfix">
       <section class="copyright">
-        <a href="/">顽主の博客</a> &copy; 
-              2017-04-29 16:45 &bull; All rights reserved.
+        <a href="http://fanyinan.me">顽主の博客</a> &copy; 
+              2017-05-01 15:07 &bull; All rights reserved.
       </section>
       <section class="poweredby">Made with Jekyll using 
         <a href="http://github.com/rosario/kasper">Kasper theme</a>

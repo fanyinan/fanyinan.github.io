@@ -2,13 +2,11 @@
 layout: post
 title: 浅谈UIImageOrientation（一）
 description: UIImageOrientation －－－ 一个不起眼的属性
-categories: [技术]
+categories: [iOS]
 tags: [Tech,Swift]
 imagePrefix: /assets/source/2015-12-29- 
 github: https://github.com/fanyinan/ImageOrientationDemo
 ---
-
-###问题的起因
 
 我在之前做一个拼图游戏的时候，需要将一张图片裁成九份，于是我用`CGImageCreateWithImageInRect`，当我直接Assets中取图片是，everything is okay，然而当我在手机中真的选图片时，我就呵呵啦，理论上应该是图1中的样子，结果却是图2中的样子
 

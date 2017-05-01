@@ -2,7 +2,7 @@
 layout: post
 title: 浅谈UIImageOrientation（二）
 description: UIImageOrientation －－－ 我是续集
-categories: [技术]
+categories: [iOS]
 tags: [Tech,Swift]
 imagePrefix: /assets/source/2016-1-7- 
 github: https://github.com/fanyinan/ImageOrientationDemo2

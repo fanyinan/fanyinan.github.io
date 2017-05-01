@@ -1,9 +1,9 @@
 name: 顽主の博客
-description: 原创，没有烂大街的东西
+description: 原创，不写烂大街的东西
 meta_description: "WTF"
 
 markdown: kramdown
-highlighter: pygments
+highlighter: rouge
 logo: false
 paginate: 15
 # baseurl: /

@@ -1,9 +1,8 @@
 ---
 layout: post
 title: UIScrollView中的双击图片放大—zoomToRect
-description: original post at WOWMORON
 <!-- tagline: original post at wowmoron.wordpress.com -->
-categories: [技术]
+categories: [iOS]
 tags: [Tech,Swift]
 github1: https://github.com/fanyinan/WZPhotoBrowser
 github2: https://github.com/fanyinan/ZoomImageScrollViewDemo
@@ -28,7 +27,7 @@ imagePrefix: /assets/source/2016-8-5-
 
 __第四步的代码__
 
-{% highlight swift %}
+```swift
  private func calculateZoomScale() {
     
     let boundSize = bounds.size
@@ -49,7 +48,7 @@ __第四步的代码__
     maximumZoomScale = 3
 
   }
-{% endhighlight %}
+```
 
 __第五步的代码__
 

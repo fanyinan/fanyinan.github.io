@@ -6,6 +6,7 @@ about: 'about.html'
 ---
 
 <header class="main-header {% if page.cover %}" style="background-image: url({{ page.cover }}) {%else%}no-cover{% endif %}">
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
     <nav class="main-nav overlay clearfix">
             {% if page.logo %}
                 <a class="blog-logo" href="{{ site.baseurl }}">
@@ -17,7 +18,7 @@ about: 'about.html'
         <div class="main-header-content inner">
             <h1 class="page-title">{{ site.name }}</h1>
             <h2 class="page-description">
-                {% if site.description %} {{ site.description }}. {% endif %}
+                {% if site.description %} {{ site.description }} {% endif %}
             </h2>
         </div>
     </div>
@@ -39,7 +40,14 @@ about: 'about.html'
             <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
         </header>
         <section class="post-excerpt">
-            {{ post.excerpt }} <a class="read-more" href="{{ post.url }}">&raquo;</a>
+            <a class="read-more" href="{{ post.url }}">
+                {% if post.description %} 
+                    {{post.description}} 
+                {%else%}
+                    {{ post.excerpt }} 
+                {% endif %}
+                &raquo;
+            </a>
         </section>
         <footer class="post-meta">
             {% if site.author %}

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>顽主の博客 - 原创，不写烂大街的东西</title>
+    <meta name="description" content="WTF" />
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <!-- Customisation  -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
+
+</head>
+<body class="home-template">
+
+    <header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="http://fanyinan.me">Home</a>
+    </nav>
+    <meta name="baidu-site-verification" content="wUEdAscTtZ" />
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">浅谈UIImageOrientation（二）</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2016-01-07">07 Jan 2016</time>
+                
+                    on iOS
+                
+            </section>
+        </header>
+
+<!--         <header class="post-header">
+            <a id="blog-logo" href="http://fanyinan.me">
+                
+                    <span class="blog-title">顽主の博客</span>
+                
+            </a>
+        </header> -->
+
+        <!-- <span class="post-meta">
+            <time datetime="2016-01-07">07 Jan 2016</time>
+            
+                on iOS
+            
+        </span> -->
+
+        <!-- <h1 class="post-title">浅谈UIImageOrientation（二）</h1> -->
+
+
+        <section class="post-content" style="margin-top:30px">
+            <p>为何总遇到关于图片的方向的问题，是不是我打开的方式不对  orz</p>
+
+<p>在做一个裁剪图片的时候，发现裁剪得到的部分并不是选定的部分，然后有了之前的经验，就联想到时<code class="highlighter-rouge">UIImageOrientation</code>的问题</p>
+
+<p>###来说一下问题的原因</p>
+
+<p>直接上图</p>
+
+<p><img src="/assets/source/2016-1-7-2.png" width="100%" /></p>
+
+<p>看着可能拥挤了点，不过应该能看清楚，如果有不明白的可以去看<a href="http://fanyinan.me/浅谈UIImageOrientation(一)">浅谈UIImageOrientation（一）</a></p>
+
+<p>###解决它</p>
+
+<p>转换<code class="highlighter-rouge">CGRect</code>的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">transformOrientationRect</span><span class="p">(</span><span class="nv">originImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">,</span> <span class="nv">rect</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGRect</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">rectTransform</span><span class="p">:</span> <span class="kt">CGAffineTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformIdentity</span>
+    
+    <span class="k">switch</span> <span class="n">originImage</span><span class="o">.</span><span class="n">imageOrientation</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">Left</span><span class="p">:</span>
+      <span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformMakeRotation</span><span class="p">(</span><span class="kt">CGFloat</span><span class="p">(</span><span class="kt">M_PI_2</span><span class="p">))</span>
+      <span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rectTransform</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">originImage</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">Right</span><span class="p">:</span>
+      <span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformMakeRotation</span><span class="p">(</span><span class="kt">CGFloat</span><span class="p">(</span><span class="o">-</span><span class="kt">M_PI_2</span><span class="p">))</span>
+      <span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rectTransform</span><span class="p">,</span> <span class="o">-</span><span class="n">originImage</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="kt">Down</span><span class="p">:</span>
+      <span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformMakeRotation</span><span class="p">(</span><span class="kt">CGFloat</span><span class="p">(</span><span class="o">-</span><span class="kt">M_PI</span><span class="p">))</span>
+      <span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rectTransform</span><span class="p">,</span> <span class="o">-</span><span class="n">originImage</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="o">-</span><span class="n">originImage</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+    <span class="k">default</span><span class="p">:</span>
+      <span class="k">break</span>
+    <span class="p">}</span>
+    
+    <span class="k">let</span> <span class="nv">orientationRect</span> <span class="o">=</span> <span class="kt">CGRectApplyAffineTransform</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="kt">CGAffineTransformScale</span><span class="p">(</span><span class="n">rectTransform</span><span class="p">,</span> <span class="n">originImage</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">originImage</span><span class="o">.</span><span class="n">scale</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">orientationRect</span>
+    
+  <span class="p">}</span></code></pre></figure>
+
+<p>依然以<code class="highlighter-rouge">.Right</code>为例：</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformMakeRotation</span><span class="p">(</span><span class="kt">CGFloat</span><span class="p">(</span><span class="o">-</span><span class="kt">M_PI_2</span><span class="p">))</span>
+<span class="n">rectTransform</span> <span class="o">=</span> <span class="kt">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rectTransform</span><span class="p">,</span> <span class="o">-</span><span class="n">originImage</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></code></pre></figure>
+
+<p>这部分代码没什么需要解释的，只要知道CGRect是怎么转换的就好，下面的图片应该能看的很清楚：</p>
+
+<p><img src="/assets/source/2016-1-7-3.png" width="48%" style="float: left; margin-right:2%" />
+<img src="/assets/source/2016-1-7-4.gif" width="50%" /></p>
+
+<p>旋转的时候看起来是不是很奇怪，但隐约感觉有什么规律，那再看下面这个GIF，是不是秒懂</p>
+
+<p><img src="/assets/source/2016-1-7-5.gif" width="70%" /></p>
+
+<p>UIView的CGAffineTransformTranslate实际上也是这样的</p>
+
+<p>其他几个方向的图片也和<code class="highlighter-rouge">.Right</code>的原理一样，找到转换的方式就可以，就不再赘述了</p>
+
+<p>嗯，就到这了，最后附上演示Demo的源码地址<a href="https://github.com/fanyinan/ImageOrientationDemo2">GitHub</a></p>
+
+
+        </section>
+
+        
+
+        <footer class="post-footer">
+            <!-- If we want to display author's name and bio -->
+            
+                <figure class="author-image">
+                    <a class="img" href="http://fanyinan.me" style="background-image: url(/assets/images/profile.png)">
+                    <span class="hidden">顽主's Picture</span></a>
+                </figure>
+                <section class="author">
+                    <!-- Author Name -->
+                    <h4> 顽主 </h4>
+                    <!-- Author Bio -->
+                    <p>
+                        Here goes the author description. You might want to place some links too in here
+                    </p>
+                </section>
+            
+
+            <!-- Share links section -->
+            <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?text=浅谈UIImageOrientation（二）&amp;url=http://fanyinan.me/ios/2016/01/07/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C).html"
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://fanyinan.me/ios/2016/01/07/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C).html"
+        onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://fanyinan.me/ios/2016/01/07/%E6%B5%85%E8%B0%88UIImageOrientation(%E4%BA%8C).html"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+
+            <!-- Disqus comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+    <footer class="site-footer clearfix">
+      <section class="copyright">
+        <a href="http://fanyinan.me">顽主の博客</a> &copy; 
+              2017-05-01 15:07 &bull; All rights reserved.
+      </section>
+      <section class="poweredby">Made with Jekyll using 
+        <a href="http://github.com/rosario/kasper">Kasper theme</a>
+      </section>
+    </footer>
+    
+    <script type="text/javascript" src="/assets/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Google Analytics Tracking code -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-81807619-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>   
+</body>
+</html>
