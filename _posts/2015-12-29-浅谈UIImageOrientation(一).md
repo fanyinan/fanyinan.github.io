@@ -65,7 +65,7 @@ UIImage(CGImage: CGImage)
 
 <img src="{{page.imagePrefix}}4.png" width="50%">
 
-###问题的解决
+### 问题的解决
 
 让我们来把图片转一转，然后用`contentsRect`是否可以取到正确的区域来检测是否真的旋转了，`contentsRect`会先确定要显示的范围，然后再调整图片，可以达到和直接裁剪图片一样的效果，至于`contentsRect`的具体用途就不做解释了
 

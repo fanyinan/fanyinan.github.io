@@ -13,7 +13,7 @@ lastPage: http://fanyinan.me/浅谈UIImageOrientation(一)
 
 在做一个裁剪图片的时候，发现裁剪得到的部分并不是选定的部分，然后有了之前的经验，就联想到时`UIImageOrientation`的问题
 
-###来说一下问题的原因
+### 来说一下问题的原因
 
 直接上图
 
@@ -21,7 +21,7 @@ lastPage: http://fanyinan.me/浅谈UIImageOrientation(一)
 
 看着可能拥挤了点，不过应该能看清楚，如果有不明白的可以去看[浅谈UIImageOrientation（一）]({{page.lastPage}})
 
-###解决它
+### 解决它
 
 转换`CGRect`的代码如下：
 
