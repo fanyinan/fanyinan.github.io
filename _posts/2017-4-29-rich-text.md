@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 易拓展的富文本控件
+title: 易扩展的富文本控件
 
 categories: [iOS]
 description: 灵活、易配置、自带缓存和预加载的富文本控件，结合了策略模式和模板方法模式（尝试使用装饰者模式，却发现有点弄巧成拙）— 你值得拥有！！！
@@ -25,7 +25,7 @@ imagePrefix: /assets/source/2017-4-29-
 	主要控件WZRichTextView继承自UIView，用于展示通过CoreText绘制文字生成的图片；通过WZTextStyle配置文字样式；可以配置多个Interpreter来处理文字
 	
 
-* 易拓展
+* 易扩展
 
 	将对文字的处理的逻辑抽象出一个Interpreter，主要包括对文字的解析，点击时的样式，点击事件的处理，在上下文中进行绘制。通过具体的Interpreter来实现需要的接口完成相应的功能。传入的多个Interpreter按顺序依次处理文字，但是如果一个`CTRun`对应了多个Interpreter，只有第一个Interpreter的点击事件和点击时的样式会生效
 
