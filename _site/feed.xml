@@ -5,12 +5,12 @@
     <description>原创，不写烂大街的东西</description>
     <link>http://fanyinan.me//</link>
     <atom:link href="http://fanyinan.me//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 12 May 2017 17:56:36 +0800</pubDate>
-    <lastBuildDate>Fri, 12 May 2017 17:56:36 +0800</lastBuildDate>
+    <pubDate>Fri, 12 May 2017 18:09:49 +0800</pubDate>
+    <lastBuildDate>Fri, 12 May 2017 18:09:49 +0800</lastBuildDate>
     <generator>Jekyll v3.2.0</generator>
     
       <item>
-        <title>易拓展的富文本控件</title>
+        <title>易扩展的富文本控件</title>
         <description>&lt;p&gt;公司在做即时通讯软件，所以显示文字消息是必须的。之前一直都在用label显示文字，像我一样单纯的文字，没有图文混排，没有点击事件，只有文字。但是偶然之间发现一个问题：在UITableView中显示文字的时候，由于cell的复用，当cell需要显示的时候才设置相应的文字，但是如果设置的文字过多（可多可多了）的时候，label在渲染的时候会有严重的性能问题，出现了特别明显的卡顿。很明显需要优化一下（通常没人会输入这么多字，但是这种已知的潜在的性能问题不解决一下怎么能忍），所以根据性能优化的经验，可以做一下异步渲染、预加载、缓存，能缓存和预加载的肯定就是处理成UIImage了，所以肯定需要CoreText。&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -29,7 +29,7 @@
     &lt;p&gt;主要控件WZRichTextView继承自UIView，用于展示通过CoreText绘制文字生成的图片；通过WZTextStyle配置文字样式；可以配置多个Interpreter来处理文字&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;易拓展&lt;/p&gt;
+    &lt;p&gt;易扩展&lt;/p&gt;
 
     &lt;p&gt;将对文字的处理的逻辑抽象出一个Interpreter，主要包括对文字的解析，点击时的样式，点击事件的处理，在上下文中进行绘制。通过具体的Interpreter来实现需要的接口完成相应的功能。传入的多个Interpreter按顺序依次处理文字，但是如果一个&lt;code class=&quot;highlighter-rouge&quot;&gt;CTRun&lt;/code&gt;对应了多个Interpreter，只有第一个Interpreter的点击事件和点击时的样式会生效&lt;/p&gt;
   &lt;/li&gt;
