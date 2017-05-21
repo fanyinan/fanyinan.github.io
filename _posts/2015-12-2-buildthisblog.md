@@ -62,7 +62,7 @@ $ cd myblog
 
 说一下域名的解析设置吧
 
-<img src="/assets/source/2015-12-2-1.png" width="100%">
+<img src="/assets/source/2015-12-2/1.png" width="100%">
 
 记录类型一般是选`CANME`和`A(adderss)记录`：
 
@@ -78,7 +78,7 @@ $ cd myblog
 
 `记录值`：使用`CNAME`就填你的网址（仓库名）；使用`A记录`的话，用命令行`PING`一下你的网址（仓库名），把得到的IP地址填上就可以了
 
-<img src="/assets/source/2015-12-2-2.png" width="100%">
+<img src="/assets/source/2015-12-2/2.png" width="100%">
 
 保存，等个十几分钟就可以了
 

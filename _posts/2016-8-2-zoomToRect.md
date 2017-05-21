@@ -6,7 +6,7 @@ categories: [iOS]
 tags: [Tech,Swift]
 github1: https://github.com/fanyinan/WZPhotoBrowser
 github2: https://github.com/fanyinan/ZoomImageScrollViewDemo
-imagePrefix: /assets/source/2016-8-5-
+imagePrefix: /assets/source/2016-8-5/
 ---
 
 突然有一天，我想给我的[图片浏览器]({{page.github1}})加上双击放大功能，想想这么简单又遍地都是的功能应该很好加吧。然而并没有，我被打脸了。

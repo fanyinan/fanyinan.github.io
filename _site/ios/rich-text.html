@@ -66,7 +66,7 @@
 <hr />
 
 <p>先看一下大致结构：
-<img src="/assets/source/2017-4-29-1.png" /></p>
+<img src="/assets/source/2017-4-29/1.png" /></p>
 
 <ul>
   <li>
@@ -83,6 +83,11 @@
     <p>灵活</p>
 
     <p>需要解析文字时只需传入相应的InterPreter即可，不做多余的文字处理。需要注意的是，当传入多个Interpreter时，需要注意在数组中的顺序，这个顺序决定了文字的处理顺序</p>
+  </li>
+  <li>
+    <p>异步</p>
+
+    <p>文字的绘制完全放在异步线程来完成，即使文字数量极大，内容极其复杂，也不会对主线程产生影响</p>
   </li>
   <li>
     <p>缓存</p>
@@ -106,8 +111,8 @@
   <li>
     <p>众所周知，当用<code class="highlighter-rouge">CoreText</code>进行图文混排的时候，可以将占位的标志替换成空格，再为	其添加<code class="highlighter-rouge">kCTRunDelegateAttributeName</code>样式。但是如果<code class="highlighter-rouge">CTLineBreakMode</code>的	值设为<code class="highlighter-rouge">byWordWrapping</code>，则会出现左图下面的情况，但实际上应该是右图的样子：</p>
 
-    <p><img src="/assets/source/2017-4-29-2.png" width="45%" style="float: left; margin-right:5%" />
- <img src="/assets/source/2017-4-29-3.png" width="45%" /></p>
+    <p><img src="/assets/source/2017-4-29/2.png" width="45%" style="float: left; margin-right:5%" />
+ <img src="/assets/source/2017-4-29/3.png" width="45%" /></p>
 
     <p>这不是难点，赤裸裸的坑啊，也不懂是因为什么，这种乍一看像是苹果的bug的问题也不	太想深究，我的处理方法时把占位的标志替换成一个透明的字符而不是空格</p>
   </li>
@@ -223,7 +228,7 @@
     <footer class="site-footer clearfix">
       <section class="copyright">
         <a href="/">顽主の博客</a> &copy; 
-              2017-05-12 18:09 &bull; All rights reserved.
+              2017-05-21 23:29 &bull; All rights reserved.
       </section>
       <section class="poweredby">Made with Jekyll using 
         <a href="http://github.com/rosario/kasper">Kasper theme</a>

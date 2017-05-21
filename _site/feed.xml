@@ -5,8 +5,8 @@
     <description>原创，不写烂大街的东西</description>
     <link>http://fanyinan.me//</link>
     <atom:link href="http://fanyinan.me//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 12 May 2017 18:09:49 +0800</pubDate>
-    <lastBuildDate>Fri, 12 May 2017 18:09:49 +0800</lastBuildDate>
+    <pubDate>Sun, 21 May 2017 23:29:42 +0800</pubDate>
+    <lastBuildDate>Sun, 21 May 2017 23:29:42 +0800</lastBuildDate>
     <generator>Jekyll v3.2.0</generator>
     
       <item>
@@ -20,7 +20,7 @@
 &lt;hr /&gt;
 
 &lt;p&gt;先看一下大致结构：
-&lt;img src=&quot;/assets/source/2017-4-29-1.png&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/source/2017-4-29/1.png&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -37,6 +37,11 @@
     &lt;p&gt;灵活&lt;/p&gt;
 
     &lt;p&gt;需要解析文字时只需传入相应的InterPreter即可，不做多余的文字处理。需要注意的是，当传入多个Interpreter时，需要注意在数组中的顺序，这个顺序决定了文字的处理顺序&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;异步&lt;/p&gt;
+
+    &lt;p&gt;文字的绘制完全放在异步线程来完成，即使文字数量极大，内容极其复杂，也不会对主线程产生影响&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;缓存&lt;/p&gt;
@@ -60,8 +65,8 @@
   &lt;li&gt;
     &lt;p&gt;众所周知，当用&lt;code class=&quot;highlighter-rouge&quot;&gt;CoreText&lt;/code&gt;进行图文混排的时候，可以将占位的标志替换成空格，再为	其添加&lt;code class=&quot;highlighter-rouge&quot;&gt;kCTRunDelegateAttributeName&lt;/code&gt;样式。但是如果&lt;code class=&quot;highlighter-rouge&quot;&gt;CTLineBreakMode&lt;/code&gt;的	值设为&lt;code class=&quot;highlighter-rouge&quot;&gt;byWordWrapping&lt;/code&gt;，则会出现左图下面的情况，但实际上应该是右图的样子：&lt;/p&gt;
 
-    &lt;p&gt;&lt;img src=&quot;/assets/source/2017-4-29-2.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
- &lt;img src=&quot;/assets/source/2017-4-29-3.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;img src=&quot;/assets/source/2017-4-29/2.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+ &lt;img src=&quot;/assets/source/2017-4-29/3.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
     &lt;p&gt;这不是难点，赤裸裸的坑啊，也不懂是因为什么，这种乍一看像是苹果的bug的问题也不	太想深究，我的处理方法时把占位的标志替换成一个透明的字符而不是空格&lt;/p&gt;
   &lt;/li&gt;
@@ -237,8 +242,8 @@
   &lt;li&gt;同2&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2016-8-5-1.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2016-8-5-2.png&quot; width=&quot;23%&quot; style=&quot;margin-right:2%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2016-8-5/1.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5/2.png&quot; width=&quot;23%&quot; style=&quot;margin-right:2%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;绿色的部分可以认为是&lt;code class=&quot;highlighter-rouge&quot;&gt;contentView&lt;/code&gt;的位置&lt;/p&gt;
 
@@ -282,15 +287,15 @@
   &lt;li&gt;获取点击在&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView&lt;/code&gt;的位置，这里值得一提的是，虽然此时&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView&lt;/code&gt;被缩小，其&lt;code class=&quot;highlighter-rouge&quot;&gt;frame&lt;/code&gt;也是当前被缩小时的值，但是&lt;code class=&quot;highlighter-rouge&quot;&gt;position&lt;/code&gt;依然是未被缩小时的位置，比如：图片尺寸为&lt;code class=&quot;highlighter-rouge&quot;&gt;640*300&lt;/code&gt;，那么&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView&lt;/code&gt;在未被缩小时的尺寸也是&lt;code class=&quot;highlighter-rouge&quot;&gt;640*300&lt;/code&gt;，假设被缩小后为&lt;code class=&quot;highlighter-rouge&quot;&gt;320*150&lt;/code&gt;，此时点击&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView&lt;/code&gt;的右下角，我们得到的&lt;code class=&quot;highlighter-rouge&quot;&gt;position&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;640*300&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;这一步是关键，计算放大的尺寸。先来解释一下&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomToRect&lt;/code&gt;的参数，这是一个&lt;code class=&quot;highlighter-rouge&quot;&gt;CGRect&lt;/code&gt;的值，表示一块矩形区域，这个区域指的是当zoomScale为1时，取&lt;code class=&quot;highlighter-rouge&quot;&gt;contentView&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;CGRect&lt;/code&gt;的部分，然后把&lt;code class=&quot;highlighter-rouge&quot;&gt;contentView&lt;/code&gt;按长边的比例缩放(自动计算&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomScale&lt;/code&gt;，当然我们不用关心这个&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomScale&lt;/code&gt;是多少)，使这部分填充&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;, 
 先看图：
-&lt;img src=&quot;/assets/source/2016-8-5-3.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2016-8-5-4.png&quot; width=&quot;48%&quot; style=&quot;margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5/3.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5/4.png&quot; width=&quot;48%&quot; style=&quot;margin-right:2%&quot; /&gt;
 先来算宽度，我们把放大的比例设为2（这个比例为我们的变量&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomRectScale&lt;/code&gt;，而不是&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomScale&lt;/code&gt;），那么假如我们要把图片放大1倍（也就是不变），显示在&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;中的是整张图片，所以当放大1倍时，这个宽度为图片的宽度；同理，当放大2倍时，显示在&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;中的部分的宽度为1倍时的1/2，也就是图片宽度的一半，即&lt;code class=&quot;highlighter-rouge&quot;&gt;image.size.width / zoomRectScale&lt;/code&gt;。
 当然这里指的是当图片的尺寸比&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;大的情况，但是当图片很小的时候，极端一点，一张&lt;code class=&quot;highlighter-rouge&quot;&gt;10*10&lt;/code&gt;的图片，当放大时需要把长度为5（宽度的1/2）放大到屏幕宽，显然不是2倍。所以如下图，我们需要把蓝色框部分当做一张图片来进行放大，就得到&lt;code class=&quot;highlighter-rouge&quot;&gt;(image.size.width + imageView.frame.minX / zoomScale * 2) / zoomRectScale&lt;/code&gt;，由于&lt;code class=&quot;highlighter-rouge&quot;&gt;image.size.width&lt;/code&gt;等价于&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView.frame.width / zoomScale&lt;/code&gt;，所以也就是&lt;code class=&quot;highlighter-rouge&quot;&gt;frame.width / zoomScale / zoomRectScale&lt;/code&gt;（&lt;code class=&quot;highlighter-rouge&quot;&gt;frame.width&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;的宽度）。高度也是同理
-&lt;img src=&quot;/assets/source/2016-8-5-5.png&quot; width=&quot;70%&quot; /&gt;。&lt;/li&gt;
+&lt;img src=&quot;/assets/source/2016-8-5/5.png&quot; width=&quot;70%&quot; /&gt;。&lt;/li&gt;
   &lt;li&gt;再来计算&lt;code class=&quot;highlighter-rouge&quot;&gt;origin&lt;/code&gt;，现在我们有了中点坐标，也就是&lt;code class=&quot;highlighter-rouge&quot;&gt;position&lt;/code&gt;，也有了宽度，那么&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomX&lt;/code&gt;就很容易计算，&lt;code class=&quot;highlighter-rouge&quot;&gt;position.x - zoomWidth / 2&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomY&lt;/code&gt;同理。
 但是这里有一个特殊情况，就是当一张图片其长宽都小于&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;，但是放大后的长或宽大于&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;长或宽的的时候，放大图片后，图片偏左。如下图（为了方便观察，我把scrollView的长和宽都缩小1/2，这样可以看到超出的部分。右图是双击图片中点放大后的样子）：                       &lt;br /&gt;
-&lt;img src=&quot;/assets/source/2016-8-5-6.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2016-8-5-7.png&quot; width=&quot;48%&quot; style=&quot;margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5/6.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-8-5/7.png&quot; width=&quot;48%&quot; style=&quot;margin-right:2%&quot; /&gt;
 那么这是为什么呢，我也不知道，真的不知道，只是发现当执行&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomScale&lt;/code&gt;之后，&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;contentOffset&lt;/code&gt;会比预期的值增加了&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView.frame.minX&lt;/code&gt;，也就是说上方右图的&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView&lt;/code&gt;向左距中心偏移的值等于上方左图中&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;frame.minX&lt;/code&gt;，但是我不知道为什么。
 先来看这个问题怎么解决吧，既然&lt;code class=&quot;highlighter-rouge&quot;&gt;scrollView&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;contentOffset&lt;/code&gt;增加了，使得图片向左移动了，就导致图片的左侧的一部分被遮住了，那么我们选取的放大区域就需要向左移动一点，也就是计算&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomX&lt;/code&gt;的时候可以减去一个值来调整位置。由于图片在放大后偏移了&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView.frame.minX&lt;/code&gt;，而且放大倍数为2，那么在未放大时需要向左调整的距离就为&lt;code class=&quot;highlighter-rouge&quot;&gt;imageView.frame.minX / zoomScale / zoomRectScale&lt;/code&gt;，所以就需要&lt;code class=&quot;highlighter-rouge&quot;&gt;position.x - zoomWidth / 2 - imageView.frame.minX / zoomScale / zoomRectScale&lt;/code&gt;。&lt;code class=&quot;highlighter-rouge&quot;&gt;zoomY&lt;/code&gt;同理&lt;/li&gt;
   &lt;li&gt;执行缩放&lt;/li&gt;
@@ -327,7 +332,7 @@
 
 &lt;p&gt;直接上图&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2016-1-7-2.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2016-1-7/2.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;看着可能拥挤了点，不过应该能看清楚，如果有不明白的可以去看&lt;a href=&quot;http://fanyinan.me/浅谈UIImageOrientation(一)&quot;&gt;浅谈UIImageOrientation（一）&lt;/a&gt;&lt;/p&gt;
 
@@ -366,12 +371,12 @@
 
 &lt;p&gt;这部分代码没什么需要解释的，只要知道CGRect是怎么转换的就好，下面的图片应该能看的很清楚：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2016-1-7-3.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2016-1-7-4.gif&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2016-1-7/3.png&quot; width=&quot;48%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2016-1-7/4.gif&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;旋转的时候看起来是不是很奇怪，但隐约感觉有什么规律，那再看下面这个GIF，是不是秒懂&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2016-1-7-5.gif&quot; width=&quot;70%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2016-1-7/5.gif&quot; width=&quot;70%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;UIView的CGAffineTransformTranslate实际上也是这样的&lt;/p&gt;
 
@@ -397,8 +402,8 @@
         <title>浅谈UIImageOrientation（一）</title>
         <description>&lt;p&gt;我在之前做一个拼图游戏的时候，需要将一张图片裁成九份，于是我用&lt;code class=&quot;highlighter-rouge&quot;&gt;CGImageCreateWithImageInRect&lt;/code&gt;，当我直接Assets中取图片是，everything is okay，然而当我在手机中真的选图片时，我就呵呵啦，理论上应该是图1中的样子，结果却是图2中的样子&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29-1.png&quot; width=&quot;47%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-29-2.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29/1.png&quot; width=&quot;47%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-29/2.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;很明显图片被逆时针旋转了90度，进过一番调查后发现是UIImaage的imageOrientation属性的原因&lt;/p&gt;
 
@@ -415,10 +420,10 @@
 
 &lt;p&gt;下图是得到这几个方向的图片的拍摄方法，原谅我没找到Mirrored的是怎么拍出来的，反正不是前置摄像头，(￣▽￣)&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29-5.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-29-6.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-29-7.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-29-8.png&quot; width=&quot;25%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29/5.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-29/6.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-29/7.png&quot; width=&quot;23%&quot; style=&quot;float: left; margin-right:2%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-29/8.png&quot; width=&quot;25%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;那这个属性有什么用呢？不知道大家有没有发现，在手机的相册中，无论拍摄照片时手机是什么方向，照片永远是拍摄时你在相机中看的的方向。为什么呢？我也不知道（不要打我），不过我推测是是&lt;code class=&quot;highlighter-rouge&quot;&gt;imageview&lt;/code&gt;会帮你把图片旋转为.Up，不过图片本身并没有任何变化，只是看上去正了。&lt;/p&gt;
 
@@ -428,7 +433,7 @@
 
 &lt;p&gt;我将选择的图片在原图(方向为右)的情况下，裁成九份，假如这九张小图的&lt;code class=&quot;highlighter-rouge&quot;&gt;imageOrientation&lt;/code&gt;依然为&lt;code class=&quot;highlighter-rouge&quot;&gt;.Right&lt;/code&gt;，那么&lt;code class=&quot;highlighter-rouge&quot;&gt;imageview&lt;/code&gt;也会把这九张小图也旋转为&lt;code class=&quot;highlighter-rouge&quot;&gt;.Up&lt;/code&gt;,如下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29-3.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29/3.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;很乱对不对，其实只要仔细看就会发现是把图2中的每张图顺时针旋转了90度。那么图2的情况是怎么来的呢，因为我在初始话裁剪后图片的时候，没有指定&lt;code class=&quot;highlighter-rouge&quot;&gt;imageOrientation&lt;/code&gt;，则默认为&lt;code class=&quot;highlighter-rouge&quot;&gt;.Up&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;imageview&lt;/code&gt;把&lt;code class=&quot;highlighter-rouge&quot;&gt;.Up&lt;/code&gt;的图片旋转了0度，也就是没旋转，就成了图2的样子&lt;/p&gt;
 
@@ -449,7 +454,7 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29-4.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29/4.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section&quot;&gt;问题的解决&lt;/h3&gt;
 
@@ -531,11 +536,11 @@
 
 &lt;p&gt;&lt;strong&gt;注意:坐标系原点在左下角&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29-9.png&quot; width=&quot;95%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29/9.png&quot; width=&quot;95%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;因为&lt;code class=&quot;highlighter-rouge&quot;&gt;CGContextConcatCTM&lt;/code&gt;相当于改变的整个坐标系，所以一定要先平移，再旋转，否则会出现下面的情况&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29-10.png&quot; width=&quot;95%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-29/10.png&quot; width=&quot;95%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;其他几种情况包括Mirrored变换的都大同小异。&lt;/p&gt;
 
@@ -601,7 +606,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-1.gif&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/1.gif&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt; &lt;span class=&quot;c1&quot;&gt;//需求一:当手指点击到屏幕时计算移动块所需的数据，只说下思路，就不贴代码了&lt;/span&gt;
  &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;touchesBegan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;touches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;UITouch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;withEvent&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;UIEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -729,7 +734,7 @@
 
 &lt;p&gt;大概思路：先从最外层的开始，即先完成0，1，2，3，再完成4，8，12，这样就完成了第一层；然后再5，6，7，再9，13，以此类推，这样每一层的逻辑都一样，逐步简化拼图&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-2.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/2.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;基本步骤：&lt;/p&gt;
 
@@ -737,13 +742,13 @@
 
 &lt;p&gt;1、0号块的位置序号是&lt;code class=&quot;highlighter-rouge&quot;&gt;5&lt;/code&gt;，所以需要获得&lt;code class=&quot;highlighter-rouge&quot;&gt;5 -&amp;gt; 0&lt;/code&gt; 的移动路径，即 &lt;code class=&quot;highlighter-rouge&quot;&gt;5 -&amp;gt; 4 -&amp;gt; 1 -&amp;gt; 0&lt;/code&gt;，值得注意的是这几个数字是位置序号，不是块上标的序号&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-3.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/3.png&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;2、但是只有空白块相临的块可以移动，所以需要先将空白块移动到&lt;code class=&quot;highlighter-rouge&quot;&gt;4&lt;/code&gt;，即2号块所在的位置，以便使位置序号&lt;code class=&quot;highlighter-rouge&quot;&gt;5&lt;/code&gt;上的0号块移动到位置序号&lt;code class=&quot;highlighter-rouge&quot;&gt;4&lt;/code&gt;的位置上，这样以此类推最终把0号块移动到位置序号&lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;上，并且整个拼图基本也是这个逻辑，除了两种特殊情况，这两种情况后面会讲到&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-4.png&quot; width=&quot;30%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-18-5.png&quot; width=&quot;30%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-18-6.png&quot; width=&quot;30%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/4.png&quot; width=&quot;30%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18/5.png&quot; width=&quot;30%&quot; style=&quot;float: left; margin-right:3%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18/6.png&quot; width=&quot;30%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这两步的原理都是一样的，都是把一个块移动到另一个位置所经过的路径，不过值得注意的是，在获取路径时，有的块是不能被移动的，所以需要避开这些块，具体方法：&lt;/p&gt;
 
@@ -834,8 +839,8 @@
 
 &lt;p&gt;为什么选择的路径不是绿色路径而是红色路径，因为红色路径更近，好吧，这是一句废话，不过却是事实，我们要选择尽可能近的路径来完成，这里我没有用移动次数来表示远近与否，因为&lt;code class=&quot;highlighter-rouge&quot;&gt;没必要&lt;/code&gt;，而是直接用勾股定理算的；当然蓝色路径实际上和红色路径的移动次数是一样的，不过那又有什么关系呢，有一条可通的不就得了。。。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-7.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-18-8.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/7.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18/8.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;图解2:&lt;/p&gt;
 
@@ -843,12 +848,12 @@
 
 &lt;p&gt;先描述一下图中的情况：现在是在准备完成1号块，即&lt;code class=&quot;highlighter-rouge&quot;&gt;5 -&amp;gt; 1&lt;/code&gt;，那么空白块需要先移动到位置序号&lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;，如果不加这个处理会怎么样呢？？空白块会先和8号块交换，再和4号块交换，再通过筛选不可移动块发现没有可以移动的位置了，则此分支递归结束，进行下一个分支，即回到和8号块交换之后的情况，当前空白块在位置序号&lt;code class=&quot;highlighter-rouge&quot;&gt;8&lt;/code&gt;，与12号块交换，在与9号块交换，再与位置序号为9（即空白块开始的位置）的块进行交换，好吧，又回来的，之后就是无尽的死循环。。。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-9.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/9.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;那么该怎么办呢，先来观察一下，1号块所在的位置(即位置序号5)不可移动，可交换的8号、5号两个块的位置距离位置序号&lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;相等，最重要的是，空白块移动到位置序号&lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;的路径只有1条，见图。所以我的处理方法见代码注释&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-10.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-18-11.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/10.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18/11.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getDistance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;fromPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adjacentPositions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toPosition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
       
@@ -877,12 +882,12 @@
 
 &lt;p&gt;这时2号块无法完成，所以必须要0号、1号块来让位，以便使2号块完成，直接上图&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-12.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-18-16.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/12.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18/16.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-13.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/13.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-14.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/14.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里我没想到什么合适的方法，所以也是和图中一样，分步去移动的，有点蠢 ^_^&lt;/p&gt;
 
@@ -890,16 +895,16 @@
 
 &lt;p&gt;和情况1基本一样，以完成6号块为例：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-17.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
-&lt;img src=&quot;/assets/source/2015-12-18-18.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/17.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;
+&lt;img src=&quot;/assets/source/2015-12-18/18.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-19.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/19.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-20.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/20.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-21.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/21.png&quot; width=&quot;45%&quot; style=&quot;float: left; margin-right:5%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18-22.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-18/22.png&quot; width=&quot;45%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;接着就知需要一步一步写出来就好了&lt;/p&gt;
 
@@ -974,7 +979,7 @@
 
 &lt;p&gt;说一下域名的解析设置吧&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-2-1.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-2/1.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;记录类型一般是选&lt;code class=&quot;highlighter-rouge&quot;&gt;CANME&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;A(adderss)记录&lt;/code&gt;：&lt;/p&gt;
 
@@ -990,7 +995,7 @@
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;记录值&lt;/code&gt;：使用&lt;code class=&quot;highlighter-rouge&quot;&gt;CNAME&lt;/code&gt;就填你的网址（仓库名）；使用&lt;code class=&quot;highlighter-rouge&quot;&gt;A记录&lt;/code&gt;的话，用命令行&lt;code class=&quot;highlighter-rouge&quot;&gt;PING&lt;/code&gt;一下你的网址（仓库名），把得到的IP地址填上就可以了&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-2-2.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/source/2015-12-2/2.png&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;保存，等个十几分钟就可以了&lt;/p&gt;
 

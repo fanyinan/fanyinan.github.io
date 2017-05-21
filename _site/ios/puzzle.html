@@ -102,7 +102,7 @@
 </code></pre>
 </div>
 
-<p><img src="/assets/source/2015-12-18-1.gif" width="50%" /></p>
+<p><img src="/assets/source/2015-12-18/1.gif" width="50%" /></p>
 
 <figure class="highlight"><pre><code class="language-swift" data-lang="swift"> <span class="c1">//需求一:当手指点击到屏幕时计算移动块所需的数据，只说下思路，就不贴代码了</span>
  <span class="k">override</span> <span class="kd">func</span> <span class="nf">touchesBegan</span><span class="p">(</span><span class="nv">touches</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">UITouch</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">withEvent</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">UIEvent</span><span class="p">?)</span> <span class="p">{</span>
@@ -230,7 +230,7 @@
 
 <p>大概思路：先从最外层的开始，即先完成0，1，2，3，再完成4，8，12，这样就完成了第一层；然后再5，6，7，再9，13，以此类推，这样每一层的逻辑都一样，逐步简化拼图</p>
 
-<p><img src="/assets/source/2015-12-18-2.png" width="50%" /></p>
+<p><img src="/assets/source/2015-12-18/2.png" width="50%" /></p>
 
 <p>基本步骤：</p>
 
@@ -238,13 +238,13 @@
 
 <p>1、0号块的位置序号是<code class="highlighter-rouge">5</code>，所以需要获得<code class="highlighter-rouge">5 -&gt; 0</code> 的移动路径，即 <code class="highlighter-rouge">5 -&gt; 4 -&gt; 1 -&gt; 0</code>，值得注意的是这几个数字是位置序号，不是块上标的序号</p>
 
-<p><img src="/assets/source/2015-12-18-3.png" width="50%" /></p>
+<p><img src="/assets/source/2015-12-18/3.png" width="50%" /></p>
 
 <p>2、但是只有空白块相临的块可以移动，所以需要先将空白块移动到<code class="highlighter-rouge">4</code>，即2号块所在的位置，以便使位置序号<code class="highlighter-rouge">5</code>上的0号块移动到位置序号<code class="highlighter-rouge">4</code>的位置上，这样以此类推最终把0号块移动到位置序号<code class="highlighter-rouge">0</code>上，并且整个拼图基本也是这个逻辑，除了两种特殊情况，这两种情况后面会讲到</p>
 
-<p><img src="/assets/source/2015-12-18-4.png" width="30%" style="float: left; margin-right:3%" />
-<img src="/assets/source/2015-12-18-5.png" width="30%" style="float: left; margin-right:3%" />
-<img src="/assets/source/2015-12-18-6.png" width="30%" /></p>
+<p><img src="/assets/source/2015-12-18/4.png" width="30%" style="float: left; margin-right:3%" />
+<img src="/assets/source/2015-12-18/5.png" width="30%" style="float: left; margin-right:3%" />
+<img src="/assets/source/2015-12-18/6.png" width="30%" /></p>
 
 <p>这两步的原理都是一样的，都是把一个块移动到另一个位置所经过的路径，不过值得注意的是，在获取路径时，有的块是不能被移动的，所以需要避开这些块，具体方法：</p>
 
@@ -335,8 +335,8 @@
 
 <p>为什么选择的路径不是绿色路径而是红色路径，因为红色路径更近，好吧，这是一句废话，不过却是事实，我们要选择尽可能近的路径来完成，这里我没有用移动次数来表示远近与否，因为<code class="highlighter-rouge">没必要</code>，而是直接用勾股定理算的；当然蓝色路径实际上和红色路径的移动次数是一样的，不过那又有什么关系呢，有一条可通的不就得了。。。</p>
 
-<p><img src="/assets/source/2015-12-18-7.png" width="45%" style="float: left; margin-right:5%" />
-<img src="/assets/source/2015-12-18-8.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/7.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18/8.png" width="45%" /></p>
 
 <p>图解2:</p>
 
@@ -344,12 +344,12 @@
 
 <p>先描述一下图中的情况：现在是在准备完成1号块，即<code class="highlighter-rouge">5 -&gt; 1</code>，那么空白块需要先移动到位置序号<code class="highlighter-rouge">1</code>，如果不加这个处理会怎么样呢？？空白块会先和8号块交换，再和4号块交换，再通过筛选不可移动块发现没有可以移动的位置了，则此分支递归结束，进行下一个分支，即回到和8号块交换之后的情况，当前空白块在位置序号<code class="highlighter-rouge">8</code>，与12号块交换，在与9号块交换，再与位置序号为9（即空白块开始的位置）的块进行交换，好吧，又回来的，之后就是无尽的死循环。。。</p>
 
-<p><img src="/assets/source/2015-12-18-9.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/9.png" width="45%" /></p>
 
 <p>那么该怎么办呢，先来观察一下，1号块所在的位置(即位置序号5)不可移动，可交换的8号、5号两个块的位置距离位置序号<code class="highlighter-rouge">1</code>相等，最重要的是，空白块移动到位置序号<code class="highlighter-rouge">1</code>的路径只有1条，见图。所以我的处理方法见代码注释</p>
 
-<p><img src="/assets/source/2015-12-18-10.png" width="45%" style="float: left; margin-right:5%" />
-<img src="/assets/source/2015-12-18-11.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/10.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18/11.png" width="45%" /></p>
 
 <figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">if</span> <span class="n">adjacentPositions</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nf">getDistance</span><span class="p">(</span><span class="nv">fromPosition</span><span class="p">:</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nv">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span> <span class="o">==</span> <span class="nf">getDistance</span><span class="p">(</span><span class="nv">fromPosition</span><span class="p">:</span> <span class="n">adjacentPositions</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nv">toPosition</span><span class="p">:</span> <span class="n">toPosition</span><span class="p">)</span> <span class="p">{</span>
       
@@ -378,12 +378,12 @@
 
 <p>这时2号块无法完成，所以必须要0号、1号块来让位，以便使2号块完成，直接上图</p>
 
-<p><img src="/assets/source/2015-12-18-12.png" width="45%" style="float: left; margin-right:5%" />
-<img src="/assets/source/2015-12-18-16.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/12.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18/16.png" width="45%" /></p>
 
-<p><img src="/assets/source/2015-12-18-13.png" width="45%" style="float: left; margin-right:5%" /></p>
+<p><img src="/assets/source/2015-12-18/13.png" width="45%" style="float: left; margin-right:5%" /></p>
 
-<p><img src="/assets/source/2015-12-18-14.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/14.png" width="45%" /></p>
 
 <p>这里我没想到什么合适的方法，所以也是和图中一样，分步去移动的，有点蠢 ^_^</p>
 
@@ -391,16 +391,16 @@
 
 <p>和情况1基本一样，以完成6号块为例：</p>
 
-<p><img src="/assets/source/2015-12-18-17.png" width="45%" style="float: left; margin-right:5%" />
-<img src="/assets/source/2015-12-18-18.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/17.png" width="45%" style="float: left; margin-right:5%" />
+<img src="/assets/source/2015-12-18/18.png" width="45%" /></p>
 
-<p><img src="/assets/source/2015-12-18-19.png" width="45%" style="float: left; margin-right:5%" /></p>
+<p><img src="/assets/source/2015-12-18/19.png" width="45%" style="float: left; margin-right:5%" /></p>
 
-<p><img src="/assets/source/2015-12-18-20.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/20.png" width="45%" /></p>
 
-<p><img src="/assets/source/2015-12-18-21.png" width="45%" style="float: left; margin-right:5%" /></p>
+<p><img src="/assets/source/2015-12-18/21.png" width="45%" style="float: left; margin-right:5%" /></p>
 
-<p><img src="/assets/source/2015-12-18-22.png" width="45%" /></p>
+<p><img src="/assets/source/2015-12-18/22.png" width="45%" /></p>
 
 <p>接着就知需要一步一步写出来就好了</p>
 
@@ -441,7 +441,7 @@
     <footer class="site-footer clearfix">
       <section class="copyright">
         <a href="/">顽主の博客</a> &copy; 
-              2017-05-12 18:09 &bull; All rights reserved.
+              2017-05-21 23:29 &bull; All rights reserved.
       </section>
       <section class="poweredby">Made with Jekyll using 
         <a href="http://github.com/rosario/kasper">Kasper theme</a>

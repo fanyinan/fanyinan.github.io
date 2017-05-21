@@ -59,8 +59,8 @@
         <section class="post-content" style="margin-top:30px">
             <p>我在之前做一个拼图游戏的时候，需要将一张图片裁成九份，于是我用<code class="highlighter-rouge">CGImageCreateWithImageInRect</code>，当我直接Assets中取图片是，everything is okay，然而当我在手机中真的选图片时，我就呵呵啦，理论上应该是图1中的样子，结果却是图2中的样子</p>
 
-<p><img src="/assets/source/2015-12-29-1.png" width="47%" style="float: left; margin-right:3%" />
-<img src="/assets/source/2015-12-29-2.png" width="50%" /></p>
+<p><img src="/assets/source/2015-12-29/1.png" width="47%" style="float: left; margin-right:3%" />
+<img src="/assets/source/2015-12-29/2.png" width="50%" /></p>
 
 <p>很明显图片被逆时针旋转了90度，进过一番调查后发现是UIImaage的imageOrientation属性的原因</p>
 
@@ -77,10 +77,10 @@
 
 <p>下图是得到这几个方向的图片的拍摄方法，原谅我没找到Mirrored的是怎么拍出来的，反正不是前置摄像头，(￣▽￣)</p>
 
-<p><img src="/assets/source/2015-12-29-5.png" width="23%" style="float: left; margin-right:2%" />
-<img src="/assets/source/2015-12-29-6.png" width="23%" style="float: left; margin-right:2%" />
-<img src="/assets/source/2015-12-29-7.png" width="23%" style="float: left; margin-right:2%" />
-<img src="/assets/source/2015-12-29-8.png" width="25%" /></p>
+<p><img src="/assets/source/2015-12-29/5.png" width="23%" style="float: left; margin-right:2%" />
+<img src="/assets/source/2015-12-29/6.png" width="23%" style="float: left; margin-right:2%" />
+<img src="/assets/source/2015-12-29/7.png" width="23%" style="float: left; margin-right:2%" />
+<img src="/assets/source/2015-12-29/8.png" width="25%" /></p>
 
 <p>那这个属性有什么用呢？不知道大家有没有发现，在手机的相册中，无论拍摄照片时手机是什么方向，照片永远是拍摄时你在相机中看的的方向。为什么呢？我也不知道（不要打我），不过我推测是是<code class="highlighter-rouge">imageview</code>会帮你把图片旋转为.Up，不过图片本身并没有任何变化，只是看上去正了。</p>
 
@@ -90,7 +90,7 @@
 
 <p>我将选择的图片在原图(方向为右)的情况下，裁成九份，假如这九张小图的<code class="highlighter-rouge">imageOrientation</code>依然为<code class="highlighter-rouge">.Right</code>，那么<code class="highlighter-rouge">imageview</code>也会把这九张小图也旋转为<code class="highlighter-rouge">.Up</code>,如下图：</p>
 
-<p><img src="/assets/source/2015-12-29-3.png" width="50%" /></p>
+<p><img src="/assets/source/2015-12-29/3.png" width="50%" /></p>
 
 <p>很乱对不对，其实只要仔细看就会发现是把图2中的每张图顺时针旋转了90度。那么图2的情况是怎么来的呢，因为我在初始话裁剪后图片的时候，没有指定<code class="highlighter-rouge">imageOrientation</code>，则默认为<code class="highlighter-rouge">.Up</code>，<code class="highlighter-rouge">imageview</code>把<code class="highlighter-rouge">.Up</code>的图片旋转了0度，也就是没旋转，就成了图2的样子</p>
 
@@ -111,7 +111,7 @@
   </li>
 </ul>
 
-<p><img src="/assets/source/2015-12-29-4.png" width="50%" /></p>
+<p><img src="/assets/source/2015-12-29/4.png" width="50%" /></p>
 
 <h3 id="section">问题的解决</h3>
 
@@ -193,11 +193,11 @@
 
 <p><strong>注意:坐标系原点在左下角</strong></p>
 
-<p><img src="/assets/source/2015-12-29-9.png" width="95%" /></p>
+<p><img src="/assets/source/2015-12-29/9.png" width="95%" /></p>
 
 <p><strong>因为<code class="highlighter-rouge">CGContextConcatCTM</code>相当于改变的整个坐标系，所以一定要先平移，再旋转，否则会出现下面的情况</strong></p>
 
-<p><img src="/assets/source/2015-12-29-10.png" width="95%" /></p>
+<p><img src="/assets/source/2015-12-29/10.png" width="95%" /></p>
 
 <p>其他几种情况包括Mirrored变换的都大同小异。</p>
 
@@ -236,7 +236,7 @@
     <footer class="site-footer clearfix">
       <section class="copyright">
         <a href="/">顽主の博客</a> &copy; 
-              2017-05-12 18:09 &bull; All rights reserved.
+              2017-05-21 23:29 &bull; All rights reserved.
       </section>
       <section class="poweredby">Made with Jekyll using 
         <a href="http://github.com/rosario/kasper">Kasper theme</a>

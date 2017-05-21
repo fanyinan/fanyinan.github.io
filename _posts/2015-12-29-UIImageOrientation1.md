@@ -4,7 +4,7 @@ title: 浅谈UIImageOrientation（一）
 description: UIImageOrientation －－－ 一个不起眼的属性
 categories: [iOS]
 tags: [Tech,Swift]
-imagePrefix: /assets/source/2015-12-29- 
+imagePrefix: /assets/source/2015-12-29/
 github: https://github.com/fanyinan/ImageOrientationDemo
 ---
 
