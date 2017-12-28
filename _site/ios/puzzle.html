@@ -20,7 +20,7 @@
 
     <header class="main-header post-head no-cover">
     <nav class="main-nav  clearfix">
-        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="back-button icon-arrow-left" href="http://fanyinan.me">Home</a>
     </nav>
 </header>
 
@@ -39,7 +39,7 @@
         </header>
 
 <!--         <header class="post-header">
-            <a id="blog-logo" href="http://fanyinan.me">
+            <a id="blog-logo" href="http://localhost:4000">
                 
                     <span class="blog-title">顽主の博客</span>
                 
@@ -61,10 +61,10 @@
 
 <p>后来又自己尝试了A*寻路算法，发现当拼图的阶数比较高时会非常慢，因此感觉拼图的自动完成不应该属于寻路，因为已经知道每一块拼图的位置，也知道应该放在什么位置，所以每一步移动都可以是有目的的，而不是去相对盲目的寻找</p>
 
-<h3 id="section">下面是原文</h3>
+<h3 id="下面是原文">下面是原文</h3>
 <hr />
 
-<h3 id="ui">UI部分</h3>
+<h3 id="ui部分">UI部分</h3>
 <p>首先一个最重要的成员变量<code class="highlighter-rouge">puzzleIndex</code>用来记录每一块拼图的当前位置，比如：3x3拼图的初始顺序为<code class="highlighter-rouge">[0,1,2,3,4,5,6,7,8]</code>，当<code class="highlighter-rouge">0</code>和<code class="highlighter-rouge">1</code>交换后为<code class="highlighter-rouge">[1,0,2,3,4,5,6,7,8]</code></p>
 
 <p>先简单说一下UI部分，基本就是用一张图片用下面这个方法先裁剪成一个正方形，然后再裁成九张图</p>
@@ -91,16 +91,15 @@
 
 <p>不过，图片实际的方向并没有改变，所以在分割图片的时候要先调整图片的方向，这里就不贴代码了，可以到我的<a href="https://github.com/fanyinan/PuzzleProject">GitHub</a>中下载源码</p>
 
-<h3 id="section-1">手动拼图</h3>
+<h3 id="手动拼图">手动拼图</h3>
 <p>先说下需求：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1.可以一次拖动多个块
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.可以一次拖动多个块
 
 2.块可以被拖动，随着手势移动
 
 3.松开手时块会根据当前的位置自动移动到偏向的位置
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/assets/source/2015-12-18/1.gif" width="50%" /></p>
 
@@ -127,7 +126,7 @@
     <span class="c1">//直接用动画移动到更靠近的一侧</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="section-2">随机排序</h3>
+<h3 id="随机排序">随机排序</h3>
 <p>先明确几个概念：</p>
 
 <p>1、位置：表示当前块位于某行某列，被移动就会改变</p>
@@ -145,7 +144,7 @@
 
 <p>2、递归路径，进行动画</p>
 
-<h4 id="section-3">先来说第一步，：</h4>
+<h4 id="先来说第一步">先来说第一步，：</h4>
 
 <figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//交换路径，表示块从某个位置序号移动到另一个位置序号</span>
 <span class="kd">struct</span> <span class="kt">SwapPath</span> <span class="p">{</span>
@@ -197,7 +196,7 @@
   <span class="p">}</span>
   </code></pre></figure>
 
-<h4 id="section-4">第二步：</h4>
+<h4 id="第二步">第二步：</h4>
 
 <p>一个递归</p>
 
@@ -226,7 +225,7 @@
   <span class="p">}</span>
   </code></pre></figure>
 
-<h3 id="section-5">自动完成</h3>
+<h3 id="自动完成">自动完成</h3>
 
 <p>大概思路：先从最外层的开始，即先完成0，1，2，3，再完成4，8，12，这样就完成了第一层；然后再5，6，7，再9，13，以此类推，这样每一层的逻辑都一样，逐步简化拼图</p>
 
@@ -372,7 +371,7 @@
     <span class="p">}</span>
   </code></pre></figure>
 
-<h3 id="section-6">现在来写一下两种特殊情况：</h3>
+<h3 id="现在来写一下两种特殊情况">现在来写一下两种特殊情况：</h3>
 
 <p>情况1：</p>
 
@@ -416,7 +415,7 @@
             <!-- If we want to display author's name and bio -->
             
                 <figure class="author-image">
-                    <a class="img" href="/" style="background-image: url(/assets/images/profile.png)">
+                    <a class="img" href="http://fanyinan.me" style="background-image: url(/assets/images/profile.png)">
                     <span class="hidden">顽主's Picture</span></a>
                 </figure>
                 <section class="author">
@@ -440,8 +439,8 @@
 
     <footer class="site-footer clearfix">
       <section class="copyright">
-        <a href="/">顽主の博客</a> &copy; 
-              2017-05-21 23:29 &bull; All rights reserved.
+        <a href="http://fanyinan.me">顽主の博客</a> &copy; 
+              2017-12-28 13:49 &bull; All rights reserved.
       </section>
       <section class="poweredby">Made with Jekyll using 
         <a href="http://github.com/rosario/kasper">Kasper theme</a>

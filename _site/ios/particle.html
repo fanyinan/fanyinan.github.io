@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>OpenGL实现仿js控件particle</title>
+    <meta name="description" content="WTF" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+    <!-- Customisation  -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
+
+</head>
+<body class="home-template">
+
+    <header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        <a class="back-button icon-arrow-left" href="http://fanyinan.me">Home</a>
+    </nav>
+</header>
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">OpenGL实现仿js控件particle</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2017-12-28">28 Dec 2017</time>
+                
+                    on iOS
+                
+            </section>
+        </header>
+
+<!--         <header class="post-header">
+            <a id="blog-logo" href="http://localhost:4000">
+                
+                    <span class="blog-title">顽主の博客</span>
+                
+            </a>
+        </header> -->
+
+        <!-- <span class="post-meta">
+            <time datetime="2017-12-28">28 Dec 2017</time>
+            
+                on iOS
+            
+        </span> -->
+
+        <!-- <h1 class="post-title">OpenGL实现仿js控件particle</h1> -->
+
+
+        <section class="post-content" style="margin-top:30px">
+            <h4 id="首先效果是这样的">首先效果是这样的：</h4>
+
+<p><img src="/assets/source/2017-12-28/particle.gif" /></p>
+
+<h4 id="大体思路">大体思路：</h4>
+
+<p>大体思路很简单，启动一个计时器，每次刷新的时候更新每一个点的位置；如果当前点的数量小于最大数量则添加一个随机方向大小的点，如果有的点通过移动超出边界则移除；遍历所有的点，生成两点之间的线。</p>
+
+<h4 id="其中的几个关键点">其中的几个关键点：</h4>
+
+<ul>
+  <li>
+    <p>如何生成起始位置和终点位置不相同的点</p>
+
+    <p>比如起始位置是在下方，那么终点位置肯定不能是下方</p>
+
+    <p>最简单的方法就是如果重复了再生成一次，直到不重复为止，不过太low了。</p>
+
+    <p>有一道算法题是如何生成1到100之间的100个不能重复的随机数，大体思路是创建一个包含1-100的源数组，先在这100个数中随机一个数，然后把这个位置上的数加入到结果中，然后把源数组中的最后一个数字放到被随机选中的数字的位置上，并移除这最后一个数字，然后继续在这99个数中随机</p>
+
+    <p>和这道题类似，不过只需要随机两次（起始位置和终点位置）</p>
+  </li>
+  <li>
+    <p>原js版particle在某个点移除边界后，与其相连的线会立刻消失，这样会略显突兀。我的做法是只有当点离开边界超过一定距离后才移除，在此期间将逐渐降低线的颜色的透明度，做到自然过渡</p>
+  </li>
+  <li>
+    <p>画圆</p>
+
+    <p>由于刚学opengl不久，最初打算用多个三角形拼出一个圆，然后发现毛边比较严重，后来发现可以直接画点，然后通过片段着色器画出一个圆</p>
+
+    <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+  <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  
+    <span class="k">if</span> <span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="nb">gl_PointCoord</span> <span class="o">-</span> <span class="kt">vec2</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+      <span class="k">discard</span><span class="p">;</span>
+    <span class="nb">gl_FragColor</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">7</span><span class="p">);</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>弹开手指点击区域的点</p>
+
+    <p>其实实现方法很简单，先像正常情况一样计算每个点的位置，然后如果点的位置在手指区域内，则以手指点击的点位圆心，将点向外移动，点距离手指越远，每次将其移动的距离越小，直到完全移出</p>
+  </li>
+</ul>
+
+<p>PS：<a href="https://github.com/fanyinan/Particle">Particle</a></p>
+
+        </section>
+
+        
+
+        <footer class="post-footer">
+            <!-- If we want to display author's name and bio -->
+            
+                <figure class="author-image">
+                    <a class="img" href="http://fanyinan.me" style="background-image: url(/assets/images/profile.png)">
+                    <span class="hidden">顽主's Picture</span></a>
+                </figure>
+                <section class="author">
+                    <!-- Author Name -->
+                    <h4> 顽主 </h4>
+                    <!-- Author Bio -->
+                    <p>
+                        不知道写什么，就是想留着这块
+                    </p>
+                </section>
+            
+
+            <!-- Disqus comments -->
+            
+
+        </footer>
+
+    </article>
+
+</main>
+
+    <footer class="site-footer clearfix">
+      <section class="copyright">
+        <a href="http://fanyinan.me">顽主の博客</a> &copy; 
+              2017-12-28 13:49 &bull; All rights reserved.
+      </section>
+      <section class="poweredby">Made with Jekyll using 
+        <a href="http://github.com/rosario/kasper">Kasper theme</a>
+      </section>
+    </footer>
+    
+    <script type="text/javascript" src="/assets/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/index.js"></script>
+
+    <!-- Google Analytics Tracking code -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-81807619-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>   
+</body>
+</html>

@@ -20,7 +20,7 @@
 
     <header class="main-header post-head no-cover">
     <nav class="main-nav  clearfix">
-        <a class="back-button icon-arrow-left" href="/">Home</a>
+        <a class="back-button icon-arrow-left" href="http://fanyinan.me">Home</a>
     </nav>
 </header>
 
@@ -39,7 +39,7 @@
         </header>
 
 <!--         <header class="post-header">
-            <a id="blog-logo" href="http://fanyinan.me">
+            <a id="blog-logo" href="http://localhost:4000">
                 
                     <span class="blog-title">顽主の博客</span>
                 
@@ -61,7 +61,7 @@
 
 <p><br /></p>
 
-<h3 id="section">简单介绍一下</h3>
+<h3 id="简单介绍一下">简单介绍一下</h3>
 
 <hr />
 
@@ -103,7 +103,7 @@
 
 <p><br /></p>
 
-<h3 id="section-1">总会遇到的坑</h3>
+<h3 id="总会遇到的坑">总会遇到的坑</h3>
 
 <hr />
 
@@ -120,73 +120,71 @@
     <p><code class="highlighter-rouge">CTRun</code>指的是在一行中所有属性都相同的连续的文字，所以如果要显示三个连续的相同	的图片的话，那么绘制图片之前用到的这三个站位的字符的属性就必须加以区分。</p>
 
     <p>首先当做图文混排的时候，至少需要给这个占位的字符添加俩个属性，一个是自定义的属	性，存放图片的名字或其他什么可以索引到图片的方法；第二个就是	<code class="highlighter-rouge">kCTRunDelegateAttributeName</code>。如果第一个属性的值是一个字符串，第二个属	性的值是<code class="highlighter-rouge">CTRunDelegateCreate(&amp;runDelegateCallbacks, nil)</code>，那么有一定几率（不知道为什么不是必现的）会在这本应该绘制多个图片的位置只绘制一个图片。</p>
+
+    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+ <span class="k">let</span> <span class="nv">insertSpace</span> <span class="o">=</span> <span class="kt">NSMutableAttributedString</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"*"</span><span class="p">)</span>
+
+ <span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">keyAttributeName</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">imageName</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
+ <span class="k">let</span> <span class="nv">runDelegate</span> <span class="o">=</span> <span class="kt">CTRunDelegateCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">runDelegateCallbacks</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+ <span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">kCTRunDelegateAttributeName</span> <span class="k">as</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">runDelegate</span><span class="o">!</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
+</code></pre></div>    </div>
+
+    <p>并且这个时候在<code class="highlighter-rouge">runDelegateCallbacks</code>中也无法取得文字的高度来设置预留位置	的大小，通常是写死一个值，所以可以像下面这样写：</p>
+
+    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+ <span class="c1">//控制图片尺寸的文字的相关尺寸</span>
+ <span class="kd">class</span> <span class="kt">PictureRunInfo</span> <span class="p">{</span>
+  	    <span class="k">var</span> <span class="nv">ascender</span><span class="p">:</span> <span class="kt">CGFloat</span>
+     <span class="k">var</span> <span class="nv">descender</span><span class="p">:</span> <span class="kt">CGFloat</span>
+     <span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span>
+      
+     <span class="nf">init</span><span class="p">(</span><span class="nv">ascender</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">descender</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="p">{</span>
+ 	    <span class="k">self</span><span class="o">.</span><span class="n">ascender</span> <span class="o">=</span> <span class="n">ascender</span>
+ 	    <span class="k">self</span><span class="o">.</span><span class="n">descender</span> <span class="o">=</span> <span class="n">descender</span> 
+ 	    <span class="k">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+    
+ <span class="c1">//CTRunDelegateCreate中的回调</span>
+ <span class="k">var</span> <span class="nv">runDelegateCallbacks</span> <span class="o">=</span> <span class="kt">CTRunDelegateCallbacks</span><span class="p">(</span><span class="nv">version</span><span class="p">:</span> <span class="n">kCTRunDelegateVersion1</span><span class="p">,</span> <span class="nv">dealloc</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="k">in</span>    
+     <span class="p">},</span> <span class="nv">getAscent</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
+          
+       <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+       <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">ascender</span>
+          
+     <span class="p">},</span> <span class="nv">getDescent</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
+      
+       <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+       <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">descender</span>
+      
+     <span class="p">},</span> <span class="nv">getWidth</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
+      
+       <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+       <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">width</span>
+     <span class="p">})</span>
+    
+    
+ <span class="c1">//成员变量，保存PictureRunInfo，防止被释放掉</span>
+ <span class="k">var</span> <span class="nv">pictureRunInfos</span><span class="p">:</span> <span class="p">[</span><span class="kt">PictureRunInfo</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    
+ <span class="k">let</span> <span class="nv">insertSpace</span> <span class="o">=</span> <span class="kt">NSMutableAttributedString</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"*"</span><span class="p">)</span>
+    	
+ <span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">keyAttributeName</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">imageName</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
+    
+ <span class="c1">//为注明的几个值只是几个控制位置的常量而已，不用太在意</span>
+ <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="kt">PictureRunInfo</span><span class="p">(</span><span class="nv">ascender</span><span class="p">:</span> <span class="n">textStyle</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">ascender</span> <span class="o">+</span> <span class="n">extraHeight</span><span class="p">,</span> <span class="nv">descender</span><span class="p">:</span> <span class="o">-</span><span class="n">textStyle</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">descender</span> <span class="o">+</span> <span class="n">extraHeight</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="n">imageSize</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">imageHoriMargin</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+ <span class="n">pictureRunInfos</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pictureRunInfo</span><span class="p">]</span>
+
+ <span class="k">let</span> <span class="nv">runDelegate</span> <span class="o">=</span> <span class="kt">CTRunDelegateCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">runDelegateCallbacks</span><span class="p">,</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pictureRunInfo</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">UnsafeMutableRawPointer</span><span class="o">.</span><span class="k">self</span><span class="p">))</span>
+ <span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">kCTRunDelegateAttributeName</span> <span class="k">as</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">runDelegate</span><span class="o">!</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
+</code></pre></div>    </div>
+
+    <p>通过传一个<code class="highlighter-rouge">PictureRunInfo</code>的指针使不同的<code class="highlighter-rouge">CTRun</code>可以区分开，同时又可以准确的控制图片的位置</p>
   </li>
-</ol>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code>
-<span class="k">let</span> <span class="nv">insertSpace</span> <span class="o">=</span> <span class="kt">NSMutableAttributedString</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"*"</span><span class="p">)</span>
-
-<span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">keyAttributeName</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">imageName</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
-<span class="k">let</span> <span class="nv">runDelegate</span> <span class="o">=</span> <span class="kt">CTRunDelegateCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">runDelegateCallbacks</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">kCTRunDelegateAttributeName</span> <span class="k">as</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">runDelegate</span><span class="o">!</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
-</code></pre>
-</div>
-
-<p>并且这个时候在<code class="highlighter-rouge">runDelegateCallbacks</code>中也无法取得文字的高度来设置预留位置	的大小，通常是写死一个值，所以可以像下面这样写：</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="c1">//控制图片尺寸的文字的相关尺寸</span>
-<span class="kd">class</span> <span class="kt">PictureRunInfo</span> <span class="p">{</span>
-  	<span class="k">var</span> <span class="nv">ascender</span><span class="p">:</span> <span class="kt">CGFloat</span>
-	<span class="k">var</span> <span class="nv">descender</span><span class="p">:</span> <span class="kt">CGFloat</span>
-	<span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span>
-  
-	<span class="nf">init</span><span class="p">(</span><span class="nv">ascender</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">descender</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="p">{</span>
- 	<span class="k">self</span><span class="o">.</span><span class="n">ascender</span> <span class="o">=</span> <span class="n">ascender</span>
- 	<span class="k">self</span><span class="o">.</span><span class="n">descender</span> <span class="o">=</span> <span class="n">descender</span> 
- 	<span class="k">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">//CTRunDelegateCreate中的回调</span>
-<span class="k">var</span> <span class="nv">runDelegateCallbacks</span> <span class="o">=</span> <span class="kt">CTRunDelegateCallbacks</span><span class="p">(</span><span class="nv">version</span><span class="p">:</span> <span class="n">kCTRunDelegateVersion1</span><span class="p">,</span> <span class="nv">dealloc</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="k">in</span>    
-    <span class="p">},</span> <span class="nv">getAscent</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
-      
-      <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">ascender</span>
-      
-    <span class="p">},</span> <span class="nv">getDescent</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
-      
-      <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">descender</span>
-      
-    <span class="p">},</span> <span class="nv">getWidth</span><span class="p">:</span> <span class="p">{</span> <span class="n">pointer</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span> <span class="k">in</span>
-      
-      <span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">PictureRunInfo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">pictureRunInfo</span><span class="o">.</span><span class="n">width</span>
-    <span class="p">})</span>
-
-
-<span class="c1">//成员变量，保存PictureRunInfo，防止被释放掉</span>
-<span class="k">var</span> <span class="nv">pictureRunInfos</span><span class="p">:</span> <span class="p">[</span><span class="kt">PictureRunInfo</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-
-<span class="k">let</span> <span class="nv">insertSpace</span> <span class="o">=</span> <span class="kt">NSMutableAttributedString</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"*"</span><span class="p">)</span>
-	
-<span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">keyAttributeName</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">imageName</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
-
-<span class="c1">//为注明的几个值只是几个控制位置的常量而已，不用太在意</span>
-<span class="k">let</span> <span class="nv">pictureRunInfo</span> <span class="o">=</span> <span class="kt">PictureRunInfo</span><span class="p">(</span><span class="nv">ascender</span><span class="p">:</span> <span class="n">textStyle</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">ascender</span> <span class="o">+</span> <span class="n">extraHeight</span><span class="p">,</span> <span class="nv">descender</span><span class="p">:</span> <span class="o">-</span><span class="n">textStyle</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">descender</span> <span class="o">+</span> <span class="n">extraHeight</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="n">imageSize</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">imageHoriMargin</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">pictureRunInfos</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pictureRunInfo</span><span class="p">]</span>
-
-<span class="k">let</span> <span class="nv">runDelegate</span> <span class="o">=</span> <span class="kt">CTRunDelegateCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">runDelegateCallbacks</span><span class="p">,</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="n">pictureRunInfo</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">UnsafeMutableRawPointer</span><span class="o">.</span><span class="k">self</span><span class="p">))</span>
-<span class="n">insertSpace</span><span class="o">.</span><span class="nf">addAttribute</span><span class="p">(</span><span class="n">kCTRunDelegateAttributeName</span> <span class="k">as</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="n">runDelegate</span><span class="o">!</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">NSRange</span><span class="p">(</span><span class="nv">location</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">length</span><span class="p">:</span> <span class="n">insertSpace</span><span class="o">.</span><span class="n">length</span><span class="p">))</span>
-</code></pre>
-</div>
-
-<p>通过传一个<code class="highlighter-rouge">PictureRunInfo</code>的指针使不同的<code class="highlighter-rouge">CTRun</code>可以区分开，同时又可以准确的控制图片的位置</p>
-
-<ol>
-  <li>现在还存在一个问题，就是无法明确Interpreter的顺序。虽然数组中的顺序即是处理文字的先后顺序，但是不够明确，比较理想的状态是可以和<code class="highlighter-rouge">GPUImage</code>一样使用装饰者来完成多个Interpreter之间的衔接，以次来强调处理文字的先后顺序。但是装饰者模式需要一个类来存储上一个元素，但是我不太希望通过派生出子类来自定义Interpreter，一是因为没有绝对的必要，不需要为了用一个设计模式而用设计模式，二是感觉用继承而不是<code class="highlighter-rouge">Protocol</code>会破坏其抽象性，所以最终还是放弃使用装饰者，之后有什么好的思路在加进来</li>
+  <li>
+    <p>现在还存在一个问题，就是无法明确Interpreter的顺序。虽然数组中的顺序即是处理文字的先后顺序，但是不够明确，比较理想的状态是可以和<code class="highlighter-rouge">GPUImage</code>一样使用装饰者来完成多个Interpreter之间的衔接，以次来强调处理文字的先后顺序。但是装饰者模式需要一个类来存储上一个元素，但是我不太希望通过派生出子类来自定义Interpreter，一是因为没有绝对的必要，不需要为了用一个设计模式而用设计模式，二是感觉用继承而不是<code class="highlighter-rouge">Protocol</code>会破坏其抽象性，所以最终还是放弃使用装饰者，之后有什么好的思路在加进来</p>
+  </li>
 </ol>
 
 <p>PS：<a href="https://github.com/fanyinan/RichTextView-Swift-3.0">RichTextView</a></p>
@@ -203,7 +201,7 @@
             <!-- If we want to display author's name and bio -->
             
                 <figure class="author-image">
-                    <a class="img" href="/" style="background-image: url(/assets/images/profile.png)">
+                    <a class="img" href="http://fanyinan.me" style="background-image: url(/assets/images/profile.png)">
                     <span class="hidden">顽主's Picture</span></a>
                 </figure>
                 <section class="author">
@@ -227,8 +225,8 @@
 
     <footer class="site-footer clearfix">
       <section class="copyright">
-        <a href="/">顽主の博客</a> &copy; 
-              2017-05-21 23:29 &bull; All rights reserved.
+        <a href="http://fanyinan.me">顽主の博客</a> &copy; 
+              2017-12-28 13:49 &bull; All rights reserved.
       </section>
       <section class="poweredby">Made with Jekyll using 
         <a href="http://github.com/rosario/kasper">Kasper theme</a>

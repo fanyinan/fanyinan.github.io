@@ -62,67 +62,68 @@ imagePrefix: /assets/source/2017-4-29/
 
 	首先当做图文混排的时候，至少需要给这个占位的字符添加俩个属性，一个是自定义的属	性，存放图片的名字或其他什么可以索引到图片的方法；第二个就是	`kCTRunDelegateAttributeName`。如果第一个属性的值是一个字符串，第二个属	性的值是`CTRunDelegateCreate(&runDelegateCallbacks, nil)`，那么有一定几率（不知道为什么不是必现的）会在这本应该绘制多个图片的位置只绘制一个图片。
 	
-```swift
+    ```swift
 
-let insertSpace = NSMutableAttributedString(string: "*")
+    let insertSpace = NSMutableAttributedString(string: "*")
 
-insertSpace.addAttribute(keyAttributeName, value: imageName, range: NSRange(location: 0, length: insertSpace.length))
-let runDelegate = CTRunDelegateCreate(&runDelegateCallbacks, nil)
-insertSpace.addAttribute(kCTRunDelegateAttributeName as String, value: runDelegate!, range: NSRange(location: 0, length: insertSpace.length))
-```
+    insertSpace.addAttribute(keyAttributeName, value: imageName, range: NSRange(location: 0, length: insertSpace.length))
+    let runDelegate = CTRunDelegateCreate(&runDelegateCallbacks, nil)
+    insertSpace.addAttribute(kCTRunDelegateAttributeName as String, value: runDelegate!, range: NSRange(location: 0, length: insertSpace.length))
+    ```
 		
-并且这个时候在`runDelegateCallbacks`中也无法取得文字的高度来设置预留位置	的大小，通常是写死一个值，所以可以像下面这样写：
+    并且这个时候在`runDelegateCallbacks`中也无法取得文字的高度来设置预留位置	的大小，通常是写死一个值，所以可以像下面这样写：
 	
-```swift
-//控制图片尺寸的文字的相关尺寸
-class PictureRunInfo {
-  	var ascender: CGFloat
-	var descender: CGFloat
-	var width: CGFloat
-  
-	init(ascender: CGFloat, descender: CGFloat, width: CGFloat) {
- 	self.ascender = ascender
- 	self.descender = descender 
- 	self.width = width
-	}
-}
+    ```swift
 
-//CTRunDelegateCreate中的回调
-var runDelegateCallbacks = CTRunDelegateCallbacks(version: kCTRunDelegateVersion1, dealloc: { pointer in    
-    }, getAscent: { pointer -> CGFloat in
+    //控制图片尺寸的文字的相关尺寸
+    class PictureRunInfo {
+  	    var ascender: CGFloat
+	    var descender: CGFloat
+	    var width: CGFloat
       
-      let pictureRunInfo = unsafeBitCast(pointer, to: PictureRunInfo.self)
-      return pictureRunInfo.ascender
+	    init(ascender: CGFloat, descender: CGFloat, width: CGFloat) {
+ 	    self.ascender = ascender
+ 	    self.descender = descender 
+ 	    self.width = width
+	    }
+    }
+    
+    //CTRunDelegateCreate中的回调
+    var runDelegateCallbacks = CTRunDelegateCallbacks(version: kCTRunDelegateVersion1, dealloc: { pointer in    
+        }, getAscent: { pointer -> CGFloat in
+          
+          let pictureRunInfo = unsafeBitCast(pointer, to: PictureRunInfo.self)
+          return pictureRunInfo.ascender
+          
+        }, getDescent: { pointer -> CGFloat in
       
-    }, getDescent: { pointer -> CGFloat in
+          let pictureRunInfo = unsafeBitCast(pointer, to: PictureRunInfo.self)
+          return pictureRunInfo.descender
       
-      let pictureRunInfo = unsafeBitCast(pointer, to: PictureRunInfo.self)
-      return pictureRunInfo.descender
+        }, getWidth: { pointer -> CGFloat in
       
-    }, getWidth: { pointer -> CGFloat in
-      
-      let pictureRunInfo = unsafeBitCast(pointer, to: PictureRunInfo.self)
-      return pictureRunInfo.width
-    })
+          let pictureRunInfo = unsafeBitCast(pointer, to: PictureRunInfo.self)
+          return pictureRunInfo.width
+        })
+    
+    
+    //成员变量，保存PictureRunInfo，防止被释放掉
+    var pictureRunInfos: [PictureRunInfo] = []
+    
+    
+    let insertSpace = NSMutableAttributedString(string: "*")
+    	
+    insertSpace.addAttribute(keyAttributeName, value: imageName, range: NSRange(location: 0, length: insertSpace.length))
+    
+    //为注明的几个值只是几个控制位置的常量而已，不用太在意
+    let pictureRunInfo = PictureRunInfo(ascender: textStyle.font.ascender + extraHeight, descender: -textStyle.font.descender + extraHeight, width: imageSize.width + imageHoriMargin * 2)
+    pictureRunInfos += [pictureRunInfo]
 
+    let runDelegate = CTRunDelegateCreate(&runDelegateCallbacks, unsafeBitCast(pictureRunInfo, to: UnsafeMutableRawPointer.self))
+    insertSpace.addAttribute(kCTRunDelegateAttributeName as String, value: runDelegate!, range: NSRange(location: 0, length: insertSpace.length))
+    ```
 
-//成员变量，保存PictureRunInfo，防止被释放掉
-var pictureRunInfos: [PictureRunInfo] = []
-
-
-let insertSpace = NSMutableAttributedString(string: "*")
-	
-insertSpace.addAttribute(keyAttributeName, value: imageName, range: NSRange(location: 0, length: insertSpace.length))
-
-//为注明的几个值只是几个控制位置的常量而已，不用太在意
-let pictureRunInfo = PictureRunInfo(ascender: textStyle.font.ascender + extraHeight, descender: -textStyle.font.descender + extraHeight, width: imageSize.width + imageHoriMargin * 2)
-pictureRunInfos += [pictureRunInfo]
-
-let runDelegate = CTRunDelegateCreate(&runDelegateCallbacks, unsafeBitCast(pictureRunInfo, to: UnsafeMutableRawPointer.self))
-insertSpace.addAttribute(kCTRunDelegateAttributeName as String, value: runDelegate!, range: NSRange(location: 0, length: insertSpace.length))
-```
-
-通过传一个`PictureRunInfo`的指针使不同的`CTRun`可以区分开，同时又可以准确的控制图片的位置
+	通过传一个`PictureRunInfo`的指针使不同的`CTRun`可以区分开，同时又可以准确的控制图片的位置
 
 3. 现在还存在一个问题，就是无法明确Interpreter的顺序。虽然数组中的顺序即是处理文字的先后顺序，但是不够明确，比较理想的状态是可以和`GPUImage`一样使用装饰者来完成多个Interpreter之间的衔接，以次来强调处理文字的先后顺序。但是装饰者模式需要一个类来存储上一个元素，但是我不太希望通过派生出子类来自定义Interpreter，一是因为没有绝对的必要，不需要为了用一个设计模式而用设计模式，二是感觉用继承而不是`Protocol`会破坏其抽象性，所以最终还是放弃使用装饰者，之后有什么好的思路在加进来
 
